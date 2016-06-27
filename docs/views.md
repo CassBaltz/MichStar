@@ -1,22 +1,19 @@
 # View Wireframes
 
-## New User
-![new-user]
+## landing
+![home]
 
-## New Session
-![new-session]
+## restaurant search
+![restaurantsearch]
 
-## NotesIndex / NoteIndexItem / NoteForm
-![notes]
+## restaurant profile
+![restaurant]
 
-## NotebooksIndex / NotebookIndexItem
-![notebooks]
+## signin
+![signin]
 
-## NotebookForm
-![notebook-form]
+## user history/past restaurants/reviews
+![userrestaurantspage]
 
-[new-user]: ./wireframes/new_user.png
-[new-session]: ./wireframes/new_session.png
-[notes]: ./wireframes/root_notes.png
-[notebooks]: ./wireframes/root_notebooks.png
-[notebook-form]: ./wireframes/notebook_form.png
+## user reservations page
+![reservationsnpage]

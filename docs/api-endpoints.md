@@ -9,6 +9,7 @@
 ### Users
 
 - `GET /users/new`
+- `GET /users/:userId`
 - `POST /users`
 - `PATCH /users`
 
@@ -18,36 +19,43 @@
 - `POST /session`
 - `DELETE /session`
 
+### About
+- `GET /about`
+
+### History (Michelin Star History)
+- `GET /history`
+
+### Contact
+- `GET /contact`
+
 ## JSON API
 
-### Notes
+### Restaurants (CURRENT VERSION HAS NO RESTAURANT CREATION)
 
-- `GET /api/notes`
+- `GET /api/restaurants`
   - Notes index/search
-  - accepts `tag_name` query param to list notes by tag
+  - Index autopopulates when search bar is clicked
   - accepts pagination params (if I get there)
-- `POST /api/notes`
-- `GET /api/notes/:id`
-- `PATCH /api/notes/:id`
-- `DELETE /api/notes/:id`
+  - can search by genre (if I get there)
+- `GET /api/restaurants/:restaurantId`
 
-### Notebooks
 
-- `GET /api/notebooks`
-- `POST /api/notebooks`
-- `GET /api/notebooks/:id`
-- `PATCH /api/notebooks/:id`
-- `DELETE /api/notebooks/:id`
-- `GET /api/notebooks/:id/notes`
-  - index of all notes for a notebook
-  - accepts pagination params (if I get there)
+### Reservations
 
-### Tags
+- `GET /api/restaurants/:restaurantId/reservation_options`
+  - sort through available vs unavailable depending on day.
+- `POST /api/reservations`
+- `GET /api/reservations`
+  - sort through using reservation list and current user id
+- `DELETE /api/reservations`
+  - cancel a reservation
+
+### Reviews
 
 - A note's tags will be included in the note show template
-- `GET /api/tags`
-  - includes query param for typeahead suggestions
-- `POST /api/notes/:note_id/tags`: add tag to note by name
+- `GET /api/reviews`
+  - filter in controller for only reviews pertaining to the restaurant in question
+- `POST /api/reviews`
   - if note doesn't already exist, it will be created
-- `DELETE /api/notes/:note_id/tags/:tag_name`: remove tag from note by
+- `DELETE /api/reviews`: remove tag from note by
   name

@@ -2,37 +2,29 @@
 
 ## Rails
 ### Models
+Restaurant
+Reservation Options
 
 ### Controllers
+Restaurant Controllers
 
 ### Views
 
 ## Flux
 ### Views (React Components)
-* NotesIndex
-  - NotesIndexItem
-* NoteForm
 
 ### Stores
-* Note
+* Restaurant
 
 ### Actions
-* ApiActions.receiveAllNotes -> triggered by ApiUtil
-* ApiActions.receiveSingleNote
-* ApiActions.deleteNote
-* NoteActions.fetchAllNotes -> triggers ApiUtil
-* NoteActions.fetchSingleNote 
-* NoteActions.createNote
-* NoteActions.editNote 
-* NoteActions.destroyNote
+* ApiActions.receiveAllRestaurants -> triggered by ApiUtil
+* ApiActions.receiveSingleRestaurant
+* NoteActions.fetchAllRestaurants -> triggers ApiUtil
+* NoteActions.fetchSingleRestaurant
 
 ### ApiUtil
-* ApiUtil.fetchAllNotes
-* ApiUtil.fetchSingleNote
-* ApiUtil.createNote
-* ApiUtil.editNote
-* ApiUtil.destroyNote
+* ApiUtil.fetchAllRestaurants
+* ApiUtil.fetchSingleRestaurant
 
 ## Gems/Libraries
-* Flux Dispatcher (npm)
-* Twitter Bootstrap
+* Google Maps Integration

@@ -1,46 +1,55 @@
 # Schema Information
 
-## notes
+## restaurants
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-title       | string    | not null
-body        | text      | not null
-author_id   | integer   | not null, foreign key (references users), indexed
-notebook_id | integer   | not null, foreign key (references notebooks), indexed
-archived    | boolean   | not null, default: false
+name        | string    | not null
+description | text      | not null
+head chef   | string    | not null, foreign key (references users), indexed
+stars       | integer   | not null
+genre       | string    | not null
+website     | string    | not null
 
-## notebooks
+## images
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-author_id   | integer   | not null, foreign key (references users), indexed
+description | string    | not null, foreign key (references users), indexed
 title       | string    | not null
-description | string    | 
+rest_id     | integer   | not null, foreign key
 
-## reminders
+## reviews
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 user_id     | integer   | not null, foreign key (references users), indexed
-note_id     | string    | not null, foreign key (references notes), indexed
+rest_id     | integer   | not null, foreign key (references notes), indexed
 date        | datetime  | not null
-type        | string    | not null
-prev_id     | integer   | foreign key (references reminders), indexed
 
-## tags
+## ratings
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-name        | string    | not null
+user_id     | integer   | not null, foreign key (references users), indexed
+rest_id     | integer   | not null, foreign key (references notes), indexed
+value       | integer   | not null
 
-## taggings
+## reservation_options(setting available reservations to be used by the site)
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-name        | string    | not null
-note_id     | integer   | not null, foreign key (references notes), indexed, unique [tag_id]
-tag_id      | integer   | not null, foreign key (references tags), indexed
+rest_id     | string    | not null
+day         | datetime  | not null
+table_size  | integer   | not null
+time_slot   | datetime  | not null   
+
+## reservations
+column name | data type | details
+------------|-----------|-----------------------
+id          | integer   | not null, primary key
+res_opt_id  | integer   | not null, foreign key
+user_id     | integer   | not null  
 
 ## users
 column name     | data type | details

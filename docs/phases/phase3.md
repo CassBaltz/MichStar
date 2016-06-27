@@ -1,44 +1,32 @@
-# Phase 3: Notebooks and Tags (2 days)
+# Phase 3: Restaurant flux-cycles
 
 ## Rails
 ### Models
-* Notebook
-* Tag
-* Tagging
 
 ### Controllers
-* Api::NotebooksController (create, destroy, index, show, update)
+* Api::RestaurantsController (show, index)
 
 ### Views
-* notebooks/index.json.jbuilder
-* notebooks/show.json.jbuilder
-* tags/show.json.jbuilder
+* restaurants/index.json.jbuilder
+* restaurants/show.json.jbuilder
 
 ## Flux
-### Views (React Components)
-* NotebooksIndex
-  - NotebookIndexItem
-* NotebookForm
-* SearchIndex
-
 ### Stores
-* Notebook
+* Restaurant
+
+### Components
+* RestaurantIndex
+* RestaurantIndexItem
+* RestaurantShow
 
 ### Actions
-* ApiActions.receiveAllNotebooks -> triggered by ApiUtil
-* ApiActions.receiveSingleNotebook
-* ApiActions.deleteNotebook
-* NotebookActions.fetchAllNotebooks -> triggers ApiUtil
-* NotebookActions.fetchSingleNotebook
-* NotebookActions.createNotebook
-* NotebookActions.editNotebook
-* NotebookActions.destroyNotebook
+* ApiActions.receiveAllRestaurants -> triggered by ApiUtil
+* ApiActions.receiveSingleRestaurant
+* RestaurantActions.fetchAllRestaurants -> triggers ApiUtil
+* RestaurantActions.fetchSingleRestaurant
 
 ### ApiUtil
-* ApiUtil.fetchAllNotebooks
-* ApiUtil.fetchSingleNotebook
-* ApiUtil.createNotebook
-* ApiUtil.editNotebook
-* ApiUtil.destroyNotebook
+* ApiUtil.fetchAllRestaurants
+* ApiUtil.fetchSingleRestaurant
 
 ## Gems/Libraries

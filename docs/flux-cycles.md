@@ -12,53 +12,34 @@ because once you start implementing your flux loops, that's precisely
 what you'll need to do.
 
 
-## Note Cycles
+## Restaurant Cycles
 
-### Notes API Request Actions
+### Restaurant API Request Actions
 
-* `fetchAllNotes`
-  0. invoked from `NotesIndex` `didMount`/`willReceiveProps`
-  0. `GET /api/notes` is called.
-  0. `receiveAllNotes` is set as the callback.
+* `fetchAllRestaurants`
+  0. invoked from `RestaurantsIndex` `didMount`/`willReceiveProps`
+  0. `GET /api/restaurants` is called.
+  0. `receiveAllRestaurants` is set as the callback.
 
-* `createNote`
-  0. invoked from new note button `onClick`
-  0. `POST /api/notes` is called.
-  0. `receiveSingleNote` is set as the callback.
+* `fetchSingleRestaurant`
+  0. invoked from `RestaurantIndexItem` `didMount`/`willReceiveProps`
+  0. `GET /api/restaurants/:restaurantId` is called.
+  0. `receiveSingleRestaurant` is set as the callback.
 
-* `fetchSingleNote`
-  0. invoked from `NoteDetail` `didMount`/`willReceiveProps`
-  0. `GET /api/notes/:id` is called.
-  0. `receiveSingleNote` is set as the callback.
+### Restaurant API Response Actions
 
-* `updateNote`
-  0. invoked from `NoteForm` `onSubmit`
-  0. `POST /api/notes` is called.
-  0. `receiveSingleNote` is set as the callback.
-
-* `destroyNote`
-  0. invoked from delete note button `onClick`
-  0. `DELETE /api/notes/:id` is called.
-  0. `removeNote` is set as the callback.
-
-### Notes API Response Actions
-
-* `receiveAllNotes`
+* `receiveAllRestaurants`
   0. invoked from an API callback.
-  0. `Note` store updates `_notes` and emits change.
+  0. `Restaurant` store updates `_restaurants` and emits change.
 
-* `receiveSingleNote`
+* `receiveSingleRestaurant`
   0. invoked from an API callback.
-  0. `Note` store updates `_notes[id]` and emits change.
-
-* `removeNote`
-  0. invoked from an API callback.
-  0. `Note` store removes `_notes[id]` and emits change.
+  0. `Restaurant` store updates `_restaurants[id]` and emits change.
 
 ### Store Listeners
 
-* `NotesIndex` component listens to `Note` store.
-* `NoteDetail` component listens to `Note` store.
+* `RestaurantsIndex` component listens to `Restaurant` store.
+* `RestaurantsIndexItem` component listens to `Restaurant` store.
 
 
 ## Notebook Cycles
