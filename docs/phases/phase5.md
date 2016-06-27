@@ -21,4 +21,3 @@
 * ReservationActions
 
 ## Gems/Libraries
-* react-quill (npm)
