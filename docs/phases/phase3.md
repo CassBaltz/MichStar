@@ -12,7 +12,7 @@
 
 ## Flux
 ### Stores
-* Restaurant
+* continued from phase 2
 
 ### Components
 * RestaurantIndex
@@ -20,13 +20,10 @@
 * RestaurantShow
 
 ### Actions
-* ApiActions.receiveAllRestaurants -> triggered by ApiUtil
-* ApiActions.receiveSingleRestaurant
-* RestaurantActions.fetchAllRestaurants -> triggers ApiUtil
-* RestaurantActions.fetchSingleRestaurant
+* continued from phase 2
 
 ### ApiUtil
-* ApiUtil.fetchAllRestaurants
-* ApiUtil.fetchSingleRestaurant
+* continued from phase 2
 
 ## Gems/Libraries
+* Google Maps Integration

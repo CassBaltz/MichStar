@@ -1,19 +1,19 @@
 # View Wireframes
 
 ## landing
-[home](wireframes/home.png)
+[Home](wireframes/home.png)
 
 ## restaurant search
-[restaurantsearch](wireframes/restaurantsearch.png)
+[Restaurant Search](wireframes/restaurantsearch.png)
 
 ## restaurant profile
-[restaurant](wireframes/restaurantpage.png)
+[Restaurant Show](wireframes/restaurantpage.png)
 
 ## signin
-[signin](wireframes/signin.png)
+[Sign in](wireframes/signin.png)
 
-## user history/past restaurants/reviews
-[userrestaurantspage](wireframes/restaurantpage.png)
+## user history, past restaurants, reviews
+[User Page](wireframes/restaurantpage.png)
 
 ## user reservations page
-[reservationsnpage](wireframes/reervationspage.png)
+[User Reservations Page](wireframes/reervationspage.png)

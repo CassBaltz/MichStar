@@ -24,8 +24,9 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 user_id     | integer   | not null, foreign key (references users), indexed
-rest_id     | integer   | not null, foreign key (references notes), indexed
+rest_id     | integer   | not null, foreign key (references restaurant), indexed
 date        | datetime  | not null
+content     | text      | not null
 
 ## ratings
 column name | data type | details
@@ -42,7 +43,8 @@ id          | integer   | not null, primary key
 rest_id     | string    | not null
 day         | datetime  | not null
 table_size  | integer   | not null
-time_slot   | datetime  | not null   
+time_slot   | datetime  | not null
+reserved    | boolean   | not null, default: false  
 
 ## reservations
 column name | data type | details

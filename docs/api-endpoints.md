@@ -6,56 +6,31 @@
 
 - `GET /` - loads React web app
 
-### Users
-
-- `GET /users/new`
-- `GET /users/:userId`
-- `POST /users`
-- `PATCH /users`
-
-### Session
-
-- `GET /session/new`
-- `POST /session`
-- `DELETE /session`
-
-### About
-- `GET /about`
-
-### History (Michelin Star History)
-- `GET /history`
-
-### Contact
-- `GET /contact`
-
 ## JSON API
 
 ### Restaurants (CURRENT VERSION HAS NO RESTAURANT CREATION)
 
-- `GET /api/restaurants`
-  - Notes index/search
-  - Index autopopulates when search bar is clicked
-  - accepts pagination params (if I get there)
-  - can search by genre (if I get there)
-- `GET /api/restaurants/:restaurantId`
-
+- `GET /api/restaurants.json.jbuilder`
+- `GET /api/restaurants/show.json.jbuilder`
 
 ### Reservations
 
-- `GET /api/restaurants/:restaurantId/reservation_options`
-  - sort through available vs unavailable depending on day.
-- `POST /api/reservations`
-- `GET /api/reservations`
-  - sort through using reservation list and current user id
-- `DELETE /api/reservations`
-  - cancel a reservation
+- `GET /api/reservations/restaurant_index.json.jbuilder`
+- `GET /api/restaurants/user_index.json.jbuilder`
+- `POST /api/reservations/create(controller only)`
+- `DELETE /api/reservations/:id delete(controller only)`
+
+### Reservation Options
+
+- `GET /api/reservation_options.json.jbuilder`
+
+### Users
+
+- `GET /api/users/show.json.jbuilder`
 
 ### Reviews
 
-- A note's tags will be included in the note show template
-- `GET /api/reviews`
-  - filter in controller for only reviews pertaining to the restaurant in question
-- `POST /api/reviews`
-  - if note doesn't already exist, it will be created
-- `DELETE /api/reviews`: remove tag from note by
-  name
+- `GET /api/reviews.json.jbuilder` (need one in restaurant and one in user context, not sure if I should do two endpoints or controller actions or one and filter by request)
+- `POST /api/reviews.json.jbuilder`
+- `UPDATE /api/reviews.json.jbuilder`
+- `DELETE /api/reviews/:id json.jbuilder delete(controller only)`

@@ -6,7 +6,7 @@ Restaurant
 Reservation Options
 
 ### Controllers
-Restaurant Controllers
+Restaurant Controller (index, show)
 
 ### Views
 
@@ -15,16 +15,20 @@ Restaurant Controllers
 
 ### Stores
 * Restaurant
+* ReservationOptions
 
 ### Actions
-* ApiActions.receiveAllRestaurants -> triggered by ApiUtil
-* ApiActions.receiveSingleRestaurant
-* NoteActions.fetchAllRestaurants -> triggers ApiUtil
-* NoteActions.fetchSingleRestaurant
+* ApiRestaurantActions.receiveAllRestaurants -> triggered by ApiUtil
+* ApiRestaurantActions.receiveSingleRestaurant
+* ApiReservationOptionsActions.fetchReservationOptions
+* RestaurantActions.fetchAllRestaurants -> triggers ApiUtil
+* RestaurantActions.fetchSingleRestaurant
+* RestaurantActions.fetchReservationOptions
 
 ### ApiUtil
 * ApiUtil.fetchAllRestaurants
 * ApiUtil.fetchSingleRestaurant
+* ApiUtil.fetchReservationOptions
 
 ## Gems/Libraries
-* Google Maps Integration
+* Remote photo hosting via CDN

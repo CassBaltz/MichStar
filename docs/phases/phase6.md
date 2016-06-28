@@ -9,9 +9,10 @@
 * Api::ReviewController (create, destroy, index, show, update)
 
 ### Views
-* restaurant/:restaurantId/reviews/index.json.jbuilder
-* user/:userId/reviews/index.json.jbuilder
-* reviews/show.json.jbuilder
+* restaurants/:restaurantId
+* users/:userId
+* reviews/index.json.jbuilder
+  * assume this will have different output with regards to whether it is called from restaurant or user component (will need two different fetch methods);
 
 ## Flux
 ### Views (React Components)
@@ -24,9 +25,6 @@
 * Reviews
 
 ### Actions
-* ApiActions.receiveAllReviews -> triggered by ApiUtil
-* ApiActions.receiveSingleReview
-* ApiActions.deleteReview
 * ReviewActions.fetchAllReviews -> triggers ApiUtil
 * ReviewActions.fetchSingleReview
 * ReviewActions.createReview
@@ -34,10 +32,11 @@
 * ReviewActions.destroyReview
 
 ### ApiUtil
-* ApiUtil.fetchAllReviews
-* ApiUtil.fetchSingleReview
-* ApiUtil.createReview
-* ApiUtil.updateReview
-* ApiUtil.destroyReview
+* ApiUtil::Reviews.fetchAllUserReviews
+* ApiUtil::Reviews.fetchAllRestaurantReviews
+* ApiUtil::Reviews.fetchSingleReview
+* ApiUtil::Reviews.createReview
+* ApiUtil::Reviews.updateReview
+* ApiUtil::Reviews.destroyReview
 
 ## Gems/Libraries

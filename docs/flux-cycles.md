@@ -42,69 +42,58 @@ what you'll need to do.
 * `RestaurantsIndexItem` component listens to `Restaurant` store.
 
 
-## Notebook Cycles
+## Reservations Cycles
 
-### Notebooks API Request Actions
+### User API Request Actions
 
-* `fetchAllNotebooks`
-  0. invoked from `NotebooksIndex` `didMount`/`willReceiveProps`
-  0. `GET /api/notebooks` is called.
-  0. `receiveAllNotebooks` is set as the callback.
+* `fetchAllReservationOptions`
+  0. invoked from `ReservationsIndex` based on restaurant showing `didMount`/`willReceiveProps`
+  0. `GET /api/restaurants/:restaurantId/reservationOptions` is called.
+  0. `receiveAllReservations` is set as the callback.
 
-* `createNotebook`
-  0. invoked from new notebook button `onClick`
-  0. `POST /api/notebooks` is called.
-  0. `receiveSingleNotebook` is set as the callback.
-
-* `fetchSingleNotebook`
-  0. invoked from `NotebookDetail` `didMount`/`willReceiveProps`
-  0. `GET /api/notebooks/:id` is called.
-  0. `receiveSingleNotebook` is set as the callback.
-
-* `updateNotebook`
-  0. invoked from `NotebookForm` `onSubmit`
-  0. `POST /api/notebooks` is called.
-  0. `receiveSingleNotebook` is set as the callback.
+* `createReservation`
+  0. invoked from new `reservation` button `onClick`
+  0. `POST /api/restaurants/:restaurantId/reservationOptions` is called.
+  0. `receiveSingleReservation` is set as the callback
 
 * `destroyNotebook`
   0. invoked from delete notebook button `onClick`
-  0. `DELETE /api/notebooks/:id` is called.
-  0. `removeNotebook` is set as the callback.
+  0. `DELETE /api/restaurants/:restaurantId/reservationOptions` is called.
+  0. `removeReservation` is set as the callback.
 
 ### Notebooks API Response Actions
 
-* `receiveAllNotebooks`
+* `receiveAllReservationOptions`
   0. invoked from an API callback.
-  0. `Notebook` store updates `_notebooks` and emits change.
+  0. `Reservations` store updates `_reservations` and `_reservationOptions` then emits change.
 
-* `receiveSingleNotebook`
+* `receiveSingleReservation`
   0. invoked from an API callback.
-  0. `Notebook` store updates `_notebooks[id]` and emits change.
+  0. `Reservation` store updates `_reservations` and emits change.
 
-* `removeNotebook`
+* `removeReservation`
   0. invoked from an API callback.
-  0. `Notebook` store removes `_notebooks[id]` and emits change.
+  0. `Reservation` store removes `_reservations[id]` then updates `reservationOptions` and emits change.
 
 ### Store Listeners
 
-* `NotebooksIndex` component listens to `Notebook` store.
+* `ReservationIndex` component listens to `Reservation` store.
+* `ReservationOptionsIndex` component listens to `Reservation` store.
 
+## Review Cycles
 
-## SearchSuggestion Cycles
+* `fetchRestaurantReviews`
+  0. invoked from `RestaurantShowItem` `componentDidMount`
+  0. `GET /api/restaurants/:restaurantId/reviews` is called
+  0. `receiveReviews` is set as the callback.
 
-* `fetchSearchSuggestions`
-  0. invoked from `NoteSearchBar` `onChange` when there is text
-  0. `GET /api/notes` is called with `text` param.
-  0. `receiveSearchSuggestions` is set as the callback.
-
-* `receiveSearchSuggestions`
+* `receiveReviews`
   0. invoked from an API callback.
-  0. `SearchSuggestion` store updates `_suggestions` and emits change.
+  0. `Reviews` store updates `_reviews` and emits change.
 
-* `removeSearchSuggestions`
-  0. invoked from `NoteSearchBar` `onChange` when empty
-  0. `SearchSuggestion` store resets `_suggestions` and emits change.
+* `removeReviews`
+  0. invoked from `userReviewsItem` `onClick` when review was actually written by the current user.
 
 ### Store Listeners
 
-* `SearchBarSuggestions` component listens to `SearchSuggestion` store.
+* `ReviewIndex` component listens to `Review` store.

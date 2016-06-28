@@ -1,4 +1,4 @@
-# Phase 1: User Authentication, Note Model and JSON API
+# Phase 1: User Authentication
 
 ## Rails
 ### Models
@@ -9,19 +9,28 @@
 * SessionsController (create, new, destroy)
 
 ### Views
-* users/new.html.erb
-* session/new.html.erb
-* notes/index.json.jbuilder
-* notes/show.json.jbuilder
+* `static_pages#root` will be the root view in the application, just like all our other projects
+* users/new.json.jbuilder
+  * `users/new` router route
+* session/new.json.jbuilder
+  * `users/new` router route (have option for sign up or sign in on this same page with different actions for the submit button depending on which item is clicked)
+* session/show.json.jbuilder
 
 ## Flux
 ### Views (React Components)
+AuthenticationForm
 
 ### Stores
+* CurrentUser
 
 ### Actions
+* UserActions
 
 ### ApiUtil
+* ApiUserActions.getCurrentUser -> triggered by ApiUtil
+* ApiUserActions.createNewUser
+* UserActions.createNewUser -> triggers ApiUtil
+* UserActions.getCurrentUser
 
 ## Gems/Libraries
 * BCrypt (Gem)
