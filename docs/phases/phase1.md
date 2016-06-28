@@ -14,7 +14,7 @@
   * `users/new` router route
 * session/new.json.jbuilder
   * `users/new` router route (have option for sign up or sign in on this same page with different actions for the submit button depending on which item is clicked)
-* session/show.json.jbuilder
+* session /show.json.jbuilder
 
 ## Flux
 ### Views (React Components)
