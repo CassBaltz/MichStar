@@ -67,7 +67,6 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(IndexRoute, { component: App }),
 	    React.createElement(Route, { path: '/login', component: LoginForm }),
 	    React.createElement(Route, { path: '/signup', component: LoginForm })
 	  )
@@ -32818,6 +32817,7 @@
 	    });
 	  },
 	  removeCurrentUser: function removeCurrentUser() {
+	    console.log("in remove currentUser");
 	    AppDispatcher.dispatch({
 	      actionType: SessionConstants.LOGOUT
 	    });

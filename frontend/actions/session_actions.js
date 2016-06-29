@@ -40,6 +40,7 @@ const SessionActions = {
   },
 
   removeCurrentUser() {
+    console.log("in remove currentUser");
     AppDispatcher.dispatch({
       actionType: SessionConstants.LOGOUT
     });
