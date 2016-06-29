@@ -19,7 +19,7 @@ var UserApiUtil = {
 			error: error
 		});
 	},
-	
+
 	fetchCurrentUser: function(success, error){
 		$.ajax({
 			url: '/api/session',

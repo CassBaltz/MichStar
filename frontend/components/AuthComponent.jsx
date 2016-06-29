@@ -1,21 +1,23 @@
 const React = require("react");
 const UserActions = require("../actions/user_actions");
 const LoginForm = require('./LoginForm');
+const SignupForm = require('./SignupForm');
 
-const App = React.createClass({
+const AuthComponent = React.createClass({
   componentDidMount(){
-    // debugger
-    // UserActions.fetchCurrentUser();
+
   },
 
   render(){
     return (
       <div>
-        <h1>Front End Auth Demo</h1>
+        <h1>LoginForm</h1>
         <LoginForm/>
+        <h1>SignupForm</h1>
+        <SignupForm/>
       </div>
     );
   }
 });
 
-module.exports = App;
+module.exports = AuthComponent;

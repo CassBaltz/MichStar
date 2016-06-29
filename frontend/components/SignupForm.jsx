@@ -2,12 +2,13 @@ var React = require("react");
 var UserActions = require("../actions/user_actions");
 var UserStore = require("../stores/user_store");
 
-var LoginForm = React.createClass({
+var SignupForm = React.createClass({
 	getInitialState: function(){
 		return {
 			currentUser: UserStore.currentUser(),
 			userErrors: UserStore.errors(),
-			email: "",
+			name: "",
+      email: "",
 			password: ""
 		};
 	},
@@ -24,10 +25,30 @@ var LoginForm = React.createClass({
 		});
 	},
 
+  _setForm: function(e){
+		this.setState({form: e.currentTarget.value});
+	},
+
+  updateEmail: function(e) {
+    e.preventDefault();
+    this.setState({email: e.target.value});
+  },
+
+  updatePassword: function(e) {
+    e.preventDefault();
+    this.setState({password: e.target.value});
+  },
+
+  updateName: function(e) {
+    e.preventDefault();
+    this.setState({name: e.target.value});
+  },
+
 	handleSubmit: function(e){
 		e.preventDefault();
-		UserActions.login({
-			email: this.state.email,
+		UserActions.signup({
+      name: this.state.name,
+      email: this.state.email,
 			password: this.state.password
 		});
 	},
@@ -35,17 +56,6 @@ var LoginForm = React.createClass({
 		e.preventDefault();
 		UserActions.logout();
 	},
-
-	updateEmail: function(e) {
-		e.preventDefault();
-		this.setState({email: e.target.value});
-	},
-
-	updatePassword: function(e) {
-		e.preventDefault();
-		this.setState({password: e.target.value});
-	},
-
 	greeting: function(){
 		if (!this.state.currentUser) {
 			return;
@@ -72,31 +82,34 @@ var LoginForm = React.createClass({
 		}
 		</ul>);
 	},
-
 	form: function(){
 		if (this.state.currentUser) {
 			return;
 		}
 		return(
-				<form onSubmit={this.handleSubmit}>
-					<section>
-						<label> Email:
-							<input type="text" onChange={this.updateEmail} value={this.state.email}/>
-						</label>
+      <form onSubmit={this.handleSubmit}>
+        <section>
+          <label> Name:
+            <input type="text" onChange={this.updateName} value={this.state.name}/>
+          </label>
 
-						<label> Password:
-							<input type="password" onChange={this.updatePassword} value={this.state.password}/>
-						</label>
-					</section>
+          <label> Email:
+            <input type="text" onChange={this.updateEmail} value={this.state.email}/>
+          </label>
 
-					<input type="Submit" value="Log In"/>
-				</form>
+          <label> Password:
+            <input type="password" onChange={this.updatePassword} value={this.state.password}/>
+          </label>
+        </section>
+
+        <input type="Submit" value="Sign Up"/>
+      </form>
 		);
 	},
 
 	render: function(){
 		return (
-			<div id="login-form">
+			<div id="signup-form">
 				{this.greeting()}
 				{this.errors()}
 				{this.form()}
@@ -105,4 +118,4 @@ var LoginForm = React.createClass({
 	}
 });
 
-module.exports = LoginForm;
+module.exports = SignupForm;

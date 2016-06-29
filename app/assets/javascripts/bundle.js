@@ -49,14 +49,14 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
 	var UserActions = __webpack_require__(168);
-	var App = __webpack_require__(193);
+	var AuthComponent = __webpack_require__(200);
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  if (window.currentUser) {
 	    UserActions.receiveCurrentUser(currentUser);
 	  }
 	  var root = document.getElementById('content');
-	  ReactDOM.render(React.createElement(App, null), root);
+	  ReactDOM.render(React.createElement(AuthComponent, null), root);
 	});
 
 /***/ },
@@ -27282,55 +27282,21 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	var UserActions = __webpack_require__(168);
-	var LoginForm = __webpack_require__(194);
-	
-	var App = React.createClass({
-	  displayName: "App",
-	  componentDidMount: function componentDidMount() {
-	    // debugger
-	    // UserActions.fetchCurrentUser();
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "h1",
-	        null,
-	        "Front End Auth Demo"
-	      ),
-	      React.createElement(LoginForm, null)
-	    );
-	  }
-	});
-	
-	module.exports = App;
-
-/***/ },
+/* 193 */,
 /* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(195);
 	var UserActions = __webpack_require__(168);
 	var UserStore = __webpack_require__(175);
 	
 	var LoginForm = React.createClass({
 		displayName: "LoginForm",
 	
-		mixins: [LinkedStateMixin],
 		getInitialState: function getInitialState() {
 			return {
-				form: "login",
 				currentUser: UserStore.currentUser(),
 				userErrors: UserStore.errors(),
 				email: "",
@@ -27340,7 +27306,7 @@
 	
 		componentDidMount: function componentDidMount() {
 			UserStore.addListener(this._updateUser);
-			// UserActions.fetchCurrentUser();
+			UserActions.fetchCurrentUser();
 		},
 	
 		_updateUser: function _updateUser() {
@@ -27349,12 +27315,168 @@
 				userErrors: UserStore.errors()
 			});
 		},
+	
+		handleSubmit: function handleSubmit(e) {
+			e.preventDefault();
+			UserActions.login({
+				email: this.state.email,
+				password: this.state.password
+			});
+		},
+		logout: function logout(e) {
+			e.preventDefault();
+			UserActions.logout();
+		},
+	
+		updateEmail: function updateEmail(e) {
+			e.preventDefault();
+			this.setState({ email: e.target.value });
+		},
+	
+		updatePassword: function updatePassword(e) {
+			e.preventDefault();
+			this.setState({ password: e.target.value });
+		},
+	
+		greeting: function greeting() {
+			if (!this.state.currentUser) {
+				return;
+			}
+	
+			return React.createElement(
+				"div",
+				null,
+				React.createElement(
+					"h2",
+					null,
+					"Hi, ",
+					this.state.currentUser.name,
+					"!"
+				),
+				React.createElement("input", { type: "submit", value: "logout", onClick: this.logout })
+			);
+		},
+	
+		errors: function errors() {
+			if (!this.state.userErrors) {
+				return;
+			}
+			var self = this;
+			return React.createElement(
+				"ul",
+				null,
+				Object.keys(this.state.userErrors).map(function (key, i) {
+					return React.createElement(
+						"li",
+						{ key: i },
+						self.state.userErrors[key]
+					);
+				})
+			);
+		},
+	
+		form: function form() {
+			if (this.state.currentUser) {
+				return;
+			}
+			return React.createElement(
+				"form",
+				{ onSubmit: this.handleSubmit },
+				React.createElement(
+					"section",
+					null,
+					React.createElement(
+						"label",
+						null,
+						" Email:",
+						React.createElement("input", { type: "text", onChange: this.updateEmail, value: this.state.email })
+					),
+					React.createElement(
+						"label",
+						null,
+						" Password:",
+						React.createElement("input", { type: "password", onChange: this.updatePassword, value: this.state.password })
+					)
+				),
+				React.createElement("input", { type: "Submit", value: "Log In" })
+			);
+		},
+	
+		render: function render() {
+			return React.createElement(
+				"div",
+				{ id: "login-form" },
+				this.greeting(),
+				this.errors(),
+				this.form()
+			);
+		}
+	});
+	
+	module.exports = LoginForm;
+
+/***/ },
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var UserActions = __webpack_require__(168);
+	var UserStore = __webpack_require__(175);
+	
+	var SignupForm = React.createClass({
+		displayName: "SignupForm",
+	
+		getInitialState: function getInitialState() {
+			return {
+				currentUser: UserStore.currentUser(),
+				userErrors: UserStore.errors(),
+				name: "",
+				email: "",
+				password: ""
+			};
+		},
+	
+		componentDidMount: function componentDidMount() {
+			UserStore.addListener(this._updateUser);
+			UserActions.fetchCurrentUser();
+		},
+	
+		_updateUser: function _updateUser() {
+			this.setState({
+				currentUser: UserStore.currentUser(),
+				userErrors: UserStore.errors()
+			});
+		},
+	
 		_setForm: function _setForm(e) {
 			this.setState({ form: e.currentTarget.value });
 		},
+	
+		updateEmail: function updateEmail(e) {
+			e.preventDefault();
+			this.setState({ email: e.target.value });
+		},
+	
+		updatePassword: function updatePassword(e) {
+			e.preventDefault();
+			this.setState({ password: e.target.value });
+		},
+	
+		updateName: function updateName(e) {
+			e.preventDefault();
+			this.setState({ name: e.target.value });
+		},
+	
 		handleSubmit: function handleSubmit(e) {
 			e.preventDefault();
-			UserActions[this.state.form]({
+			UserActions.signup({
+				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password
 			});
@@ -27412,40 +27534,30 @@
 					React.createElement(
 						"label",
 						null,
+						" Name:",
+						React.createElement("input", { type: "text", onChange: this.updateName, value: this.state.name })
+					),
+					React.createElement(
+						"label",
+						null,
 						" Email:",
-						React.createElement("input", { type: "text", valueLink: this.linkState("email") })
+						React.createElement("input", { type: "text", onChange: this.updateEmail, value: this.state.email })
 					),
 					React.createElement(
 						"label",
 						null,
 						" Password:",
-						React.createElement("input", { type: "password", valueLink: this.linkState("password") })
+						React.createElement("input", { type: "password", onChange: this.updatePassword, value: this.state.password })
 					)
 				),
-				React.createElement(
-					"section",
-					null,
-					React.createElement(
-						"label",
-						null,
-						" Login",
-						React.createElement("input", { type: "Radio", name: "action", value: "login", onChange: this._setForm })
-					),
-					React.createElement(
-						"label",
-						null,
-						" Sign Up",
-						React.createElement("input", { type: "Radio", name: "action", value: "signup", onChange: this._setForm })
-					)
-				),
-				React.createElement("input", { type: "Submit" })
+				React.createElement("input", { type: "Submit", value: "Sign Up" })
 			);
 		},
 	
 		render: function render() {
 			return React.createElement(
 				"div",
-				{ id: "login-form" },
+				{ id: "signup-form" },
 				this.greeting(),
 				this.errors(),
 				this.form()
@@ -27453,239 +27565,43 @@
 		}
 	});
 	
-	module.exports = LoginForm;
+	module.exports = SignupForm;
 
 /***/ },
-/* 195 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(196);
-
-/***/ },
-/* 196 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule LinkedStateMixin
-	 */
+	"use strict";
 	
-	'use strict';
+	var React = __webpack_require__(1);
+	var UserActions = __webpack_require__(168);
+	var LoginForm = __webpack_require__(194);
+	var SignupForm = __webpack_require__(199);
 	
-	var ReactLink = __webpack_require__(197);
-	var ReactStateSetters = __webpack_require__(198);
-	
-	/**
-	 * A simple mixin around ReactLink.forState().
-	 * See https://facebook.github.io/react/docs/two-way-binding-helpers.html
-	 */
-	var LinkedStateMixin = {
-	  /**
-	   * Create a ReactLink that's linked to part of this component's state. The
-	   * ReactLink will have the current value of this.state[key] and will call
-	   * setState() when a change is requested.
-	   *
-	   * @param {string} key state key to update. Note: you may want to use keyOf()
-	   * if you're using Google Closure Compiler advanced mode.
-	   * @return {ReactLink} ReactLink instance linking to the state.
-	   */
-	  linkState: function (key) {
-	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
+	var AuthComponent = React.createClass({
+	  displayName: "AuthComponent",
+	  componentDidMount: function componentDidMount() {},
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "h1",
+	        null,
+	        "LoginForm"
+	      ),
+	      React.createElement(LoginForm, null),
+	      React.createElement(
+	        "h1",
+	        null,
+	        "SignupForm"
+	      ),
+	      React.createElement(SignupForm, null)
+	    );
 	  }
-	};
+	});
 	
-	module.exports = LinkedStateMixin;
-
-/***/ },
-/* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactLink
-	 */
-	
-	'use strict';
-	
-	/**
-	 * ReactLink encapsulates a common pattern in which a component wants to modify
-	 * a prop received from its parent. ReactLink allows the parent to pass down a
-	 * value coupled with a callback that, when invoked, expresses an intent to
-	 * modify that value. For example:
-	 *
-	 * React.createClass({
-	 *   getInitialState: function() {
-	 *     return {value: ''};
-	 *   },
-	 *   render: function() {
-	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
-	 *     return <input valueLink={valueLink} />;
-	 *   },
-	 *   _handleValueChange: function(newValue) {
-	 *     this.setState({value: newValue});
-	 *   }
-	 * });
-	 *
-	 * We have provided some sugary mixins to make the creation and
-	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
-	 */
-	
-	var React = __webpack_require__(2);
-	
-	/**
-	 * Deprecated: An an easy way to express two-way binding with React. 
-	 * See https://facebook.github.io/react/docs/two-way-binding-helpers.html
-	 *
-	 * @param {*} value current value of the link
-	 * @param {function} requestChange callback to request a change
-	 */
-	function ReactLink(value, requestChange) {
-	  this.value = value;
-	  this.requestChange = requestChange;
-	}
-	
-	/**
-	 * Creates a PropType that enforces the ReactLink API and optionally checks the
-	 * type of the value being passed inside the link. Example:
-	 *
-	 * MyComponent.propTypes = {
-	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
-	 * }
-	 */
-	function createLinkTypeChecker(linkType) {
-	  var shapes = {
-	    value: linkType === undefined ? React.PropTypes.any.isRequired : linkType.isRequired,
-	    requestChange: React.PropTypes.func.isRequired
-	  };
-	  return React.PropTypes.shape(shapes);
-	}
-	
-	ReactLink.PropTypes = {
-	  link: createLinkTypeChecker
-	};
-	
-	module.exports = ReactLink;
-
-/***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactStateSetters
-	 */
-	
-	'use strict';
-	
-	var ReactStateSetters = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (component, funcReturningState) {
-	    return function (a, b, c, d, e, f) {
-	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
-	      if (partialState) {
-	        component.setState(partialState);
-	      }
-	    };
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (component, key) {
-	    // Memoize the setters.
-	    var cache = component.__keySetters || (component.__keySetters = {});
-	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
-	  }
-	};
-	
-	function createStateKeySetter(component, key) {
-	  // Partial state is allocated outside of the function closure so it can be
-	  // reused with every call, avoiding memory allocation when this function
-	  // is called.
-	  var partialState = {};
-	  return function stateKeySetter(value) {
-	    partialState[key] = value;
-	    component.setState(partialState);
-	  };
-	}
-	
-	ReactStateSetters.Mixin = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateSetter(function(xValue) {
-	   *     return {x: xValue};
-	   *   })(1);
-	   *
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (funcReturningState) {
-	    return ReactStateSetters.createStateSetter(this, funcReturningState);
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateKeySetter('x')(1);
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (key) {
-	    return ReactStateSetters.createStateKeySetter(this, key);
-	  }
-	};
-	
-	module.exports = ReactStateSetters;
+	module.exports = AuthComponent;
 
 /***/ }
 /******/ ]);
