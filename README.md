@@ -1,13 +1,12 @@
 # Michstar
 
-[Heroku link](michstarapp.herokuapp.com)
+[Heroku link](https://michstarapp.herokuapp.com)
 
 ## Minimum Viable Product
 
-Michstar is a web application inspired by OpenTable for all the 2 and 3 Michelin star restaurants located in San Fancisco (2016 awards).  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
+Michstar is a web application inspired by OpenTable for all the 2 and 3 Michelin star restaurants located in San Francisco (2016 awards).  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
 - [ ] Hosting on Heroku
-- [ ] Custom URL
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README, replacing this README
 - [ ] Restaurants Directory
@@ -29,6 +28,7 @@ Michstar is a web application inspired by OpenTable for all the 2 and 3 Michelin
 
 Bonus
 
+- [ ] Custom URL
 - [ ] Create Restaurant
   - [ ] Ability for a restaurant owner to enter information and assign reservation options on the site
 - [ ] Michelin Star (viaMichelin) api integration

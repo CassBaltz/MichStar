@@ -1,105 +1,129 @@
 var React = require("react");
-var UserActions = require("../actions/user_actions");
-var UserStore = require("../stores/user_store");
+const SessionActions = require('../actions/session_actions');
+const Link = require('react-router').Link;
+const SessionStore = require('../stores/session_store');
+const ErrorStore = require('../stores/error_store');
 
-var LoginForm = React.createClass({
+const LoginForm = React.createClass({
+
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
+
 	getInitialState: function(){
 		return {
-			currentUser: UserStore.currentUser(),
-			userErrors: UserStore.errors(),
+			name: "",
 			email: "",
 			password: ""
 		};
 	},
 
 	componentDidMount: function(){
-		UserStore.addListener(this._updateUser);
-		UserActions.fetchCurrentUser();
-	},
+		this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+  },
 
-	_updateUser: function(){
-		this.setState({
-			currentUser: UserStore.currentUser(),
-			userErrors: UserStore.errors()
-		});
-	},
+	componentWillUnmount() {
+    this.errorListener.remove();
+    this.sessionListener.remove();
+  },
 
-	handleSubmit: function(e){
+	redirectIfLoggedIn() {
+    if (SessionStore.isUserLoggedIn()) {
+      this.context.router.push("/");
+    }
+  },
+
+	handleSubmit(e) {
 		e.preventDefault();
-		UserActions.login({
+
+		const formData = {
+			name: this.state.name,
 			email: this.state.email,
 			password: this.state.password
-		});
-	},
-	logout: function(e){
-		e.preventDefault();
-		UserActions.logout();
+		};
+
+    if (this.props.location.pathname === "/login") {
+      SessionActions.logIn({email: formData.email, password: formData.password});
+    } else {
+      SessionActions.signUp(formData);
+    }
 	},
 
-	updateEmail: function(e) {
-		e.preventDefault();
-		this.setState({email: e.target.value});
-	},
+  fieldErrors(field) {
+    const errors = ErrorStore.formErrors(this.formType());
 
-	updatePassword: function(e) {
-		e.preventDefault();
-		this.setState({password: e.target.value});
-	},
+    if (!errors[field]) { return; }
 
-	greeting: function(){
-		if (!this.state.currentUser) {
-			return;
-		}
+    const messages = errors[field].map( (errorMsg, i) => {
+      return <li key={ i }>{ errorMsg }</li>;
+    });
+
+    return <ul>{ messages }</ul>;
+  },
+
+  formType() {
+    return this.props.location.pathname.slice(1);
+  },
+
+  update(property) {
+    return (e) => this.setState({[property]: e.target.value});
+  },
+
+	render() {
+
+    let navLink;
+    if (this.formType() === "login") {
+      navLink = <Link to="/signup">sign up instead</Link>;
+    } else {
+      navLink = <Link to="/login">log in instead</Link>;
+    }
+
 
 		return (
-			<div>
-				<h2>Hi, {this.state.currentUser.name}!</h2>
-				<input type="submit" value="logout" onClick={this.logout}/>
-			</div>
-		);
-	},
+			<div className="login-form-container">
+				<form onSubmit={this.handleSubmit} className="login-form-box">
+	        Welcome to MichStar
+					<br/>
+					Please { this.formType() } or { navLink }
 
-	errors: function(){
-		if (!this.state.userErrors){
-			return;
-		}
-		var self = this;
-		return (<ul>
-		{
-			Object.keys(this.state.userErrors).map(function(key, i){
-				return (<li key={i}>{self.state.userErrors[key]}</li>);
-			})
-		}
-		</ul>);
-	},
+	        { this.fieldErrors("base") }
 
-	form: function(){
-		if (this.state.currentUser) {
-			return;
-		}
-		return(
-				<form onSubmit={this.handleSubmit}>
-					<section>
+					{this.formType() === "signup" ?
+						<div className="login-form">
+			        <br />
+							<label>Name:
+			          { this.fieldErrors("name") }
+								<input type="text"
+			            value={this.state.name}
+			            onChange={this.update("name")}
+									className="login-input" />
+							</label>
+						</div> : <div></div>}
+
+					<div className="login-form">
+		        <br />
 						<label> Email:
-							<input type="text" onChange={this.updateEmail} value={this.state.email}/>
+		          { this.fieldErrors("email") }
+							<input type="text"
+		            value={this.state.email}
+		            onChange={this.update("email")}
+								className="login-input" />
 						</label>
 
+		        <br />
 						<label> Password:
-							<input type="password" onChange={this.updatePassword} value={this.state.password}/>
+		          { this.fieldErrors("password") }
+		          <input type="password"
+		            value={this.state.password}
+		            onChange={this.update("password")}
+								className="login-input" />
 						</label>
-					</section>
 
-					<input type="Submit" value="Log In"/>
+		        <br />
+						<input type="submit" value="Submit" />
+					</div>
 				</form>
-		);
-	},
-
-	render: function(){
-		return (
-			<div id="login-form">
-				{this.greeting()}
-				{this.errors()}
-				{this.form()}
 			</div>
 		);
 	}

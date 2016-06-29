@@ -28,6 +28,7 @@ include BCrypt
 
   def reset_token!
     self.session_token = SecureRandom.urlsafe_base64(16)
+  ensure_session_token_uniqueness
     self.save!
     self.session_token
   end
