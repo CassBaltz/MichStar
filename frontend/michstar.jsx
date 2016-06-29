@@ -1,19 +1,12 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+const UserActions = require('./actions/user_actions');
+const App = require('./components/app.jsx');
 
-const App = React.createClass({
-  render: function () {
-    return (
-      <div>
-        <h1>Hello from the App</h1>
-      </div>
-    );
+document.addEventListener('DOMContentLoaded', function(){
+  if(window.currentUser){
+    UserActions.receiveCurrentUser(currentUser);
   }
+  const root = document.getElementById('content');
+  ReactDOM.render(<App />, root);
 });
-
-document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(
-      <App />,
-      document.getElementById('content')
-  );
-})

@@ -1,6 +1,6 @@
 # Michstar
 
-[Heroku link](https://michstar.herokuapp.com)
+[Heroku link](michstarapp.herokuapp.com)
 
 ## Minimum Viable Product
 
