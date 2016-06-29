@@ -7,7 +7,7 @@ const Route = ReactRouter.Route;
 const IndexRoute = ReactRouter.IndexRoute;
 const hashHistory = ReactRouter.hashHistory;
 
-const App = require('./components/app');
+const App = require('./components/App');
 const LoginForm = require('./components/LoginForm');
 
 const SessionStore = require('./stores/session_store');
