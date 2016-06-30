@@ -6,7 +6,7 @@
 
 Michstar is a web application inspired by OpenTable for all the 2 and 3 Michelin star restaurants located in San Francisco (2016 awards).  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
-- [ ] Hosting on Heroku
+- [x] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README, replacing this README
 - [ ] Restaurants Directory

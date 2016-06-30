@@ -56,7 +56,7 @@
 	var hashHistory = ReactRouter.hashHistory;
 	
 	var App = __webpack_require__(230);
-	var LoginForm = __webpack_require__(258);
+	var LoginForm = __webpack_require__(259);
 	
 	var SessionStore = __webpack_require__(231);
 	var SessionActions = __webpack_require__(254);
@@ -25968,6 +25968,7 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var SessionActions = __webpack_require__(254);
+	var NavBar = __webpack_require__(258);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -26017,6 +26018,7 @@
 	      React.createElement(
 	        'header',
 	        null,
+	        React.createElement(NavBar, null),
 	        React.createElement(
 	          Link,
 	          { to: '/', className: 'header-link' },
@@ -26034,6 +26036,8 @@
 	});
 	
 	module.exports = App;
+	
+	window.NavBar = NavBar;
 
 /***/ },
 /* 231 */
@@ -33008,13 +33012,73 @@
 
 	'use strict';
 	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var ReactRouter = __webpack_require__(168);
+	var hashHistory = ReactRouter.hashHistory;
+	
+	var hlStatus = void 0,
+	    plStatus = void 0,
+	    nameField = void 0;
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  getInitialState: function getInitialState() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      nameField = SessionStore.currentUser().name;
+	    } else {
+	      nameField = "Sign Up or Log In";
+	    }
+	    return { hlStatus: "home-link", plStatus: "personal-link", personalNav: nameField };
+	  },
+	
+	  updateHlStatus: function updateHlStatus(e) {
+	    e.preventDefault();
+	    this.setState({ hlStatus: "home-link clicked", plStatus: "personal-link" });
+	    hashHistory.push("/");
+	  },
+	
+	  updatePlStatus: function updatePlStatus(e) {
+	    e.preventDefault();
+	    this.setState({ hlStatus: "home-link", plStatus: "personal-link clicked" });
+	    hashHistory.push("/login");
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'container' },
+	      React.createElement(
+	        'h3',
+	        { className: this.state.hlStatus, onClick: this.updateHlStatus },
+	        'Home'
+	      ),
+	      React.createElement(
+	        'h3',
+	        { className: this.state.plStatus, onClick: this.updatePlStatus },
+	        'Hello'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	var React = __webpack_require__(1);
 	var SessionActions = __webpack_require__(254);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
-	var ErrorStore = __webpack_require__(259);
+	var ErrorStore = __webpack_require__(260);
 	var ErrorActions = __webpack_require__(256);
 	
 	var LoginForm = React.createClass({
@@ -33033,13 +33097,16 @@
 			};
 		},
 	
+		componentWillMount: function componentWillMount() {
+			ErrorActions.clearErrors();
+		},
+	
 		componentDidMount: function componentDidMount() {
 			this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
 			this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
 		},
 	
 		componentWillUnmount: function componentWillUnmount() {
-			ErrorActions.clearErrors();
 			this.errorListener.remove();
 			this.sessionListener.remove();
 		},
@@ -33200,7 +33267,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

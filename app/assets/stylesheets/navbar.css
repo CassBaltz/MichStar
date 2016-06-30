@@ -1,0 +1,42 @@
+div.container {
+  width: 100%;
+  display: inline-block;
+  background: black;
+  color: white;
+  position: fixed;
+}
+
+h3.home-link {
+  float: left;
+  color: white;
+  padding: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h3.home-link:hover {
+  background: grey;
+  color: red;
+  cursor: pointer;
+  cursor: hand;
+}
+
+h3.personal-link:hover {
+  background: grey;
+  color: red;
+  cursor: pointer;
+  cursor: hand;
+}
+
+h3.personal-link {
+  float: right;
+  color: white;
+  padding: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h3.clicked {
+  background: white;
+  color: black;
+}

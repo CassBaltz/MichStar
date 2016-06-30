@@ -4,6 +4,7 @@ const React = require('react');
 const Link = require('react-router').Link;
 const SessionStore = require('../stores/session_store');
 const SessionActions = require('../actions/session_actions');
+const NavBar = require('./navbar');
 
 const App = React.createClass({
 
@@ -39,6 +40,7 @@ const App = React.createClass({
     return (
       <div className="main-content">
         <header>
+          <NavBar />
           <Link to="/" className="header-link"><h1>MichStar</h1></Link>
           { this.greeting() }
         </header>
@@ -49,3 +51,5 @@ const App = React.createClass({
 });
 
 module.exports = App;
+
+window.NavBar = NavBar;
