@@ -72,56 +72,55 @@ const LoginForm = React.createClass({
 
 	render() {
 
-    let navLink;
+    let navLink, formHeader;
     if (this.formType() === "login") {
       navLink = <Link to="/signup">sign up instead</Link>;
+			formHeader = "Log In";
     } else {
       navLink = <Link to="/login">log in instead</Link>;
+			formHeader = "Sign Up";
     }
 
 
 		return (
-			<div className="login-form-container">
-				<form onSubmit={this.handleSubmit} className="login-form-box">
-	        Welcome to MichStar
-					<br/>
-					Please { this.formType() } or { navLink }
+			<div className="login-form">
+				<form className="form-fieldset">
+	        <div className="form-header">
+						<h2>{ formHeader }</h2>
+						<h4> { navLink } </h4>
+					</div>
 
 	        { this.fieldErrors("base") }
 
+				<div className="login-form">
+
 					{this.formType() === "signup" ?
-						<div className="login-form">
-			        <br />
-							<label>Name:
+							<div className="form-input-div"><label className="form-label">Name</label>
 			          { this.fieldErrors("name") }
-								<input type="text"
+								<input type="text" placeholder="Name"
 			            value={this.state.name}
 			            onChange={this.update("name")}
 									className="login-input" />
-							</label>
-						</div> : <div></div>}
+							 </div> : <div/>}
 
-					<div className="login-form">
-		        <br />
-						<label> Email:
+						<label className="form-label"> Email</label>
 		          { this.fieldErrors("email") }
 							<input type="text"
-		            value={this.state.email}
+		            placeholder="Email" value={this.state.email}
 		            onChange={this.update("email")}
 								className="login-input" />
-						</label>
 
-		        <br />
-						<label> Password:
+						<label className="form-label"> Password</label>
 		          { this.fieldErrors("password") }
 		          <input type="password"
+								placeholder="Password"
 		            value={this.state.password}
 		            onChange={this.update("password")}
 								className="login-input" />
-						</label>
 
-		        <br />
-						<input type="submit" value="Submit" />
+							<div>
+								<button className="form-submit" onSubmit={this.handleSubmit} type="submit">Submit</button>
+							</div>
 					</div>
 				</form>
 			</div>

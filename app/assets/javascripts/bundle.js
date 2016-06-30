@@ -32817,7 +32817,6 @@
 	    });
 	  },
 	  removeCurrentUser: function removeCurrentUser() {
-	    console.log("in remove currentUser");
 	    AppDispatcher.dispatch({
 	      actionType: SessionConstants.LOGOUT
 	    });
@@ -33018,76 +33017,94 @@
 		},
 		render: function render() {
 	
-			var navLink = void 0;
+			var navLink = void 0,
+			    formHeader = void 0;
 			if (this.formType() === "login") {
 				navLink = React.createElement(
 					Link,
 					{ to: '/signup' },
 					'sign up instead'
 				);
+				formHeader = "Log In";
 			} else {
 				navLink = React.createElement(
 					Link,
 					{ to: '/login' },
 					'log in instead'
 				);
+				formHeader = "Sign Up";
 			}
 	
 			return React.createElement(
 				'div',
-				{ className: 'login-form-container' },
+				{ className: 'login-form' },
 				React.createElement(
 					'form',
-					{ onSubmit: this.handleSubmit, className: 'login-form-box' },
-					'Welcome to MichStar',
-					React.createElement('br', null),
-					'Please ',
-					this.formType(),
-					' or ',
-					navLink,
-					this.fieldErrors("base"),
-					this.formType() === "signup" ? React.createElement(
+					{ className: 'form-fieldset' },
+					React.createElement(
 						'div',
-						{ className: 'login-form' },
-						React.createElement('br', null),
+						{ className: 'form-header' },
 						React.createElement(
-							'label',
+							'h2',
 							null,
-							'Name:',
-							this.fieldErrors("name"),
-							React.createElement('input', { type: 'text',
-								value: this.state.name,
-								onChange: this.update("name"),
-								className: 'login-input' })
+							formHeader
+						),
+						React.createElement(
+							'h4',
+							null,
+							' ',
+							navLink,
+							' '
 						)
-					) : React.createElement('div', null),
+					),
+					this.fieldErrors("base"),
 					React.createElement(
 						'div',
 						{ className: 'login-form' },
-						React.createElement('br', null),
+						this.formType() === "signup" ? React.createElement(
+							'div',
+							{ className: 'form-input-div' },
+							React.createElement(
+								'label',
+								{ className: 'form-label' },
+								'Name'
+							),
+							this.fieldErrors("name"),
+							React.createElement('input', { type: 'text', placeholder: 'Name',
+								value: this.state.name,
+								onChange: this.update("name"),
+								className: 'login-input' })
+						) : React.createElement('div', null),
 						React.createElement(
 							'label',
-							null,
-							' Email:',
-							this.fieldErrors("email"),
-							React.createElement('input', { type: 'text',
-								value: this.state.email,
-								onChange: this.update("email"),
-								className: 'login-input' })
+							{ className: 'form-label' },
+							' Email'
 						),
-						React.createElement('br', null),
+						this.fieldErrors("email"),
+						React.createElement('input', { type: 'text',
+							placeholder: 'Email', value: this.state.email,
+							onChange: this.update("email"),
+							className: 'login-input' }),
 						React.createElement(
 							'label',
-							null,
-							' Password:',
-							this.fieldErrors("password"),
-							React.createElement('input', { type: 'password',
-								value: this.state.password,
-								onChange: this.update("password"),
-								className: 'login-input' })
+							{ className: 'form-label' },
+							' Password'
 						),
-						React.createElement('br', null),
-						React.createElement('input', { type: 'submit', value: 'Submit' })
+						this.fieldErrors("password"),
+						React.createElement('input', { type: 'password',
+							placeholder: 'Password',
+							value: this.state.password,
+							onChange: this.update("password"),
+							className: 'login-input' }),
+						React.createElement(
+							'div',
+							null,
+							React.createElement(
+								'button',
+								{ className: 'form-submit', onSubmit: this.handleSubmit, type: 'submit' },
+								'Submit'
+							)
+						)
 					)
 				)
 			);
@@ -33209,7 +33226,7 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'main-content' },
 	      React.createElement(
 	        'header',
 	        null,

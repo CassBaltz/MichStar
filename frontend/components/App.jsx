@@ -37,7 +37,7 @@ const App = React.createClass({
 
   render() {
     return (
-      <div>
+      <div className="main-content">
         <header>
           <Link to="/" className="header-link"><h1>MichStar</h1></Link>
           { this.greeting() }
