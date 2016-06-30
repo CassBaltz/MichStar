@@ -55,7 +55,7 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var hashHistory = ReactRouter.hashHistory;
 	
-	var App = __webpack_require__(260);
+	var App = __webpack_require__(230);
 	var LoginForm = __webpack_require__(258);
 	
 	var SessionStore = __webpack_require__(231);
@@ -25959,7 +25959,83 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 230 */,
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var SessionActions = __webpack_require__(254);
+	
+	var App = React.createClass({
+	  displayName: 'App',
+	  componentDidMount: function componentDidMount() {
+	    SessionStore.addListener(this.forceUpdate.bind(this));
+	  },
+	  _handleLogOut: function _handleLogOut() {
+	    SessionActions.logOut();
+	  },
+	  greeting: function greeting() {
+	    if (SessionStore.isUserLoggedIn()) {
+	
+	      return React.createElement(
+	        'hgroup',
+	        { className: 'header-group' },
+	        React.createElement(
+	          'h2',
+	          { className: 'header-name' },
+	          'Hi, ',
+	          SessionStore.currentUser().name,
+	          '!'
+	        ),
+	        React.createElement('input', { className: 'header-button', type: 'submit', value: 'logout', onClick: this._handleLogOut })
+	      );
+	    } else if (!["/login", "/signup"].includes(this.props.location.pathname)) {
+	      return React.createElement(
+	        'nav',
+	        { className: 'login-signup' },
+	        React.createElement(
+	          Link,
+	          { to: '/login', activeClassName: 'current' },
+	          'Login'
+	        ),
+	        ' or ',
+	        React.createElement(
+	          Link,
+	          { to: '/signup', activeClassName: 'current' },
+	          'Sign up!'
+	        )
+	      );
+	    }
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-content' },
+	      React.createElement(
+	        'header',
+	        null,
+	        React.createElement(
+	          Link,
+	          { to: '/', className: 'header-link' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            'MichStar'
+	          )
+	        ),
+	        this.greeting()
+	      ),
+	      this.props.children
+	    );
+	  }
+	});
+	
+	module.exports = App;
+
+/***/ },
 /* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32897,6 +32973,7 @@
 	
 	var ErrorActions = {
 	  setErrors: function setErrors(form, errors) {
+	    console.log(errors);
 	    AppDispatcher.dispatch({
 	      actionType: ErrorConstants.SET_ERRORS,
 	      form: form,
@@ -32938,6 +33015,7 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var ErrorStore = __webpack_require__(259);
+	var ErrorActions = __webpack_require__(256);
 	
 	var LoginForm = React.createClass({
 		displayName: 'LoginForm',
@@ -32961,6 +33039,7 @@
 		},
 	
 		componentWillUnmount: function componentWillUnmount() {
+			ErrorActions.clearErrors();
 			this.errorListener.remove();
 			this.sessionListener.remove();
 		},
@@ -32971,7 +33050,6 @@
 		},
 		handleSubmit: function handleSubmit(e) {
 			e.preventDefault();
-	
 			var formData = {
 				name: this.state.name,
 				email: this.state.email,
@@ -32985,8 +33063,8 @@
 			}
 		},
 		fieldErrors: function fieldErrors(field) {
-			var errors = ErrorStore.formErrors(this.formType());
 	
+			var errors = ErrorStore.formErrors(this.formType());
 			if (!errors[field]) {
 				return;
 			}
@@ -33001,7 +33079,7 @@
 	
 			return React.createElement(
 				'ul',
-				null,
+				{ className: 'text-center' },
 				messages
 			);
 		},
@@ -33015,6 +33093,14 @@
 				return _this.setState(_defineProperty({}, property, e.target.value));
 			};
 		},
+		removeErrors: function removeErrors(e) {
+			this.setState({
+				name: "",
+				email: "",
+				password: ""
+			});
+			ErrorActions.clearErrors();
+		},
 		render: function render() {
 	
 			var navLink = void 0,
@@ -33022,15 +33108,15 @@
 			if (this.formType() === "login") {
 				navLink = React.createElement(
 					Link,
-					{ to: '/signup' },
-					'sign up instead'
+					{ to: '/signup', onClick: this.removeErrors },
+					'Sign Up'
 				);
 				formHeader = "Log In";
 			} else {
 				navLink = React.createElement(
 					Link,
-					{ to: '/login' },
-					'log in instead'
+					{ to: '/login', onClick: this.removeErrors },
+					'Log In'
 				);
 				formHeader = "Sign Up";
 			}
@@ -33040,7 +33126,7 @@
 				{ className: 'login-form' },
 				React.createElement(
 					'form',
-					{ className: 'form-fieldset' },
+					{ className: 'form-fieldset', onSubmit: this.handleSubmit },
 					React.createElement(
 						'div',
 						{ className: 'form-header' },
@@ -33098,10 +33184,10 @@
 							className: 'login-input' }),
 						React.createElement(
 							'div',
-							null,
+							{ className: 'button-wrapper' },
 							React.createElement(
 								'button',
-								{ className: 'form-submit', onSubmit: this.handleSubmit, type: 'submit' },
+								{ className: 'form-submit', type: 'submit' },
 								'Submit'
 							)
 						)
@@ -33170,83 +33256,6 @@
 	};
 	
 	module.exports = ErrorStore;
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	var SessionStore = __webpack_require__(231);
-	var SessionActions = __webpack_require__(254);
-	
-	var App = React.createClass({
-	  displayName: 'App',
-	  componentDidMount: function componentDidMount() {
-	    SessionStore.addListener(this.forceUpdate.bind(this));
-	  },
-	  _handleLogOut: function _handleLogOut() {
-	    SessionActions.logOut();
-	  },
-	  greeting: function greeting() {
-	    if (SessionStore.isUserLoggedIn()) {
-	
-	      return React.createElement(
-	        'hgroup',
-	        { className: 'header-group' },
-	        React.createElement(
-	          'h2',
-	          { className: 'header-name' },
-	          'Hi, ',
-	          SessionStore.currentUser().name,
-	          '!'
-	        ),
-	        React.createElement('input', { className: 'header-button', type: 'submit', value: 'logout', onClick: this._handleLogOut })
-	      );
-	    } else if (!["/login", "/signup"].includes(this.props.location.pathname)) {
-	      return React.createElement(
-	        'nav',
-	        { className: 'login-signup' },
-	        React.createElement(
-	          Link,
-	          { to: '/login', activeClassName: 'current' },
-	          'Login'
-	        ),
-	        ' or ',
-	        React.createElement(
-	          Link,
-	          { to: '/signup', activeClassName: 'current' },
-	          'Sign up!'
-	        )
-	      );
-	    }
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-content' },
-	      React.createElement(
-	        'header',
-	        null,
-	        React.createElement(
-	          Link,
-	          { to: '/', className: 'header-link' },
-	          React.createElement(
-	            'h1',
-	            null,
-	            'MichStar'
-	          )
-	        ),
-	        this.greeting()
-	      ),
-	      this.props.children
-	    );
-	  }
-	});
-	
-	module.exports = App;
 
 /***/ }
 /******/ ]);

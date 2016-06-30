@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
 include BCrypt
 
-  validates :email, :password_digest, :session_token, presence: true
+  validates :name, :email, :password_digest, :session_token, presence: true
   validates :password, length: {minimum: 6, allow_nil: true}
   validates_format_of :email, :with => /.+@.+\..+/i
   validates :email, uniqueness: true

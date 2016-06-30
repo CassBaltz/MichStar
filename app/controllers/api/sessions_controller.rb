@@ -5,8 +5,12 @@ class Api::SessionsController < ApplicationController
 			login(@user)
 			render "api/users/show"
 		else
-			@errors = ['sorry, that email or password is incorrect']
-			render "api/shared/error", status: 401
+      render(
+        json: {
+          base: ["Sorry, that username and/or password is incorrect."]
+        },
+        status: 401
+      )
 		end
   end
 

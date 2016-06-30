@@ -1,8 +1,9 @@
-var React = require("react");
+const React = require("react");
 const SessionActions = require('../actions/session_actions');
 const Link = require('react-router').Link;
 const SessionStore = require('../stores/session_store');
 const ErrorStore = require('../stores/error_store');
+const ErrorActions = require('../actions/error_actions');
 
 const LoginForm = React.createClass({
 
@@ -24,8 +25,10 @@ const LoginForm = React.createClass({
   },
 
 	componentWillUnmount() {
-    this.errorListener.remove();
+		ErrorActions.clearErrors();
+		this.errorListener.remove();
     this.sessionListener.remove();
+
   },
 
 	redirectIfLoggedIn() {
@@ -36,7 +39,6 @@ const LoginForm = React.createClass({
 
 	handleSubmit(e) {
 		e.preventDefault();
-
 		const formData = {
 			name: this.state.name,
 			email: this.state.email,
@@ -51,15 +53,15 @@ const LoginForm = React.createClass({
 	},
 
   fieldErrors(field) {
-    const errors = ErrorStore.formErrors(this.formType());
 
+		const errors = ErrorStore.formErrors(this.formType());
     if (!errors[field]) { return; }
 
     const messages = errors[field].map( (errorMsg, i) => {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
-    return <ul>{ messages }</ul>;
+    return <ul className="text-center">{ messages }</ul>;
   },
 
   formType() {
@@ -70,21 +72,30 @@ const LoginForm = React.createClass({
     return (e) => this.setState({[property]: e.target.value});
   },
 
+	removeErrors(e) {
+		this.setState({
+			name: "",
+			email: "",
+			password: ""
+		});
+		ErrorActions.clearErrors();
+	},
+
 	render() {
 
     let navLink, formHeader;
     if (this.formType() === "login") {
-      navLink = <Link to="/signup">sign up instead</Link>;
+      navLink = <Link to="/signup" onClick={this.removeErrors}>Sign Up</Link>;
 			formHeader = "Log In";
     } else {
-      navLink = <Link to="/login">log in instead</Link>;
+      navLink = <Link to="/login" onClick={this.removeErrors}>Log In</Link>;
 			formHeader = "Sign Up";
     }
 
 
 		return (
 			<div className="login-form">
-				<form className="form-fieldset">
+				<form className="form-fieldset" onSubmit={this.handleSubmit}>
 	        <div className="form-header">
 						<h2>{ formHeader }</h2>
 						<h4> { navLink } </h4>
@@ -95,13 +106,13 @@ const LoginForm = React.createClass({
 				<div className="login-form">
 
 					{this.formType() === "signup" ?
-							<div className="form-input-div"><label className="form-label">Name</label>
-			          { this.fieldErrors("name") }
-								<input type="text" placeholder="Name"
-			            value={this.state.name}
-			            onChange={this.update("name")}
-									className="login-input" />
-							 </div> : <div/>}
+						<div className="form-input-div"><label className="form-label">Name</label>
+		          { this.fieldErrors("name") }
+							<input type="text" placeholder="Name"
+		            value={this.state.name}
+		            onChange={this.update("name")}
+								className="login-input" />
+						 </div> : <div/>}
 
 						<label className="form-label"> Email</label>
 		          { this.fieldErrors("email") }
@@ -118,9 +129,9 @@ const LoginForm = React.createClass({
 		            onChange={this.update("password")}
 								className="login-input" />
 
-							<div>
-								<button className="form-submit" onSubmit={this.handleSubmit} type="submit">Submit</button>
-							</div>
+						<div className="button-wrapper">
+							<button className="form-submit" type="submit">Submit</button>
+						</div>
 					</div>
 				</form>
 			</div>

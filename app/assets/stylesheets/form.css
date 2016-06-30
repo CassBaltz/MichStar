@@ -12,6 +12,12 @@
 
 }
 
+.text-center {
+  text-align: center;
+  background: red;
+  color: white;
+}
+
 div.form-header > h2 {
   float: left;
   margin-left: 10px;
@@ -52,8 +58,13 @@ div.form-header > h4 {
   display: none;
 }
 
+div.button-wrapper {
+  text-align: center;
+}
+
 button.form-submit {
   padding:10px;
+  margin: 10px;
   background-color: white;
   border: 1px solid #ccc;
   text-decoration:none;
