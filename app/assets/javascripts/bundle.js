@@ -60,6 +60,11 @@
 	
 	var SessionStore = __webpack_require__(231);
 	var SessionActions = __webpack_require__(254);
+	var RestaurantActions = __webpack_require__(261);
+	var RestaurantApiUtil = __webpack_require__(263);
+	
+	var RestaurantIndex = __webpack_require__(264);
+	var RestaurantShow = __webpack_require__(267);
 	
 	var appRouter = React.createElement(
 	  Router,
@@ -67,6 +72,8 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
+	    React.createElement(IndexRoute, { component: RestaurantIndex }),
+	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/login', component: LoginForm }),
 	    React.createElement(Route, { path: '/signup', component: LoginForm })
 	  )
@@ -90,6 +97,8 @@
 	  var root = document.getElementById('content');
 	  ReactDOM.render(appRouter, root);
 	});
+	
+	window.RestaurantActions = RestaurantActions;
 
 /***/ },
 /* 1 */
@@ -26018,17 +26027,7 @@
 	      React.createElement(
 	        'header',
 	        null,
-	        React.createElement(NavBar, null),
-	        React.createElement(
-	          Link,
-	          { to: '/', className: 'header-link' },
-	          React.createElement(
-	            'h1',
-	            null,
-	            'MichStar'
-	          )
-	        ),
-	        this.greeting()
+	        React.createElement(NavBar, null)
 	      ),
 	      this.props.children
 	    );
@@ -33323,6 +33322,228 @@
 	};
 	
 	module.exports = ErrorStore;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(232);
+	var RestaurantConstants = __webpack_require__(262);
+	var RestaurantApiUtil = __webpack_require__(263);
+	var ErrorActions = __webpack_require__(256);
+	
+	var RestaurantActions = {
+	  fetchRestaurants: function fetchRestaurants() {
+	    RestaurantApiUtil.fetchRestaurants(RestaurantActions.receiveAllRestaurants);
+	  },
+	
+	  getRestaurant: function getRestaurant(id) {
+	    RestaurantApiUtil.getRestaurant(RestaurantActions.receiveRestaurant);
+	  },
+	
+	  receiveRestaurant: function receiveRestaurant(restaurant) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.RECEIVE_RESTAURANT,
+	      restaurant: restaurant
+	    });
+	  },
+	
+	  receiveAllRestaurants: function receiveAllRestaurants(restaurants) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.RECEIVE_RESTAURANTS,
+	      restaurants: restaurants
+	    });
+	  }
+	};
+	
+	module.exports = RestaurantActions;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var RestaurantConstants = {
+		RECEIVE_RESTAURANT: "RECEIVE_RESTAURANT",
+		RECEIVE_RESTAURANTS: "RECEIVE_RESTAURANTS"
+	};
+	
+	module.exports = RestaurantConstants;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var RestaurantApiUtil = {
+	  fetchRestaurants: function fetchRestaurants(callback) {
+	    $.ajax({
+	      url: 'api/restaurants',
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function success(restaurants) {
+	        callback(restaurants);
+	      }
+	    });
+	  },
+	
+	  getRestaurant: function getRestaurant(id, callback) {
+	    $.ajax({
+	      url: 'api/restaurants/' + id,
+	      method: 'GET',
+	      success: function success(restaurant) {
+	        callback(restaurant);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = RestaurantApiUtil;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var RestaurantActions = __webpack_require__(261);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var RestaurantStore = __webpack_require__(265);
+	var RestaurantMap = __webpack_require__(266);
+	
+	var RestaurantIndex = React.createClass({
+	  displayName: "RestaurantIndex",
+	
+	  getInitialState: function getInitialState() {
+	    return { restaurants: RestaurantStore.allRestaurants() };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    RestaurantStore.addListener(this.updateChange);
+	    RestaurantActions.fetchRestaurants();
+	  },
+	
+	  updateChange: function updateChange() {
+	    this.setState({ restaurants: RestaurantStore.allRestaurants() });
+	  },
+	
+	  render: function render() {
+	
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "p",
+	        null,
+	        "hello"
+	      ),
+	      React.createElement(RestaurantMap, { restaurants: this.state.restaurants })
+	    );
+	  }
+	});
+	
+	module.exports = RestaurantIndex;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(232);
+	var Store = __webpack_require__(236).Store;
+	var RestaurantConstants = __webpack_require__(262);
+	
+	var RestaurantStore = new Store(AppDispatcher);
+	
+	var _restaurants = {};
+	
+	RestaurantStore.allRestaurants = function () {
+	  return Object.keys(_restaurants).map(function (key) {
+	    return _restaurants[key];
+	  });
+	};
+	
+	function resetRestaurants(restaurants) {
+	  _restaurants = {};
+	  restaurants.forEach(function (restaurant) {
+	    _restaurants[restaurant.id] = restaurant;
+	  });
+	};
+	
+	function updateRestaurants(restaurant) {
+	  _restaurants[restaurant.id] = restaurant;
+	};
+	
+	RestaurantStore.find = function (id) {
+	  return _restaurants[id];
+	};
+	
+	RestaurantStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case RestaurantConstants.RECEIVE_RESTAURANTS:
+	      resetRestaurants(payload.restaurants);
+	      RestaurantStore.__emitChange();
+	      break;
+	
+	    case RestaurantConstants.RECEIVE_RESTAURANT:
+	      updateRestaurants(payload.restaurant);
+	      RestaurantStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = RestaurantStore;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
+	var RestaurantActions = __webpack_require__(261);
+	var RestaurantStore = __webpack_require__(265);
+	
+	var RestaurantMap = React.createClass({
+	  displayName: "RestaurantMap",
+	  componentDidMount: function componentDidMount() {
+	    var mapDOMNode = ReactDOM.findDOMNode(this.refs.map);
+	    var mapOptions = {
+	      center: { lat: 37.7758, lng: -122.435 }, // this is SF
+	      zoom: 10
+	    };
+	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { id: "map", ref: "map" },
+	      "Map"
+	    );
+	  }
+	});
+	
+	module.exports = RestaurantMap;
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var RestaurantActions = __webpack_require__(261);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var RestaurantStore = __webpack_require__(265);
 
 /***/ }
 /******/ ]);

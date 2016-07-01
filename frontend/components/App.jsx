@@ -41,8 +41,6 @@ const App = React.createClass({
       <div className="main-content">
         <header>
           <NavBar />
-          <Link to="/" className="header-link"><h1>MichStar</h1></Link>
-          { this.greeting() }
         </header>
         {this.props.children}
       </div>

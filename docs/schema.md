@@ -5,8 +5,8 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 name        | string    | not null
-description | text      | not null
-head chef   | string    | not null, foreign key (references users), indexed
+mich_review | text      | not null
+head chef   | string    | not null
 stars       | integer   | not null
 genre       | string    | not null
 website     | string    | not null

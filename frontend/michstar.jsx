@@ -12,10 +12,17 @@ const LoginForm = require('./components/LoginForm');
 
 const SessionStore = require('./stores/session_store');
 const SessionActions = require('./actions/session_actions');
+const RestaurantActions = require('./actions/restaurant_actions');
+const RestaurantApiUtil = require('./util/restaurant_api_util');
+
+const RestaurantIndex = require('./components/restaurant_index');
+const RestaurantShow = require('./components/restaurant_show');
 
 const appRouter = (
   <Router history={ hashHistory }>
     <Route path="/" component={ App }>
+      <IndexRoute component={ RestaurantIndex } />
+      <Route path="/restaurants" component={ RestaurantIndex } />
       <Route path="/login" component={ LoginForm } />
       <Route path="/signup" component={ LoginForm } />
     </Route>
@@ -40,3 +47,5 @@ document.addEventListener('DOMContentLoaded', function(){
   const root = document.getElementById('content');
   ReactDOM.render(appRouter, root);
 });
+
+window.RestaurantActions = RestaurantActions;

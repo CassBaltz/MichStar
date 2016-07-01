@@ -3,7 +3,6 @@ div.container {
   display: inline-block;
   background: black;
   color: white;
-  position: fixed;
 }
 
 h3.home-link {
