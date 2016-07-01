@@ -33512,15 +33512,28 @@
 	var RestaurantActions = __webpack_require__(261);
 	var RestaurantStore = __webpack_require__(265);
 	
+	var marker;
 	var RestaurantMap = React.createClass({
 	  displayName: "RestaurantMap",
 	  componentDidMount: function componentDidMount() {
+	    RestaurantStore.addListener(this.updateRestaurants);
 	    var mapDOMNode = ReactDOM.findDOMNode(this.refs.map);
 	    var mapOptions = {
 	      center: { lat: 37.7758, lng: -122.435 }, // this is SF
 	      zoom: 10
 	    };
 	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	  },
+	  updateRestaurants: function updateRestaurants() {
+	    var restaurants = RestaurantStore.allRestaurants();
+	    for (var i = 0; i < restaurants.length; i++) {
+	      marker = new google.maps.Marker({
+	        position: { lat: restaurants[i]['lat'], lng: restaurants[i]['lon'] },
+	        map: this.map,
+	        title: restaurants[i]['name']
+	      });
+	      marker.setMap(this.map);
+	    };
 	  },
 	  render: function render() {
 	    return React.createElement(

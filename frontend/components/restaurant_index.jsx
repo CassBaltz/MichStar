@@ -24,7 +24,7 @@ const RestaurantIndex = React.createClass({
     return (
       <div>
         <p>hello</p>
-        <RestaurantMap restaurants={this.state.restaurants} />
+        <RestaurantMap restaurants={this.state.restaurants}/>
       </div>
 
     );
