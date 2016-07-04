@@ -33116,7 +33116,7 @@
 	  displayName: 'HomeButton',
 	
 	  getInitialState: function getInitialState() {
-	    return { buttonClass: "", buttonText: "" };
+	    return { buttonClass: "home-link clicked", buttonText: "" };
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
@@ -33167,13 +33167,13 @@
 	  displayName: 'PersonalButton',
 	
 	  getInitialState: function getInitialState() {
-	    return { text: "", path: "", personalClass: "personal-link" };
+	    return { text: "Signup", linkPath: "/login", personalClass: "personal-link" };
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(navProps) {
 	    if (navProps.status) {
 	      linkText = SessionStore.currentUser().name;
-	      linkPath = '/users/' + SessionStore.currentUser().id;
+	      linkPath = '/login';
 	      personalClass = this.updateClass(navProps);
 	    } else {
 	      linkText = "Sign In";
@@ -33199,7 +33199,7 @@
 	  render: function render() {
 	    return React.createElement(
 	      'h3',
-	      { onClick: this.update, className: 'personal-link' },
+	      { onClick: this.update, className: this.state.personalClass },
 	      this.state.text
 	    );
 	  }

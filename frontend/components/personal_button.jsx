@@ -7,13 +7,13 @@ const hashHistory = ReactRouter.hashHistory;
 let linkText, linkPath, personalClass;
 const PersonalButton = React.createClass({
   getInitialState: function() {
-    return ({text: "", path: "", personalClass: "personal-link"});
+    return ({text: "Signup", linkPath: "/login", personalClass: "personal-link"});
   },
 
   componentWillReceiveProps: function(navProps) {
     if (navProps.status) {
       linkText = SessionStore.currentUser().name;
-      linkPath = `/users/${SessionStore.currentUser().id}`;
+      linkPath = `/login`;
       personalClass = this.updateClass(navProps);
     } else {
       linkText = "Sign In";
@@ -34,11 +34,12 @@ const PersonalButton = React.createClass({
   update: function(e){
     e.preventDefault();
     hashHistory.push(this.state.linkPath);
+
   },
 
   render: function() {
     return (
-    <h3 onClick={this.update} className="personal-link">{this.state.text}</h3>
+    <h3 onClick={this.update} className={this.state.personalClass}>{this.state.text}</h3>
     );
   }
 });

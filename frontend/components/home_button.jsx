@@ -8,7 +8,7 @@ let buttonClass;
 
 const HomeButton = React.createClass({
   getInitialState: function () {
-    return {buttonClass: "", buttonText: ""}
+    return {buttonClass: "home-link clicked", buttonText: ""}
   },
 
   componentWillReceiveProps: function(newProps) {

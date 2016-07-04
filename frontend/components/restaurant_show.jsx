@@ -27,6 +27,7 @@ const RestaurantShow = React.createClass({
     return (
       <div className="restaurant-show">
         <h1 className="restaurant-header">{this.state.restaurant.name}</h1>
+        
         <Link to="/">BACK TO RESTAURANTS</Link>
       </div>
     );
