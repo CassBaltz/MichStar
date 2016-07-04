@@ -4,22 +4,36 @@ const SessionStore = require('../stores/session_store');
 const ReactRouter = require('react-router');
 const hashHistory = ReactRouter.hashHistory;
 
-let linkText, linkPath;
+let linkText, linkPath, personalClass;
 const PersonalButton = React.createClass({
   getInitialState: function() {
-    if (this.props.status) {
+    return ({text: "", path: "", personalClass: "personal-link"});
+  },
+
+  componentWillReceiveProps: function(navProps) {
+    if (navProps.status) {
       linkText = SessionStore.currentUser().name;
       linkPath = `/users/${SessionStore.currentUser().id}`;
+      personalClass = this.updateClass(navProps);
     } else {
       linkText = "Sign In";
-      linkPath = "/login"
+      linkPath = "/login";
+      personalClass = this.updateClass(navProps);
     }
-    return ({text: linkText, path: linkPath});
+    this.setState({text: linkText, path: linkPath, personalClass: personalClass});
+  },
+
+  updateClass: function (navProps) {
+    if (navProps.location === "/login" || navProps.location === "/signup") {
+      return "personal-link clicked"
+    } else {
+      return "personal-link"
+    }
   },
 
   update: function(e){
     e.preventDefault();
-    hashHistory.push(linkPath);
+    hashHistory.push(this.state.linkPath);
   },
 
   render: function() {

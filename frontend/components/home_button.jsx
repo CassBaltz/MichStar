@@ -8,23 +8,20 @@ let buttonClass;
 
 const HomeButton = React.createClass({
   getInitialState: function () {
-    buttonClass = this.updateClass();
-    return {buttonClass: buttonClass}
+    return {buttonClass: "", buttonText: ""}
   },
 
-  componentWillReceiveProps: function() {
-    buttonClass = this.updateClass();
+  componentWillReceiveProps: function(newProps) {
+    buttonClass = this.updateClass(newProps);
     this.setState({buttonClass: buttonClass});
-    debugger
   },
 
-  updateClass: function () {
-    if (this.props.location === "/") {
+  updateClass: function (newProps) {
+    if (newProps.location === "/") {
       return "home-link clicked"
     } else {
       return "home-link"
     }
-    debugger
   },
 
   updateLocation: function (e) {

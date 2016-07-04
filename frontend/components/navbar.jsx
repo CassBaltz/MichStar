@@ -50,7 +50,6 @@ const NavBar = React.createClass({
       }
     }
     this.setState({location: str});
-    debugger
   },
 
   updateHlStatus: function (e) {

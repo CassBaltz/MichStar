@@ -33072,7 +33072,6 @@
 	      }
 	    }
 	    this.setState({ location: str });
-	    debugger;
 	  },
 	
 	  updateHlStatus: function updateHlStatus(e) {
@@ -33117,23 +33116,20 @@
 	  displayName: 'HomeButton',
 	
 	  getInitialState: function getInitialState() {
-	    buttonClass = this.updateClass();
-	    return { buttonClass: buttonClass };
+	    return { buttonClass: "", buttonText: "" };
 	  },
 	
-	  componentWillReceiveProps: function componentWillReceiveProps() {
-	    buttonClass = this.updateClass();
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    buttonClass = this.updateClass(newProps);
 	    this.setState({ buttonClass: buttonClass });
-	    debugger;
 	  },
 	
-	  updateClass: function updateClass() {
-	    if (this.props.location === "/") {
+	  updateClass: function updateClass(newProps) {
+	    if (newProps.location === "/") {
 	      return "home-link clicked";
 	    } else {
 	      return "home-link";
 	    }
-	    debugger;
 	  },
 	
 	  updateLocation: function updateLocation(e) {
@@ -33165,24 +33161,39 @@
 	var hashHistory = ReactRouter.hashHistory;
 	
 	var linkText = void 0,
-	    linkPath = void 0;
+	    linkPath = void 0,
+	    personalClass = void 0;
 	var PersonalButton = React.createClass({
 	  displayName: 'PersonalButton',
 	
 	  getInitialState: function getInitialState() {
-	    if (this.props.status) {
+	    return { text: "", path: "", personalClass: "personal-link" };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(navProps) {
+	    if (navProps.status) {
 	      linkText = SessionStore.currentUser().name;
 	      linkPath = '/users/' + SessionStore.currentUser().id;
+	      personalClass = this.updateClass(navProps);
 	    } else {
 	      linkText = "Sign In";
 	      linkPath = "/login";
+	      personalClass = this.updateClass(navProps);
 	    }
-	    return { text: linkText, path: linkPath };
+	    this.setState({ text: linkText, path: linkPath, personalClass: personalClass });
+	  },
+	
+	  updateClass: function updateClass(navProps) {
+	    if (navProps.location === "/login" || navProps.location === "/signup") {
+	      return "personal-link clicked";
+	    } else {
+	      return "personal-link";
+	    }
 	  },
 	
 	  update: function update(e) {
 	    e.preventDefault();
-	    hashHistory.push(linkPath);
+	    hashHistory.push(this.state.linkPath);
 	  },
 	
 	  render: function render() {
@@ -33757,7 +33768,7 @@
 	      { className: "restaurant-show" },
 	      React.createElement(
 	        "h1",
-	        null,
+	        { className: "restaurant-header" },
 	        this.state.restaurant.name
 	      ),
 	      React.createElement(

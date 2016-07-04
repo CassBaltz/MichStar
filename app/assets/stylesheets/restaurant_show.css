@@ -1,0 +1,12 @@
+div.restaurant-show {
+  width: 65%;
+  height: 65%;
+  background: white;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+}
+
+h1.restaurant-header {
+  text-align: center;
+  font-size: 3em;
+}
