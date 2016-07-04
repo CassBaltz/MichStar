@@ -31,7 +31,6 @@ const LoginForm = React.createClass({
 	componentWillUnmount() {
 		this.errorListener.remove();
     this.sessionListener.remove();
-
   },
 
 	redirectIfLoggedIn() {
@@ -53,6 +52,11 @@ const LoginForm = React.createClass({
     } else {
       SessionActions.signUp(formData);
     }
+	},
+
+	handleGuestLogin(e) {
+		e.preventDefault();
+		SessionActions.logIn({email: "guest@gmail.com", password: "password"});
 	},
 
   fieldErrors(field) {
@@ -85,8 +89,7 @@ const LoginForm = React.createClass({
 	},
 
 	render() {
-
-    let navLink, formHeader;
+    let navLink, formHeader, buttonClass;
     if (this.formType() === "login") {
       navLink = <Link to="/signup" onClick={this.removeErrors}>Sign Up</Link>;
 			formHeader = "Log In";
@@ -94,6 +97,7 @@ const LoginForm = React.createClass({
       navLink = <Link to="/login" onClick={this.removeErrors}>Log In</Link>;
 			formHeader = "Sign Up";
     }
+
 
 
 		return (
@@ -133,6 +137,7 @@ const LoginForm = React.createClass({
 								className="login-input" />
 
 						<div className="button-wrapper">
+							<button onClick={this.handleGuestLogin} className="form-submit">Guest</button>
 							<button className="form-submit" type="submit">Submit</button>
 						</div>
 					</div>

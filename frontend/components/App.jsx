@@ -6,6 +6,8 @@ const SessionStore = require('../stores/session_store');
 const SessionActions = require('../actions/session_actions');
 const NavBar = require('./navbar');
 
+let name = SessionStore.currentUser().name;
+
 const App = React.createClass({
 
   componentDidMount() {
@@ -17,6 +19,8 @@ const App = React.createClass({
   },
 
   greeting() {
+
+
     if (SessionStore.isUserLoggedIn()) {
 
     	return (
@@ -39,9 +43,7 @@ const App = React.createClass({
   render() {
     return (
       <div className="main-content">
-        <header>
-          <NavBar />
-        </header>
+        <NavBar />
         {this.props.children}
       </div>
     );
@@ -50,4 +52,4 @@ const App = React.createClass({
 
 module.exports = App;
 
-window.NavBar = NavBar;
+window.SessionStore = SessionStore;

@@ -11,7 +11,7 @@ const RestaurantApiUtil = {
   },
 
   getRestaurant: function (id, callback) {
-    $.ajax({
+		$.ajax({
       url: `api/restaurants/${id}`,
       method: 'GET',
       success: function (restaurant) {

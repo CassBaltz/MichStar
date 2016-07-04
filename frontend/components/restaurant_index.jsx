@@ -11,7 +11,7 @@ const RestaurantIndex = React.createClass({
   },
 
   componentDidMount: function() {
-    RestaurantStore.addListener(this.updateChange);
+    this.listener = RestaurantStore.addListener(this.updateChange);
     RestaurantActions.fetchRestaurants();
   },
 
@@ -19,12 +19,16 @@ const RestaurantIndex = React.createClass({
     this.setState({restaurants: RestaurantStore.allRestaurants()});
   },
 
+  componentWillUnmount: function() {
+    this.listener.remove();
+  },
+
   render: function () {
 
     return (
       <div>
-        <p>hello</p>
-        <RestaurantMap restaurants={this.state.restaurants}/>
+        <div class="top-spacer" />
+        <RestaurantMap />
       </div>
 
     );

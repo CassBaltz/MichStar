@@ -56,15 +56,16 @@
 	var hashHistory = ReactRouter.hashHistory;
 	
 	var App = __webpack_require__(230);
-	var LoginForm = __webpack_require__(259);
+	var LoginForm = __webpack_require__(261);
+	var NavBar = __webpack_require__(258);
 	
 	var SessionStore = __webpack_require__(231);
 	var SessionActions = __webpack_require__(254);
-	var RestaurantActions = __webpack_require__(261);
-	var RestaurantApiUtil = __webpack_require__(263);
+	var RestaurantActions = __webpack_require__(263);
+	var RestaurantApiUtil = __webpack_require__(265);
 	
-	var RestaurantIndex = __webpack_require__(264);
-	var RestaurantShow = __webpack_require__(267);
+	var RestaurantIndex = __webpack_require__(266);
+	var RestaurantShow = __webpack_require__(269);
 	
 	var appRouter = React.createElement(
 	  Router,
@@ -74,6 +75,7 @@
 	    { path: '/', component: App },
 	    React.createElement(IndexRoute, { component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
+	    React.createElement(Route, { path: '/restaurants/:restaurantId', component: RestaurantShow }),
 	    React.createElement(Route, { path: '/login', component: LoginForm }),
 	    React.createElement(Route, { path: '/signup', component: LoginForm })
 	  )
@@ -98,7 +100,10 @@
 	  ReactDOM.render(appRouter, root);
 	});
 	
-	window.RestaurantActions = RestaurantActions;
+	window.SessionActions = SessionActions;
+	window.SessionStore = SessionStore;
+	window.NavBar = NavBar;
+	window.LoginForm = LoginForm;
 
 /***/ },
 /* 1 */
@@ -25979,6 +25984,8 @@
 	var SessionActions = __webpack_require__(254);
 	var NavBar = __webpack_require__(258);
 	
+	var name = SessionStore.currentUser().name;
+	
 	var App = React.createClass({
 	  displayName: 'App',
 	  componentDidMount: function componentDidMount() {
@@ -25988,6 +25995,7 @@
 	    SessionActions.logOut();
 	  },
 	  greeting: function greeting() {
+	
 	    if (SessionStore.isUserLoggedIn()) {
 	
 	      return React.createElement(
@@ -26024,11 +26032,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'main-content' },
-	      React.createElement(
-	        'header',
-	        null,
-	        React.createElement(NavBar, null)
-	      ),
+	      React.createElement(NavBar, null),
 	      this.props.children
 	    );
 	  }
@@ -26036,7 +26040,7 @@
 	
 	module.exports = App;
 	
-	window.NavBar = NavBar;
+	window.SessionStore = SessionStore;
 
 /***/ },
 /* 231 */
@@ -33016,21 +33020,59 @@
 	var SessionStore = __webpack_require__(231);
 	var ReactRouter = __webpack_require__(168);
 	var hashHistory = ReactRouter.hashHistory;
+	var SessionActions = __webpack_require__(254);
+	var HomeButton = __webpack_require__(259);
+	var PersonalButton = __webpack_require__(260);
 	
-	var hlStatus = void 0,
-	    plStatus = void 0,
-	    nameField = void 0;
+	var status = void 0,
+	    str = void 0,
+	    url = void 0,
+	    path = void 0;
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
 	
 	  getInitialState: function getInitialState() {
-	    if (SessionStore.isUserLoggedIn()) {
-	      nameField = SessionStore.currentUser().name;
-	    } else {
-	      nameField = "Sign Up or Log In";
+	    path = window.location.hash;
+	    url = path.split("").slice(1).join("");
+	    str = "";
+	    for (var i = 0; i < url.length; i++) {
+	      if (url[i] === "?") {
+	        break;
+	      } else {
+	        str += url[i];
+	      }
 	    }
-	    return { hlStatus: "home-link", plStatus: "personal-link", personalNav: nameField };
+	    return { status: SessionStore.isUserLoggedIn(), location: str };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.listener = SessionStore.addListener(this.userChange);
+	    window.addEventListener('hashchange', this.hashChange, false);
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	
+	  userChange: function userChange() {
+	    status = SessionStore.isUserLoggedIn();
+	    this.setState({ status: status });
+	  },
+	
+	  hashChange: function hashChange() {
+	    path = window.location.hash;
+	    url = path.split("").slice(1).join("");
+	    str = "";
+	    for (var i = 0; i < url.length; i++) {
+	      if (url[i] === "?") {
+	        break;
+	      } else {
+	        str += url[i];
+	      }
+	    }
+	    this.setState({ location: str });
+	    debugger;
 	  },
 	
 	  updateHlStatus: function updateHlStatus(e) {
@@ -33049,16 +33091,8 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
-	      React.createElement(
-	        'h3',
-	        { className: this.state.hlStatus, onClick: this.updateHlStatus },
-	        'Home'
-	      ),
-	      React.createElement(
-	        'h3',
-	        { className: this.state.plStatus, onClick: this.updatePlStatus },
-	        'Hello'
-	      )
+	      React.createElement(HomeButton, { status: this.state.status, location: this.state.location }),
+	      React.createElement(PersonalButton, { status: this.state.status, location: this.state.location })
 	    );
 	  }
 	});
@@ -33071,13 +33105,110 @@
 
 	'use strict';
 	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var ReactRouter = __webpack_require__(168);
+	var hashHistory = ReactRouter.hashHistory;
+	
+	var buttonClass = void 0;
+	
+	var HomeButton = React.createClass({
+	  displayName: 'HomeButton',
+	
+	  getInitialState: function getInitialState() {
+	    buttonClass = this.updateClass();
+	    return { buttonClass: buttonClass };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps() {
+	    buttonClass = this.updateClass();
+	    this.setState({ buttonClass: buttonClass });
+	    debugger;
+	  },
+	
+	  updateClass: function updateClass() {
+	    if (this.props.location === "/") {
+	      return "home-link clicked";
+	    } else {
+	      return "home-link";
+	    }
+	    debugger;
+	  },
+	
+	  updateLocation: function updateLocation(e) {
+	    e.preventDefault;
+	    hashHistory.push("/");
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'h3',
+	      { onClick: this.updateLocation, className: this.state.buttonClass },
+	      'Restaurants'
+	    );
+	  }
+	});
+	
+	module.exports = HomeButton;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var ReactRouter = __webpack_require__(168);
+	var hashHistory = ReactRouter.hashHistory;
+	
+	var linkText = void 0,
+	    linkPath = void 0;
+	var PersonalButton = React.createClass({
+	  displayName: 'PersonalButton',
+	
+	  getInitialState: function getInitialState() {
+	    if (this.props.status) {
+	      linkText = SessionStore.currentUser().name;
+	      linkPath = '/users/' + SessionStore.currentUser().id;
+	    } else {
+	      linkText = "Sign In";
+	      linkPath = "/login";
+	    }
+	    return { text: linkText, path: linkPath };
+	  },
+	
+	  update: function update(e) {
+	    e.preventDefault();
+	    hashHistory.push(linkPath);
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'h3',
+	      { onClick: this.update, className: 'personal-link' },
+	      this.state.text
+	    );
+	  }
+	});
+	
+	module.exports = PersonalButton;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	var React = __webpack_require__(1);
 	var SessionActions = __webpack_require__(254);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
-	var ErrorStore = __webpack_require__(260);
+	var ErrorStore = __webpack_require__(262);
 	var ErrorActions = __webpack_require__(256);
 	
 	var LoginForm = React.createClass({
@@ -33128,6 +33259,10 @@
 				SessionActions.signUp(formData);
 			}
 		},
+		handleGuestLogin: function handleGuestLogin(e) {
+			e.preventDefault();
+			SessionActions.logIn({ email: "guest@gmail.com", password: "password" });
+		},
 		fieldErrors: function fieldErrors(field) {
 	
 			var errors = ErrorStore.formErrors(this.formType());
@@ -33168,9 +33303,9 @@
 			ErrorActions.clearErrors();
 		},
 		render: function render() {
-	
 			var navLink = void 0,
-			    formHeader = void 0;
+			    formHeader = void 0,
+			    buttonClass = void 0;
 			if (this.formType() === "login") {
 				navLink = React.createElement(
 					Link,
@@ -33253,6 +33388,11 @@
 							{ className: 'button-wrapper' },
 							React.createElement(
 								'button',
+								{ onClick: this.handleGuestLogin, className: 'form-submit' },
+								'Guest'
+							),
+							React.createElement(
+								'button',
 								{ className: 'form-submit', type: 'submit' },
 								'Submit'
 							)
@@ -33266,7 +33406,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 260 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -33324,14 +33464,14 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 261 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var AppDispatcher = __webpack_require__(232);
-	var RestaurantConstants = __webpack_require__(262);
-	var RestaurantApiUtil = __webpack_require__(263);
+	var RestaurantConstants = __webpack_require__(264);
+	var RestaurantApiUtil = __webpack_require__(265);
 	var ErrorActions = __webpack_require__(256);
 	
 	var RestaurantActions = {
@@ -33340,7 +33480,7 @@
 	  },
 	
 	  getRestaurant: function getRestaurant(id) {
-	    RestaurantApiUtil.getRestaurant(RestaurantActions.receiveRestaurant);
+	    RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant);
 	  },
 	
 	  receiveRestaurant: function receiveRestaurant(restaurant) {
@@ -33361,7 +33501,7 @@
 	module.exports = RestaurantActions;
 
 /***/ },
-/* 262 */
+/* 264 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33374,7 +33514,7 @@
 	module.exports = RestaurantConstants;
 
 /***/ },
-/* 263 */
+/* 265 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33405,17 +33545,17 @@
 	module.exports = RestaurantApiUtil;
 
 /***/ },
-/* 264 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var React = __webpack_require__(1);
-	var RestaurantActions = __webpack_require__(261);
+	var RestaurantActions = __webpack_require__(263);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
-	var RestaurantStore = __webpack_require__(265);
-	var RestaurantMap = __webpack_require__(266);
+	var RestaurantStore = __webpack_require__(267);
+	var RestaurantMap = __webpack_require__(268);
 	
 	var RestaurantIndex = React.createClass({
 	  displayName: "RestaurantIndex",
@@ -33425,7 +33565,7 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    RestaurantStore.addListener(this.updateChange);
+	    this.listener = RestaurantStore.addListener(this.updateChange);
 	    RestaurantActions.fetchRestaurants();
 	  },
 	
@@ -33433,17 +33573,17 @@
 	    this.setState({ restaurants: RestaurantStore.allRestaurants() });
 	  },
 	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	
 	  render: function render() {
 	
 	    return React.createElement(
 	      "div",
 	      null,
-	      React.createElement(
-	        "p",
-	        null,
-	        "hello"
-	      ),
-	      React.createElement(RestaurantMap, { restaurants: this.state.restaurants })
+	      React.createElement("div", { "class": "top-spacer" }),
+	      React.createElement(RestaurantMap, null)
 	    );
 	  }
 	});
@@ -33451,14 +33591,14 @@
 	module.exports = RestaurantIndex;
 
 /***/ },
-/* 265 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var AppDispatcher = __webpack_require__(232);
 	var Store = __webpack_require__(236).Store;
-	var RestaurantConstants = __webpack_require__(262);
+	var RestaurantConstants = __webpack_require__(264);
 	
 	var RestaurantStore = new Store(AppDispatcher);
 	
@@ -33502,44 +33642,76 @@
 	module.exports = RestaurantStore;
 
 /***/ },
-/* 266 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
-	var RestaurantActions = __webpack_require__(261);
-	var RestaurantStore = __webpack_require__(265);
+	var RestaurantActions = __webpack_require__(263);
+	var RestaurantStore = __webpack_require__(267);
+	var Link = __webpack_require__(168).Link;
+	var ReactRouter = __webpack_require__(168);
+	var hashHistory = ReactRouter.hashHistory;
 	
-	var marker;
+	var marker, self, linkPath, currentRestaurant;
+	
 	var RestaurantMap = React.createClass({
 	  displayName: "RestaurantMap",
+	  getInitialState: function getInitialState() {
+	    return { mapHeader: "None Selected", linkId: "" };
+	  },
 	  componentDidMount: function componentDidMount() {
 	    RestaurantStore.addListener(this.updateRestaurants);
 	    var mapDOMNode = ReactDOM.findDOMNode(this.refs.map);
 	    var mapOptions = {
 	      center: { lat: 37.7758, lng: -122.435 }, // this is SF
-	      zoom: 10
+	      zoom: 8
 	    };
 	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	  },
+	  updateHeader: function updateHeader(marker) {
+	    currentRestaurant = RestaurantStore.find(marker.id);
+	    this.setState({ mapHeader: currentRestaurant.name, linkId: marker.id });
 	  },
 	  updateRestaurants: function updateRestaurants() {
 	    var restaurants = RestaurantStore.allRestaurants();
 	    for (var i = 0; i < restaurants.length; i++) {
+	      linkPath = restaurants[i]['id'];
 	      marker = new google.maps.Marker({
 	        position: { lat: restaurants[i]['lat'], lng: restaurants[i]['lon'] },
 	        map: this.map,
-	        title: restaurants[i]['name']
+	        id: restaurants[i]['id']
 	      });
+	
+	      self = this;
+	
+	      google.maps.event.addListener(marker, 'click', function () {
+	        self.updateHeader(this);
+	      });
+	
 	      marker.setMap(this.map);
 	    };
 	  },
+	
+	
+	  changePage: function changePage(e) {
+	    e.preventDefault;
+	    hashHistory.push("restaurants/" + this.state.linkId);
+	  },
+	
 	  render: function render() {
+	
 	    return React.createElement(
 	      "div",
-	      { id: "map", ref: "map" },
-	      "Map"
+	      { "class": "map-div" },
+	      React.createElement(
+	        "h3",
+	        { className: "map-overlay", onClick: this.changePage },
+	        this.state.mapHeader
+	      ),
+	      React.createElement("div", { id: "map", ref: "map" })
 	    );
 	  }
 	});
@@ -33547,16 +33719,57 @@
 	module.exports = RestaurantMap;
 
 /***/ },
-/* 267 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var React = __webpack_require__(1);
-	var RestaurantActions = __webpack_require__(261);
+	var RestaurantActions = __webpack_require__(263);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
-	var RestaurantStore = __webpack_require__(265);
+	var RestaurantStore = __webpack_require__(267);
+	
+	var RestaurantShow = React.createClass({
+	  displayName: "RestaurantShow",
+	
+	  getInitialState: function getInitialState() {
+	    return { restaurant: {} };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.listener = RestaurantStore.addListener(this.updateRestaurant);
+	    RestaurantActions.getRestaurant(parseInt(this.props.params.restaurantId));
+	  },
+	
+	  updateRestaurant: function updateRestaurant() {
+	    var restaurant = RestaurantStore.find(parseInt(this.props.params.restaurantId));
+	    this.setState({ restaurant: restaurant });
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { className: "restaurant-show" },
+	      React.createElement(
+	        "h1",
+	        null,
+	        this.state.restaurant.name
+	      ),
+	      React.createElement(
+	        Link,
+	        { to: "/" },
+	        "BACK TO RESTAURANTS"
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = RestaurantShow;
 
 /***/ }
 /******/ ]);

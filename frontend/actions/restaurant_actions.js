@@ -9,7 +9,7 @@ const RestaurantActions = {
   },
 
   getRestaurant: function (id) {
-    RestaurantApiUtil.getRestaurant(RestaurantActions.receiveRestaurant);
+    RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant);
   },
 
   receiveRestaurant: function (restaurant) {

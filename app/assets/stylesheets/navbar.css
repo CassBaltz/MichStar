@@ -3,14 +3,17 @@ div.container {
   display: inline-block;
   background: black;
   color: white;
+  position: fixed;
+  top: 0;
 }
 
 h3.home-link {
   float: left;
   color: white;
-  padding: 20px;
+  padding: 1%;
   margin-top: 0;
   margin-bottom: 0;
+  margin-left: 0;
 }
 
 h3.home-link:hover {
@@ -30,7 +33,7 @@ h3.personal-link:hover {
 h3.personal-link {
   float: right;
   color: white;
-  padding: 20px;
+  padding: 1%;
   margin-top: 0;
   margin-bottom: 0;
 }
