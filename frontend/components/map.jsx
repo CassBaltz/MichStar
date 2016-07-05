@@ -60,7 +60,6 @@ const RestaurantMap = React.createClass({
         <h3 className="map-overlay" onClick={this.changePage}>{this.state.mapHeader}</h3>
         <div id="map" ref="map"></div>
       </div>
-
     );
   }
 });

@@ -33967,9 +33967,9 @@
 	
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var UserStore = __webpack_require__(274);
+	var UserStore = __webpack_require__(273);
 	var SessionStore = __webpack_require__(231);
-	var UserActions = __webpack_require__(273);
+	var UserActions = __webpack_require__(274);
 	var ReviewItem = __webpack_require__(271);
 	
 	var UserProfile = React.createClass({
@@ -34031,59 +34031,6 @@
 /* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	var AppDispatcher = __webpack_require__(232);
-	var RestaurantConstants = __webpack_require__(264);
-	var hashHistory = __webpack_require__(168).hashHistory;
-	var UserApiUtil = __webpack_require__(275);
-	
-	var UserActions = {
-	
-	  postReview: function postReview(review) {
-	    UserApiUtil.postReview(review, UserActions.updateReview);
-	  },
-	
-	  deleteReview: function deleteReview(reviewId) {
-	    UserApiUtil.deleteReview(review, UserActions.removeReview);
-	  },
-	
-	  editReview: function editReview(review) {
-	    UserApiUtil.editReview(review, UserActions.updateReview);
-	  },
-	
-	  getReviews: function getReviews() {
-	    UserApiUtil.getReviews(UserActions.updateReviews);
-	  },
-	
-	  updateReview: function updateReview(review) {
-	    AppDispatcher.dispatch({
-	      actionType: RestaurantConstants.UPDATE_REVIEW,
-	      review: review
-	    });
-	  },
-	
-	  updateReviews: function updateReviews(userData) {
-	    AppDispatcher.dispatch({
-	      actionType: RestaurantConstants.UPDATE_REVIEWS,
-	      userData: userData
-	    });
-	  },
-	
-	  removeReview: function removeReview(reviewId) {
-	    AppDispatcher.dispatch({
-	      actionType: RestaurantConstants.REMOVE_REVIEW,
-	      reviewId: reviewId
-	    });
-	  }
-	};
-	
-	module.exports = UserActions;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	
 	var AppDispatcher = __webpack_require__(232);
@@ -34139,6 +34086,59 @@
 	};
 	
 	module.exports = UserStore;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(232);
+	var RestaurantConstants = __webpack_require__(264);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	var UserApiUtil = __webpack_require__(275);
+	
+	var UserActions = {
+	
+	  postReview: function postReview(review) {
+	    UserApiUtil.postReview(review, UserActions.updateReview);
+	  },
+	
+	  deleteReview: function deleteReview(reviewId) {
+	    UserApiUtil.deleteReview(review, UserActions.removeReview);
+	  },
+	
+	  editReview: function editReview(review) {
+	    UserApiUtil.editReview(review, UserActions.updateReview);
+	  },
+	
+	  getReviews: function getReviews() {
+	    UserApiUtil.getReviews(UserActions.updateReviews);
+	  },
+	
+	  updateReview: function updateReview(review) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.UPDATE_REVIEW,
+	      review: review
+	    });
+	  },
+	
+	  updateReviews: function updateReviews(userData) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.UPDATE_REVIEWS,
+	      userData: userData
+	    });
+	  },
+	
+	  removeReview: function removeReview(reviewId) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.REMOVE_REVIEW,
+	      reviewId: reviewId
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
 
 /***/ },
 /* 275 */

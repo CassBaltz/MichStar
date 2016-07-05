@@ -31,7 +31,6 @@ const RestaurantIndex = React.createClass({
         <h1 className="index-header">Reservations At San Francisco's Top Restaurants</h1>
         <RestaurantMap />
       </div>
-
     );
   }
 });
