@@ -171,6 +171,7 @@ user4 = User.new(name: "Ashley", email: "ashley@gmail.com", password: "password"
 user5 = User.new(name: "Sarah", email: "sarah@gmail.com", password: "password")
 user6 = User.new(name: "Mike", email: "mike@gmail.com", password: "password")
 
+user0.save
 user1.save
 user2.save
 user3.save
