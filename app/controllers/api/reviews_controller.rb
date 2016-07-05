@@ -25,7 +25,7 @@ class Api::ReviewsController < ApplicationController
     @review = Review.find(params[:id])
     @id = @review.id
     @review.destroy
-    render (json: {@id})
+    render json: @id
   end
 
   private
