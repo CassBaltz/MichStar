@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     resource :user, only: [:create, :show]
     resource :session, only: [:create, :destroy, :show]
     resources :restaurants, only: [:index, :show]
+    resources :reviews, only: [:create, :show, :destroy, :update]
+    get 'user/profile', :to => 'users#profile'
   end
 
   root to: "static_pages#root"

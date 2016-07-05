@@ -12,19 +12,21 @@ const PersonalButton = React.createClass({
 
   componentWillReceiveProps: function(navProps) {
     if (navProps.status) {
-      linkText = SessionStore.currentUser().name;
-      linkPath = `/login`;
+      linkText = SessionStore.currentUser().name + " +";
+      linkPath = `/profile`;
       personalClass = this.updateClass(navProps);
     } else {
       linkText = "Sign In";
       linkPath = "/login";
       personalClass = this.updateClass(navProps);
     }
-    this.setState({text: linkText, path: linkPath, personalClass: personalClass});
+
+    this.setState({text: linkText, linkPath: linkPath, personalClass: personalClass});
   },
 
   updateClass: function (navProps) {
-    if (navProps.location === "/login" || navProps.location === "/signup") {
+    debugger
+    if (navProps.location === "/login" || navProps.location === "/signup" || navProps.location === "/profile") {
       return "personal-link clicked"
     } else {
       return "personal-link"

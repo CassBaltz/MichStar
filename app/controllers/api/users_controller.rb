@@ -21,6 +21,15 @@ class Api::UsersController < ApplicationController
 		end
 	end
 
+	def profile
+		@user = current_user
+		if @user
+			@reviews = @user.reviews
+		else
+			render json: nil, status: 404
+		end
+	end
+
 	private
 
 	def user_params

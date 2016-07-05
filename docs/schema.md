@@ -27,6 +27,7 @@ user_id     | integer   | not null, foreign key (references users), indexed
 rest_id     | integer   | not null, foreign key (references restaurant), indexed
 date        | datetime  | not null
 content     | text      | not null
+rating      | integer   | not null
 
 ## ratings
 column name | data type | details
@@ -34,7 +35,7 @@ column name | data type | details
 id          | integer   | not null, primary key
 user_id     | integer   | not null, foreign key (references users), indexed
 rest_id     | integer   | not null, foreign key (references notes), indexed
-value       | integer   | not null
+
 
 ## reservation_options(setting available reservations to be used by the site)
 column name | data type | details

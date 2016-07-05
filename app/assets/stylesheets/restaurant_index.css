@@ -2,3 +2,8 @@ div.top-spacer {
   height: 3%;
   display: block;
 }
+
+h1.index-header {
+  font-size: 35px;
+  text-align: center; 
+}

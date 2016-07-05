@@ -1,6 +1,16 @@
 div.restaurant-show {
-  width: 65%;
-  height: 65%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background: white;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+}
+
+div.restaurant-box {
+  width: 75%;
+  height: 75%;
   background: white;
   margin: 0 auto;
   border: 1px solid #ccc;
@@ -9,4 +19,21 @@ div.restaurant-show {
 h1.restaurant-header {
   text-align: center;
   font-size: 3em;
+}
+
+div.restaurant-text {
+  width: 50%;
+  float: left;
+  overflow: auto;
+}
+
+div.restaurant-picture {
+  width: 50%;
+  float: right;
+}
+
+div.button-links {
+  background: white;
+  display: inline-block;
+  text-align: center;
 }

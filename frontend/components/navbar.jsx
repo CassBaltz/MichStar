@@ -52,18 +52,6 @@ const NavBar = React.createClass({
     this.setState({location: str});
   },
 
-  updateHlStatus: function (e) {
-    e.preventDefault();
-    this.setState({hlStatus: "home-link clicked", plStatus: "personal-link"});
-    hashHistory.push("/");
-  },
-
-  updatePlStatus: function (e) {
-    e.preventDefault();
-    this.setState({hlStatus: "home-link", plStatus: "personal-link clicked"});
-    hashHistory.push("/login");
-  },
-
   render: function () {
     return (
       <div className="container">

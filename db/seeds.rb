@@ -20,7 +20,7 @@ benu = Restaurant.create(
 )
 
 french_laundry = Restaurant.create(
-  name: "Manresa",
+  name: "French Laundry",
   mich_review: "After more than 20 years of gracing every foodie's bucket list from here to Hong Kong, Thomas Keller's legendary Napa Valley destination still doesn't miss a beat-irrespective of being in the midst of change. And, what's not to love? Chef Keller pairs incredibly technical cooking with wildly fresh and seasonal ingredients in a dreamy wine country setting. It's a perfect storm of restaurant greatness-and we should all be so lucky to score a reservation here in our lifetime. Located in scenic Yountville, along a shady, bucolic, and winding road, the restaurant is the picture of countryside charm, with creeping ivy arching up its quaint stone exterior and a homey dining room set with elegant dishware. There are two seasonal, nine-course tasting menus to choose from, including a vegetarian option. Dinner might kick off with the restaurant's signature oysters, paired with gleaming white sturgeon caviar pooled in a warm sabayon studded with tapioca pearls; before moving on to golden striped bass with deconstructed deviled eggs. Other treasures include unctuous pork belly set over creamy, spiced Rancho Gordo beans; or tender veal, paired with tomato-infused béarnaise sauce and a spectacular summer corn salad bursting with cherry tomato, chanterelle mushrooms, and a basil-scented cake.",
   head_chef: "Thomas Keller",
   stars: 3,
@@ -142,11 +142,12 @@ commis = Restaurant.create(
   head_chef: "James Syhabout",
   stars: 2,
   cuisine: "Contemporary",
-  website: "http://www.coirestaurant.com",
+  website: "http://www.commisrestaurant.com/",
   address: "3859 Piedmont Ave., Oakland 94611",
   phone: "1.510.653.3902",
   lat: 37.824736,
   lon: -122.254927,
+  photo: "http://res.cloudinary.com/cassbaltz/image/upload/v1467665074/MichStar/commis-restaurant-photo_izzuwe.jpg"
 )
 
 quince = Restaurant.create(
@@ -155,9 +156,29 @@ quince = Restaurant.create(
   head_chef: "Michael Tusk",
   stars: 2,
   cuisine: "Italian",
-  website: "http://www.coirestaurant.com",
+  website: "http://www.quincerestaurant.com",
   address: "470 Pacific Ave., San Francisco 94133",
   phone: "1.415.775.8500",
   lat: 37.797512,
   lon: -122.403337,
 )
+
+user1 = User.new(name: "Pam", email: "pam@gmail.com", password: "password")
+user2 = User.new(name: "Joe", email: "joe@gmail.com", password: "password")
+user3 = User.new(name: "Sally", email: "sally@gmail.com", password: "password")
+user4 = User.new(name: "Ashley", email: "ashley@gmail.com", password: "password")
+user5 = User.new(name: "Sarah", email: "sarah@gmail.com", password: "password")
+user6 = User.new(name: "Mike", email: "mike@gmail.com", password: "password")
+
+user1.save
+user2.save
+user3.save
+user4.save
+user5.save
+user6.save
+
+review1 = Review.new(rating: 2, rest_id: 1, user_id: 1, content: "first review")
+review2 = Review.new(rating: 2, rest_id: 1, user_id: 1, content: "first review")
+
+review1.save
+review2.save

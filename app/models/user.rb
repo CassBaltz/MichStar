@@ -11,6 +11,10 @@ include BCrypt
 
   attr_reader :password
 
+  has_many :reviews
+
+  has_many :reviewed_restaurants, through: :reviews, source: :restaurant
+
   def self.find_by_credentials(email, password)
     user = User.find_by(email: email)
     return nil unless user && user.valid_password?(password)
@@ -31,6 +35,10 @@ include BCrypt
   ensure_session_token_uniqueness
     self.save!
     self.session_token
+  end
+
+  def user_reviews
+    self.reviews
   end
 
   private

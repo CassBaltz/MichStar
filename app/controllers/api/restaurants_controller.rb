@@ -6,6 +6,7 @@ class Api::RestaurantsController < ApplicationController
 
 	def show
 		@restaurant = Restaurant.find(params[:id])
+		@reviews = @restaurant.build_reviews
 	end
 
 end
