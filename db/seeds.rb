@@ -163,6 +163,7 @@ quince = Restaurant.create(
   lon: -122.403337,
 )
 
+user0 = User.new(name: "Jane", email: "guest@gmail.com", password: "password")
 user1 = User.new(name: "Pam", email: "pam@gmail.com", password: "password")
 user2 = User.new(name: "Joe", email: "joe@gmail.com", password: "password")
 user3 = User.new(name: "Sally", email: "sally@gmail.com", password: "password")
