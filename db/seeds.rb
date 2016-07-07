@@ -97,7 +97,7 @@ atelier_crenn = Restaurant.create(
   lon: -122.435943,
 )
 
-bauame = Restaurant.create(
+baume = Restaurant.create(
   name: "Baumé",
   mich_review: "A bold orange door in an otherwise nondescript single story building along Palo Alto's main thoroughfare marks the entrance to the lovely Baumé. Do yourself a favor and enter-for Chef Bruno Chemel's progressive fine dining is truly an otherworldly culinary experience. Inside, you'll find an exquisite dining room with a pristine, modernist sensibility and that same beautiful orange hue accenting various walls and fabric room dividers. The kitchen may do only one dinner seating a night, but tables are refreshingly spaced widely for privacy and it's lovely not to be rushed. The service staff only adds to this luxurious and unhurried vibe with their warmth, knowledge, and clear enthusiasm for Chef Chemel's food. Beginning with sublime and seasonal ingredients, the master creator takes his flavor profiles to truly profound levels. Dinner might include a gorgeous little plate of golden Osetra caviar spooned over a creamy panna cotta humming with fennel and tart kiwi; or a bright and perfectly poached Jidori egg yolk paired with creamy polenta, frothy sabayon, smoky meringue and kale ragout. Conclude over a sensational goat cheese-and-parsley root mousse that is studded with pretty pink peppercorns and topped with tiny little crisps of caramel.",
   head_chef: "Bruno Chemel",
@@ -184,3 +184,24 @@ review2 = Review.new(rating: 2, rest_id: 1, user_id: 1, content: "first review")
 
 review1.save
 review2.save
+
+[benu, french_laundry, manresa, restuarant_at_meadowood, saison, acquerello, atelier_crenn, baume, campton_place, coi, commis, quince].each do |restaurant|
+  [2, 4, 6].each do |seats|
+    [2016].each do |year|
+      [7, 8, 9].each do |month|
+        (1..30).to_a.each do |day|
+          (19..21).to_a.each do |hour|
+            [0, 30].each do |min|
+              ReservationOption.create(
+              rest_id: restaurant.id,
+              reservation_time: DateTime.new(year, month, day, hour, min),
+              table_size: seats,
+              reserved: false
+              )
+            end
+          end
+        end
+      end
+    end
+  end
+end

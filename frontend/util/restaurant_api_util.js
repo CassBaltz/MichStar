@@ -10,10 +10,12 @@ const RestaurantApiUtil = {
     });
   },
 
-  getRestaurant: function (id, callback) {
+  getRestaurant: function (id, callback, search) {
+		debugger
 		$.ajax({
       url: `api/restaurants/${id}`,
       method: 'GET',
+			data: search,
       success: function (restaurant) {
         callback(restaurant);
       }

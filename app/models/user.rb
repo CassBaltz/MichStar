@@ -11,6 +11,11 @@ include BCrypt
 
   attr_reader :password
 
+  has_many :reservations,
+  class_name: :Reservation,
+  primary_key: :id,
+  foreign_key: :user_id
+
   has_many :reviews
 
   has_many :reviewed_restaurants, through: :reviews, source: :restaurant

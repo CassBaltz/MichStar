@@ -68,7 +68,9 @@
 	var RestaurantShow = __webpack_require__(269);
 	var RestaurantReviews = __webpack_require__(270);
 	
-	var UserProfile = __webpack_require__(272);
+	var RestaurantReservations = __webpack_require__(276);
+	
+	var UserProfile = __webpack_require__(279);
 	
 	var appRouter = React.createElement(
 	  Router,
@@ -80,6 +82,7 @@
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants/:restaurantId', component: RestaurantShow }),
 	    React.createElement(Route, { path: '/restaurants/:restaurantId/reviews', component: RestaurantReviews }),
+	    React.createElement(Route, { path: '/restaurants/:restaurantId/reservations', onEnter: _ensureLoggedIn, component: RestaurantReservations }),
 	    React.createElement(Route, { path: '/login', component: LoginForm }),
 	    React.createElement(Route, { path: '/signup', component: LoginForm }),
 	    React.createElement(Route, { path: '/profile', component: UserProfile, onEnter: _ensureLoggedIn })
@@ -32877,6 +32880,7 @@
 	
 	var SessionActions = {
 	  signUp: function signUp(formData) {
+	    debugger;
 	    SessionApiUtil.signUp(formData, SessionActions.receiveCurrentUser, ErrorActions.setErrors);
 	  },
 	  logIn: function logIn(formData) {
@@ -32898,7 +32902,7 @@
 	    AppDispatcher.dispatch({
 	      actionType: SessionConstants.LOGOUT
 	    });
-	    hashHistory.push("/login");
+	    hashHistory.push("/");
 	  }
 	};
 	
@@ -33168,7 +33172,6 @@
 	  },
 	
 	  updateClass: function updateClass(navProps) {
-	    debugger;
 	    if (navProps.location === "/login" || navProps.location === "/signup" || navProps.location === "/profile") {
 	      return "personal-link clicked";
 	    } else {
@@ -33476,7 +33479,10 @@
 	  },
 	
 	  getRestaurant: function getRestaurant(id) {
-	    RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant);
+	    var search = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	    debugger;
+	    RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant, search);
 	  },
 	
 	  receiveRestaurant: function receiveRestaurant(restaurant) {
@@ -33507,7 +33513,9 @@
 		RECEIVE_RESTAURANTS: "RECEIVE_RESTAURANTS",
 		UPDATE_REVIEW: "UPDATE_REVIEW",
 		UPDATE_REVIEWS: "UPDATE_REVIEWS",
-		REMOVE_REVIEW: "REMOVE_REVIEW"
+		REMOVE_REVIEW: "REMOVE_REVIEW",
+		ADD_RESERVATION: "ADD_RESERVATION",
+		UPDATE_RESERVATIONS: "UPDATE_RESERVATIONS"
 	};
 	
 	module.exports = RestaurantConstants;
@@ -33530,10 +33538,12 @@
 	    });
 	  },
 	
-	  getRestaurant: function getRestaurant(id, callback) {
+	  getRestaurant: function getRestaurant(id, callback, search) {
+	    debugger;
 	    $.ajax({
 	      url: 'api/restaurants/' + id,
 	      method: 'GET',
+	      data: search,
 	      success: function success(restaurant) {
 	        callback(restaurant);
 	      }
@@ -33853,6 +33863,7 @@
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
 	var ReviewItem = __webpack_require__(271);
+	var ReviewForm = __webpack_require__(272);
 	
 	var RestaurantReviews = React.createClass({
 	  displayName: "RestaurantReviews",
@@ -33906,7 +33917,8 @@
 	        "ul",
 	        null,
 	        reviews
-	      )
+	      ),
+	      React.createElement(ReviewForm, { restaurantId: this.state.restaurant.id })
 	    );
 	  }
 	});
@@ -33965,6 +33977,8 @@
 
 	"use strict";
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var UserStore = __webpack_require__(273);
@@ -33972,60 +33986,107 @@
 	var UserActions = __webpack_require__(274);
 	var ReviewItem = __webpack_require__(271);
 	
-	var UserProfile = React.createClass({
-	  displayName: "UserProfile",
+	var buttonDisable = void 0;
+	
+	var ReviewForm = React.createClass({
+	  displayName: "ReviewForm",
 	
 	  getInitialState: function getInitialState() {
-	    var reviews = UserStore.findAllReviews();
-	    return { reviews: "none", user: SessionStore.currentUser() };
+	    if (SessionStore.isUserLoggedIn()) {
+	      buttonDisable = false;
+	    } else {
+	      buttonDisable = true;
+	    }
+	    return { content: "", buttonDisable: buttonDisable, rating: null, restaurant: "" };
 	  },
 	
-	  componentDidMount: function componentDidMount() {
-	    UserActions.getReviews();
-	    this.listener = UserStore.addListener(this.update);
+	  oneStar: function oneStar(e) {
+	    e.preventDefault();
+	    this.setState({ rating: 1 });
 	  },
 	
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.listener.remove();
+	  twoStar: function twoStar(e) {
+	    e.preventDefault();
+	    this.setState({ rating: 2 });
 	  },
 	
-	  update: function update() {
-	    this.setState({ reviews: UserStore.findAllReviews() });
+	  threeStar: function threeStar(e) {
+	    e.preventDefault();
+	    this.setState({ rating: 3 });
+	  },
+	
+	  handleSubmit: function handleSubmit(e) {
+	    e.preventDefault();
+	    UserActions.postReview({ content: this.state.content, rest_id: parseInt(this.props.restaurantId), user_id: SessionStore.currentUser().id, rating: this.state.rating });
+	  },
+	
+	  updateContent: function updateContent(e) {
+	    this.setState({ content: e.target.value });
 	  },
 	
 	  render: function render() {
-	    var reviews = void 0;
-	
-	    if (this.state.reviews === "none") {
-	      reviews = React.createElement(
-	        "div",
-	        null,
-	        "No Reviews"
-	      );
-	    } else {
-	      reviews = this.state.reviews.map(function (review, idx) {
-	        return React.createElement(ReviewItem, { key: idx, review: review });
-	      });
-	    }
-	
 	    return React.createElement(
 	      "div",
-	      { className: "restaurant-box" },
+	      { className: "login-form" },
 	      React.createElement(
-	        "h3",
-	        null,
-	        "Reviews"
-	      ),
-	      React.createElement(
-	        "ul",
-	        null,
-	        reviews
+	        "form",
+	        { className: "form-fieldset", onSubmit: this.handleSubmit },
+	        React.createElement(
+	          "div",
+	          { className: "form-header" },
+	          React.createElement(
+	            "h2",
+	            null,
+	            "Leave a Review"
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "login-form" },
+	          React.createElement(
+	            "label",
+	            { className: "form-label" },
+	            "Review"
+	          ),
+	          React.createElement("textarea", {
+	            placeholder: "Leave a comment (must be signed in)", value: this.state.content,
+	            onChange: this.updateContent,
+	            className: "login-input" }),
+	          React.createElement(
+	            "ul",
+	            { className: "input block" },
+	            React.createElement(
+	              "li",
+	              { onClick: this.oneStar },
+	              "*"
+	            ),
+	            React.createElement(
+	              "li",
+	              { onClick: this.twoStar },
+	              "**"
+	            ),
+	            React.createElement(
+	              "li",
+	              { onClick: this.threeStar },
+	              "***"
+	            )
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "button-wrapper" },
+	            React.createElement(
+	              "button",
+	              _defineProperty({ type: "submit", disabled: this.state.buttonDisable, className: "form-submit" }, "type", "submit"),
+	              "Leave Review"
+	            )
+	          )
+	        )
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = UserProfile;
+	module.exports = ReviewForm;
 
 /***/ },
 /* 273 */
@@ -34040,6 +34101,7 @@
 	var UserStore = new Store(AppDispatcher);
 	
 	var _reviews = {};
+	var _reservations = {};
 	
 	UserStore.findAllReviews = function () {
 	  return Object.keys(_reviews).map(function (key) {
@@ -34047,24 +34109,49 @@
 	  });
 	};
 	
+	UserStore.findAllReservations = function () {
+	  return Object.keys(_reservations).map(function (key) {
+	    return _reservations[key];
+	  });
+	};
+	
 	UserStore.findReview = function (id) {
 	  return _reviews[id];
+	};
+	
+	UserStore.findReservation = function (id) {
+	  return _reservations[id];
 	};
 	
 	function updateReview(review) {
 	  _reviews[review.id] = review;
 	};
 	
+	function updateReservation(reservation) {
+	  _reservations[reservation.id] = reservation;
+	};
+	
 	function deleteReview(reviewId) {
 	  delete _reviews[reviewId];
 	};
 	
+	function deleteReservation(reservationId) {
+	  delete _reservations[reservationId];
+	};
+	
 	function updateReviews(userData) {
-	  debugger;
 	  _reviews = {};
 	  var reviews = userData['reviews'];
 	  reviews.forEach(function (review) {
 	    _reviews[review.id] = review;
+	  });
+	};
+	
+	function updateReservations(userData) {
+	  _reservations = {};
+	  var reservations = userData['reservations'];
+	  reservations.forEach(function (reservation) {
+	    _reservation[review.id] = reservation;
 	  });
 	};
 	
@@ -34080,6 +34167,10 @@
 	      break;
 	    case RestaurantConstants.REMOVE_REVIEW:
 	      deleteReview(payload.reviewId);
+	      UserStore.__emitChange();
+	      break;
+	    case RestaurantConstants.UPDATE_RESERVATIONS:
+	      updateReservations(payload.userData);
 	      UserStore.__emitChange();
 	      break;
 	  }
@@ -34114,6 +34205,10 @@
 	
 	  getReviews: function getReviews() {
 	    UserApiUtil.getReviews(UserActions.updateReviews);
+	  },
+	
+	  createReservation: function createReservation(reservation) {
+	    UserApiUtil.createReservation(reservation, update);
 	  },
 	
 	  updateReview: function updateReview(review) {
@@ -34152,6 +34247,7 @@
 	      url: 'api/reviews',
 	      method: 'POST',
 	      dataType: 'json',
+	      data: { review: review },
 	      success: function success(review) {
 	        callback(review);
 	      }
@@ -34180,16 +34276,305 @@
 	
 	  editReview: function editReview(review, callback) {
 	    $.ajax({
-	      url: 'api/reviews/' + id,
+	      url: 'api/reviews/' + review.id,
 	      method: 'UPDATE',
 	      success: function success(review) {
 	        callback(review);
+	      }
+	    });
+	  },
+	
+	  createReservation: function createReservation(reservation, callback) {
+	    $.ajax({
+	      url: 'api/reservations',
+	      method: 'POST',
+	      data: { reservation: reservation },
+	      success: function success(restaurant) {
+	        callback(restaurant);
 	      }
 	    });
 	  }
 	};
 	
 	module.exports = UserApiUtil;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var RestaurantActions = __webpack_require__(263);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(231);
+	var RestaurantStore = __webpack_require__(267);
+	var ReservationItem = __webpack_require__(277);
+	var ReservationSearch = __webpack_require__(278);
+	
+	var RestaurantReservations = React.createClass({
+	  displayName: "RestaurantReservations",
+	
+	  getInitialState: function getInitialState() {
+	    return { restaurant: "none" };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.listener = RestaurantStore.addListener(this.updateRestaurant);
+	    RestaurantActions.getRestaurant(parseInt(this.props.params.restaurantId));
+	  },
+	
+	  updateRestaurant: function updateRestaurant() {
+	    var restaurant = RestaurantStore.find(parseInt(this.props.params.restaurantId));
+	    this.setState({ restaurant: restaurant });
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	
+	  render: function render() {
+	    var resItems = void 0;
+	    if (this.state.restaurant === "none") {
+	      resItems = React.createElement(
+	        "div",
+	        null,
+	        "No Reservations"
+	      );
+	    } else {
+	      resItems = this.state.restaurant.reservations.map(function (resItem, idx) {
+	        return React.createElement(ReservationItem, { key: idx, resItem: resItem });
+	      });
+	    }
+	
+	    return React.createElement(
+	      "div",
+	      { className: "restaurant-box" },
+	      React.createElement(
+	        "h2",
+	        null,
+	        this.state.restaurant.name
+	      ),
+	      React.createElement(ReservationSearch, { restaurantId: parseInt(this.props.params.restaurantId) }),
+	      React.createElement(
+	        "h3",
+	        null,
+	        "Reservation Options"
+	      ),
+	      React.createElement(
+	        "ul",
+	        null,
+	        resItems
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = RestaurantReservations;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
+	var ReservationItem = React.createClass({
+	  displayName: "ReservationItem",
+	
+	  getInitialState: function getInitialState() {
+	    var resItem = this.props.resItem;
+	    return { resItem: resItem };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(resItem) {
+	    this.setState({ resItem: resItem });
+	  },
+	
+	  createReservation: function createReservation(e) {},
+	
+	  render: function render() {
+	    return React.createElement(
+	      "li",
+	      null,
+	      React.createElement(
+	        "h2",
+	        null,
+	        this.state.resItem.reservation_time
+	      ),
+	      React.createElement(
+	        "h4",
+	        null,
+	        this.state.resItem.table_size
+	      ),
+	      React.createElement(
+	        "button",
+	        { onClick: this.createReservation },
+	        "Reserve!"
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ReservationItem;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var RestaurantActions = __webpack_require__(263);
+	
+	var ReservationSearch = React.createClass({
+	  displayName: 'ReservationSearch',
+	
+	  getInitialState: function getInitialState() {
+	    return { date: null, seats: null };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(props) {
+	    this.setState({ restaurantId: this.props.restaurantId });
+	  },
+	
+	  updateDate: function updateDate(e) {
+	    e.preventDefault();
+	    this.setState({ date: e.target.value });
+	    RestaurantActions.getRestaurant(this.state.restaurantId, { date: e.target.value, seats: this.state.seats });
+	  },
+	
+	  updateTableSize: function updateTableSize(e) {
+	    e.preventDefault();
+	    debugger;
+	    this.setState({ seats: e.target.value });
+	    RestaurantActions.getRestaurant(this.state.restaurantId, { date: this.state.date, seats: this.state.seats });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement('input', { type: 'date', onChange: this.updateDate }),
+	        React.createElement(
+	          'select',
+	          { onChange: this.updateTableSize, name: 'table_size' },
+	          React.createElement(
+	            'option',
+	            { selected: true, disabled: true },
+	            'Number of Diners'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: '2' },
+	            '2'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: '4' },
+	            '4'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: '6' },
+	            '6'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ReservationSearch;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var UserStore = __webpack_require__(273);
+	var SessionStore = __webpack_require__(231);
+	var SessionActions = __webpack_require__(254);
+	var UserActions = __webpack_require__(274);
+	var ReviewItem = __webpack_require__(271);
+	
+	var UserProfile = React.createClass({
+	  displayName: "UserProfile",
+	
+	  getInitialState: function getInitialState() {
+	    var reviews = UserStore.findAllReviews();
+	    return { reviews: "none", user: SessionStore.currentUser() };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    UserActions.getReviews();
+	    this.listener = UserStore.addListener(this.update);
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	
+	  update: function update() {
+	    this.setState({ reviews: UserStore.findAllReviews() });
+	  },
+	
+	  logout: function logout() {
+	    SessionActions.logOut();
+	    hashHistory.push('/');
+	  },
+	
+	  render: function render() {
+	    var reviews = void 0;
+	
+	    if (this.state.reviews === "none") {
+	      reviews = React.createElement(
+	        "div",
+	        null,
+	        "No Reviews"
+	      );
+	    } else {
+	      reviews = this.state.reviews.map(function (review, idx) {
+	        return React.createElement(ReviewItem, { key: idx, review: review });
+	      });
+	    }
+	
+	    return React.createElement(
+	      "div",
+	      { className: "restaurant-box" },
+	      React.createElement(
+	        "div",
+	        { className: "form-header", onClick: this.logout },
+	        React.createElement(
+	          "h4",
+	          null,
+	          "LOGOUT"
+	        )
+	      ),
+	      React.createElement(
+	        "h3",
+	        null,
+	        "Reviews"
+	      ),
+	      React.createElement(
+	        "ul",
+	        null,
+	        reviews
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserProfile;
 
 /***/ }
 /******/ ]);

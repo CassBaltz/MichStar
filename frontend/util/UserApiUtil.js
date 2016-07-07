@@ -4,6 +4,7 @@ const UserApiUtil = {
       url: 'api/reviews',
       method: 'POST',
       dataType: 'json',
+			data: {review},
       success: function(review) {
         callback(review);
       }
@@ -32,13 +33,24 @@ const UserApiUtil = {
 
   editReview: function (review, callback) {
     $.ajax({
-      url: `api/reviews/${id}`,
+      url: `api/reviews/${review.id}`,
       method: 'UPDATE',
       success: function(review) {
         callback(review)
       }
     });
   },
+
+	createReservation: function(reservation, callback) {
+		$.ajax({
+			url: `api/reservations`,
+			method: 'POST',
+			data: {reservation},
+			success: function(restaurant) {
+				callback(restaurant);
+			}
+		});
+	}
 };
 
 module.exports = UserApiUtil;

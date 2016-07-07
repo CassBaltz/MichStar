@@ -13,5 +13,9 @@ json.photo @restaurant.photo
 
 
 json.reviews do
-    json.array! @reviews
+  json.array! @reviews
+end
+
+json.reservations do
+  json.array! @reservation_options
 end

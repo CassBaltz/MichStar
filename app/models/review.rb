@@ -7,4 +7,5 @@ class Review < ActiveRecord::Base
   class_name: :Restaurant,
   primary_key: :id,
   foreign_key: :rest_id
+
 end

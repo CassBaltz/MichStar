@@ -8,8 +8,9 @@ const RestaurantActions = {
     RestaurantApiUtil.fetchRestaurants(RestaurantActions.receiveAllRestaurants);
   },
 
-  getRestaurant: function (id) {
-    RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant);
+  getRestaurant: function (id, search={}) {
+    debugger
+    RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant, search);
   },
 
   receiveRestaurant: function (restaurant) {

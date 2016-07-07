@@ -3,10 +3,10 @@ const RestaurantActions = require("../actions/restaurant_actions");
 const Link = require('react-router').Link;
 const SessionStore = require('../stores/session_store');
 const RestaurantStore = require('../stores/restaurant_store');
-const ReviewItem = require('./restaurant_review_item');
-const ReviewForm = require('./review_form');
+const ReservationItem = require('./reservation_item');
+const ReservationSearch = require('./reservation_search');
 
-const RestaurantReviews = React.createClass({
+const RestaurantReservations = React.createClass({
   getInitialState: function () {
     return {restaurant: "none"};
   },
@@ -26,27 +26,27 @@ const RestaurantReviews = React.createClass({
   },
 
   render: function() {
-    let reviews;
+    let resItems;
     if (this.state.restaurant === "none") {
-      reviews = <div>No Reviews</div>;
+      resItems = <div>No Reservations</div>;
     } else {
-      reviews = this.state.restaurant.reviews.map((review, idx) => {
-        return <ReviewItem key={idx} review={review} />
+      resItems = this.state.restaurant.reservations.map((resItem, idx) => {
+        return <ReservationItem key={idx} resItem={resItem} />
       })
     }
 
     return (
         <div className="restaurant-box">
           <h2>{this.state.restaurant.name}</h2>
-          <h3>Reviews</h3>
+          <ReservationSearch restaurantId={parseInt(this.props.params.restaurantId)} />
+          <h3>Reservation Options</h3>
           <ul>
-            {reviews}
+            {resItems}
           </ul>
-          <ReviewForm restaurantId={this.state.restaurant.id} />
         </div>
     );
   }
 });
 
 
-module.exports = RestaurantReviews;
+module.exports = RestaurantReservations;

@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160704215647) do
+ActiveRecord::Schema.define(version: 20160706171106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "reservation_options", force: :cascade do |t|
+    t.integer  "rest_id",                          null: false
+    t.datetime "reservation_time",                 null: false
+    t.integer  "table_size",                       null: false
+    t.boolean  "reserved",         default: false, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  create_table "reservations", force: :cascade do |t|
+    t.integer  "reservation_option_id", null: false
+    t.integer  "user_id",               null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
 
   create_table "restaurants", force: :cascade do |t|
     t.string   "name",        null: false

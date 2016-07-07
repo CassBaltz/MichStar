@@ -25,6 +25,7 @@ class Api::UsersController < ApplicationController
 		@user = current_user
 		if @user
 			@reviews = @user.reviews
+			@reservations = @user.reservations
 		else
 			render json: nil, status: 404
 		end

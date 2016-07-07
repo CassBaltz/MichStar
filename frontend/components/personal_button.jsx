@@ -25,7 +25,6 @@ const PersonalButton = React.createClass({
   },
 
   updateClass: function (navProps) {
-    debugger
     if (navProps.location === "/login" || navProps.location === "/signup" || navProps.location === "/profile") {
       return "personal-link clicked"
     } else {

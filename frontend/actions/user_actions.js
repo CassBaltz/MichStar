@@ -21,6 +21,10 @@ const UserActions = {
     UserApiUtil.getReviews(UserActions.updateReviews)
   },
 
+  createReservation: function(reservation) {
+    UserApiUtil.createReservation(reservation, update)
+  },
+
   updateReview: function(review) {
     AppDispatcher.dispatch({
       actionType: RestaurantConstants.UPDATE_REVIEW,

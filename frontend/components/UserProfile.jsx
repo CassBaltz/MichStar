@@ -2,6 +2,7 @@ const React = require("react");
 const Link = require('react-router').Link;
 const UserStore = require("../stores/user_store");
 const SessionStore = require("../stores/session_store");
+const SessionActions = require("../actions/session_actions");
 const UserActions = require('../actions/user_actions');
 const ReviewItem = require('./restaurant_review_item');
 
@@ -24,6 +25,11 @@ const UserProfile = React.createClass({
     this.setState({reviews: UserStore.findAllReviews()})
   },
 
+  logout: function() {
+    SessionActions.logOut();
+    hashHistory.push('/');
+  },
+
   render: function() {
     let reviews;
 
@@ -37,6 +43,7 @@ const UserProfile = React.createClass({
 
     return (
       <div className="restaurant-box">
+        <div className="form-header" onClick={this.logout}><h4>LOGOUT</h4></div>
         <h3>Reviews</h3>
         <ul>
           {reviews}
