@@ -2,8 +2,14 @@ class Api::ReservationsController < ApplicationController
 
   def create
     @reservation = Reservation.new(reservation_params)
+    reservation_option = ReservationOption.find(reservation_params[:reservation_option_id])
+    reservation_option.reserved = true
+    reservation_option.save
     @reservation.save
-    render "api/reservations/#{@reservation.id}"
+    @user = @reservation.user
+    @reservations = @user.reservations
+    @reviews = @user.reviews
+    render "api/users/profile"
   end
 
   def show

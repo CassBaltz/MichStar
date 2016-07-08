@@ -35,6 +35,7 @@ const ReviewForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     UserActions.postReview({content: this.state.content, rest_id: parseInt(this.props.restaurantId), user_id: SessionStore.currentUser().id, rating: this.state.rating});
+    this.setState({content: ''})
   },
 
   updateContent: function(e) {

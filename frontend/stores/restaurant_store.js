@@ -21,6 +21,10 @@ function updateRestaurants (restaurant) {
   _restaurants[restaurant.id] = restaurant;
 };
 
+function updateReview(review) {
+  _restaurants[review["rest_id"]].reviews.push(review);
+};
+
 RestaurantStore.find = function(id) {
   return _restaurants[id];
 };
@@ -29,6 +33,11 @@ RestaurantStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case RestaurantConstants.RECEIVE_RESTAURANTS:
     resetRestaurants(payload.restaurants);
+    RestaurantStore.__emitChange();
+    break;
+
+    case RestaurantConstants.UPDATE_REVIEWS:
+    updateReview(payload.reviewData);
     RestaurantStore.__emitChange();
     break;
 

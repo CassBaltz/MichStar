@@ -29,24 +29,32 @@ const RestaurantShow = React.createClass({
 
     return (
       <div className="restaurant-box">
-        <h1 className="restaurant-header">{this.state.restaurant.name}</h1>
+        <div className="header-div">
+          <h1 className="restaurant-header">{this.state.restaurant.name}</h1>
+          <h1 className="restaurant-header">|</h1>
+          <h1 className="restaurant-header">{this.state.restaurant.stars} Stars</h1>
+        </div>
         <div className="restaurant-show">
           <div className="restaurant-text">
+            <h3>Cuisine: {this.state.restaurant.cuisine}</h3>
             <h3>Chef: {this.state.restaurant.head_chef}</h3>
             <h3>Phone: {this.state.restaurant.phone}</h3>
+            <h3><a href={this.state.restaurant.website}>Visit Website</a></h3>
             <h3>Address: {this.state.restaurant.address}</h3>
-            <h3>Stars: {this.state.restaurant.stars}</h3>
-            <h3>Cuisine: {this.state.restaurant.cuisine}</h3>
-            <h3>Michelin Review: {this.state.restaurant.mich_review}</h3>
           </div>
           <div className="restaurant-picture">
-            <img src={this.state.restaurant.photo} alt={this.state.restaurant.name} />
+            <img className="flex-image" src={this.state.restaurant.photo} alt={this.state.restaurant.name} />
           </div>
         </div>
+        <div className="michelin-review">
+          <h3>Michelin Review: {this.state.restaurant.mich_review}</h3>
+        </div>
         <div className="button-links">
-          <Link to="/">BACK TO RESTAURANTS</Link>
-          <Link to={reservationPath}>RESERVATIONS</Link>
-          <Link to={reviewsPath}>REVIEWS</Link>
+          <div><Link to="/">BACK TO RESTAURANTS</Link></div>
+          <div>|</div>
+          <div><Link to={reservationPath}>RESERVATIONS</Link></div>
+          <div>|</div>
+          <div><Link to={reviewsPath}>REVIEWS</Link></div>
         </div>
       </div>
     );

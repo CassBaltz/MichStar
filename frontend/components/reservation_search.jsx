@@ -19,9 +19,8 @@ const ReservationSearch = React.createClass({
 
   updateTableSize: function (e) {
     e.preventDefault();
-    debugger
     this.setState({seats: e.target.value});
-    RestaurantActions.getRestaurant(this.state.restaurantId, {date: this.state.date, seats: this.state.seats});
+    RestaurantActions.getRestaurant(this.state.restaurantId, {date: this.state.date, seats: e.target.value});
   },
 
   render: function() {

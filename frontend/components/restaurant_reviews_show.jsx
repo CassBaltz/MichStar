@@ -8,7 +8,7 @@ const ReviewForm = require('./review_form');
 
 const RestaurantReviews = React.createClass({
   getInitialState: function () {
-    return {restaurant: "none"};
+    return {restaurant: {}};
   },
 
   componentDidMount: function () {
@@ -27,7 +27,7 @@ const RestaurantReviews = React.createClass({
 
   render: function() {
     let reviews;
-    if (this.state.restaurant === "none") {
+    if (Object.keys(this.state.restaurant).length === 0) {
       reviews = <div>No Reviews</div>;
     } else {
       reviews = this.state.restaurant.reviews.map((review, idx) => {
@@ -37,12 +37,17 @@ const RestaurantReviews = React.createClass({
 
     return (
         <div className="restaurant-box">
-          <h2>{this.state.restaurant.name}</h2>
-          <h3>Reviews</h3>
-          <ul>
+          <div className="header">
+            <div className="review-button">
+              <ReviewForm restaurantId={this.state.restaurant.id} />
+            </div>
+            <div className="restaurantName">
+              <h2>{this.state.restaurant.name}</h2>
+            </div>
+          </div>
+          <div className="review-item">
             {reviews}
-          </ul>
-          <ReviewForm restaurantId={this.state.restaurant.id} />
+          </div>
         </div>
     );
   }

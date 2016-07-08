@@ -1,9 +1,9 @@
 class Api::ReviewsController < ApplicationController
 
 	def create
-		@review = Review.new(review_params)
-		if @review.save
-			render "api/reviews/#{@review.id}"
+		review = Review.new(review_params)
+		if review.save
+			redirect_to api_review_url(review)
 		else
 			@errors = @user.errors.full_messages
 			render "api/shared/error", status: 422
@@ -11,7 +11,8 @@ class Api::ReviewsController < ApplicationController
 	end
 
 	def show
-		@review = Review.find(params[:id])
+		review = Review.find(params[:id])
+		@review = review.build_review
 	end
 
   def update

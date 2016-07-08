@@ -1,5 +1,7 @@
 const React = require("react");
 const Link = require('react-router').Link;
+const UserActions = require('../actions/user_actions');
+const hashHistory = require('react-router').hashHistory;
 
 const ReservationItem = React.createClass({
   getInitialState: function () {
@@ -7,12 +9,16 @@ const ReservationItem = React.createClass({
     return {resItem: resItem};
   },
 
-  componentWillReceiveProps: function (resItem) {
-    this.setState({resItem: resItem});
+  componentWillReceiveProps: function (props) {
+    this.setState({resItem: props.resItem});
   },
 
   createReservation: function (e) {
-
+    e.preventDefault();
+    let userId = SessionStore.currentUser().id;
+    let resOptId = this.state.resItem.id;
+    UserActions.createReservation({user_id: userId, reservation_option_id: resOptId});
+    hashHistory.push("/profile");
   },
 
   render: function() {
@@ -20,7 +26,7 @@ const ReservationItem = React.createClass({
       <li>
         <h2>{this.state.resItem.reservation_time}</h2>
         <h4>{this.state.resItem.table_size}</h4>
-        <button onClick={this.createReservation}>Reserve!</button>
+        <button onClick={this.createReservation}>Reserve</button>
       </li>
     );
   }

@@ -8,8 +8,8 @@ const RestaurantReviewItem = React.createClass({
     return {review: review};
   },
 
-  componentWillReceiveProps: function (review) {
-    this.setState({review: review});
+  componentWillReceiveProps: function (props) {
+    this.setState({review: props.review});
   },
 
   render: function() {

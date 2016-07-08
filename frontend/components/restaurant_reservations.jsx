@@ -34,7 +34,7 @@ const RestaurantReservations = React.createClass({
         return <ReservationItem key={idx} resItem={resItem} />
       })
     }
-
+    
     return (
         <div className="restaurant-box">
           <h2>{this.state.restaurant.name}</h2>

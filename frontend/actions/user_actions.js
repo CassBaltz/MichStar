@@ -2,40 +2,41 @@ const AppDispatcher = require('../dispatcher/dispatcher');
 const RestaurantConstants = require('../constants/restaurant_constants');
 const hashHistory = require('react-router').hashHistory;
 const UserApiUtil = require('../util/UserApiUtil');
+const UserConstants = require('../constants/user_constants');
 
 const UserActions = {
 
   postReview: function (review) {
-    UserApiUtil.postReview(review, UserActions.updateReview)
+    UserApiUtil.postReview(review, UserActions.updateReviews)
   },
 
   deleteReview: function (reviewId) {
-    UserApiUtil.deleteReview(review, UserActions.removeReview)
+    UserApiUtil.deleteReview(review, UserActions.updateUser)
   },
 
   editReview: function (review) {
-    UserApiUtil.editReview(review, UserActions.updateReview)
+    UserApiUtil.editReview(review, UserActions.updateUser)
   },
 
-  getReviews: function () {
-    UserApiUtil.getReviews(UserActions.updateReviews)
+  getUser: function () {
+    UserApiUtil.getUser(UserActions.updateUser)
   },
 
   createReservation: function(reservation) {
-    UserApiUtil.createReservation(reservation, update)
+    UserApiUtil.createReservation(reservation, UserActions.updateUser)
   },
 
-  updateReview: function(review) {
+  updateUser: function(user) {
     AppDispatcher.dispatch({
-      actionType: RestaurantConstants.UPDATE_REVIEW,
-      review: review
+      actionType: UserConstants.UPDATE_USER,
+      user: user
     });
   },
 
-  updateReviews: function(userData) {
+  updateReviews: function(reviewData) {
     AppDispatcher.dispatch({
       actionType: RestaurantConstants.UPDATE_REVIEWS,
-      userData: userData
+      reviewData: reviewData
     });
   },
 

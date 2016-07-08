@@ -7,7 +7,7 @@ const hashHistory = ReactRouter.hashHistory;
 let linkText, linkPath, personalClass;
 const PersonalButton = React.createClass({
   getInitialState: function() {
-    return ({text: "Signup", linkPath: "/login", personalClass: "personal-link"});
+    return ({text: "Login", linkPath: "/login", personalClass: "personal-link"});
   },
 
   componentWillReceiveProps: function(navProps) {

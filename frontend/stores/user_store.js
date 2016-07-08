@@ -2,13 +2,14 @@
 
 const AppDispatcher = require('../dispatcher/dispatcher.js');
 const Store = require('flux/utils').Store;
+const UserConstants = require('../constants/user_constants');
 const RestaurantConstants = require('../constants/restaurant_constants');
 
 const UserStore = new Store(AppDispatcher);
 
-let _reviews = {};
-let _reservations = {};
+let _user = {}
 
+UserStore.getUser = () => _user
 
 UserStore.findAllReviews = () => {
   return Object.keys(_reviews).map(key => {
@@ -40,6 +41,10 @@ function updateReservation (reservation) {
 
 function deleteReview(reviewId) {
   delete _reviews[reviewId];
+};
+
+function updateUser(user) {
+  _user = user;
 };
 
 function deleteReservation(reservationId) {
@@ -79,6 +84,9 @@ UserStore.__onDispatch = function (payload) {
     case RestaurantConstants.UPDATE_RESERVATIONS:
       updateReservations(payload.userData);
       UserStore.__emitChange();
+      break;
+    case UserConstants.UPDATE_USER:
+      updateUser(payload.user);
       break;
   }
 }

@@ -26,8 +26,8 @@ const RestaurantIndex = React.createClass({
   render: function () {
 
     return (
-      <div>
-        <div class="top-spacer" />
+      <div className="map-container">
+        <div className="top-spacer" />
         <h1 className="index-header">Reservations At San Francisco's Top Restaurants</h1>
         <RestaurantMap />
       </div>

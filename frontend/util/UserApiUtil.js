@@ -21,7 +21,7 @@ const UserApiUtil = {
     });
   },
 
-  getReviews: function (callback) {
+  getUser: function (callback) {
 		$.ajax({
       url: `api/user/profile`,
       method: 'GET',
@@ -45,9 +45,9 @@ const UserApiUtil = {
 		$.ajax({
 			url: `api/reservations`,
 			method: 'POST',
-			data: {reservation},
-			success: function(restaurant) {
-				callback(restaurant);
+			data: {reservation: reservation},
+			success: function(user) {
+				callback(user);
 			}
 		});
 	}

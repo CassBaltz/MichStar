@@ -1,15 +1,25 @@
 #map {
-  width: 500px;
-  height: 500px;
-  margin: 0 auto 5% auto;
+  width: 80vw;
+  height: 80vh;
+  margin: auto;
+  position: relative;
+  opacity: .9;
 }
 
 h3.map-overlay {
   margin: 0 auto;
   text-align: center;
+  font-size: 2em;
   padding-top: 1%;
-  padding-bottom: 3%;
+  padding-bottom: 1%;
+  background: white;
+  opacity: .9;
 }
+
+h3.map-overlay:hover {
+  cursor: pointer;
+}
+
 
 div.map-container {
   margin-top: 30px;
@@ -18,4 +28,16 @@ div.map-container {
 div.map-div {
   width: 75%;
   height: 75%;
+}
+
+div.gm-style {
+  margin: auto;
+}
+
+div.map-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  padding-bottom: 5%;
 }

@@ -5,15 +5,16 @@ const SessionStore = require("../stores/session_store");
 const SessionActions = require("../actions/session_actions");
 const UserActions = require('../actions/user_actions');
 const ReviewItem = require('./restaurant_review_item');
+const hashHistory = require('react-router').hashHistory;
 
 const UserProfile = React.createClass({
   getInitialState: function () {
-    let reviews = UserStore.findAllReviews();
-    return {reviews: "none", user: SessionStore.currentUser()};
+    let user = UserStore.getUser();
+    return {user: user};
   },
 
   componentDidMount: function() {
-    UserActions.getReviews();
+    UserActions.getUser();
     this.listener = UserStore.addListener(this.update);
   },
 
@@ -22,7 +23,7 @@ const UserProfile = React.createClass({
   },
 
   update: function () {
-    this.setState({reviews: UserStore.findAllReviews()})
+    this.setState({user: UserStore.getUser()})
   },
 
   logout: function() {
@@ -32,11 +33,10 @@ const UserProfile = React.createClass({
 
   render: function() {
     let reviews;
-
-    if (this.state.reviews === "none") {
+    if (Object.keys(this.state.user).length === 0) {
       reviews = <div>No Reviews</div>;
     } else {
-      reviews = this.state.reviews.map((review, idx) => {
+      reviews = this.state.user.reviews.map((review, idx) => {
        return <ReviewItem key={idx} review={review} />
      })
     }

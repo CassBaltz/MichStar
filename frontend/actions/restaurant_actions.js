@@ -9,7 +9,6 @@ const RestaurantActions = {
   },
 
   getRestaurant: function (id, search={}) {
-    debugger
     RestaurantApiUtil.getRestaurant(id, RestaurantActions.receiveRestaurant, search);
   },
 

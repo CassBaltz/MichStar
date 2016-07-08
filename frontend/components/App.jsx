@@ -19,8 +19,6 @@ const App = React.createClass({
   },
 
   greeting() {
-
-
     if (SessionStore.isUserLoggedIn()) {
 
     	return (

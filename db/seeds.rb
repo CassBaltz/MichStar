@@ -188,10 +188,11 @@ review2.save
 [benu, french_laundry, manresa, restuarant_at_meadowood, saison, acquerello, atelier_crenn, baume, campton_place, coi, commis, quince].each do |restaurant|
   [2, 4, 6].each do |seats|
     [2016].each do |year|
-      [7, 8, 9].each do |month|
+      [7, 8].each do |month|
         (1..30).to_a.each do |day|
           (19..21).to_a.each do |hour|
             [0, 30].each do |min|
+              next if rand(2) == 1
               ReservationOption.create(
               rest_id: restaurant.id,
               reservation_time: DateTime.new(year, month, day, hour, min),

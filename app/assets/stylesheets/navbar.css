@@ -1,14 +1,25 @@
 div.container {
   width: 100%;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   background: black;
   color: white;
   position: fixed;
   top: 0;
 }
 
+h2.logo {
+  order: 1;
+  margin-top: 0
+  margin-bottom: 0;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 1em;
+}
+
 h3.home-link {
-  float: left;
+  order: 0;
   color: white;
   padding: 1%;
   margin-top: 0;
@@ -31,7 +42,7 @@ h3.personal-link:hover {
 }
 
 h3.personal-link {
-  float: right;
+  order: 1;
   color: white;
   padding: 1%;
   margin-top: 0;
