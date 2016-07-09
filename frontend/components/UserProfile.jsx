@@ -6,11 +6,13 @@ const SessionActions = require("../actions/session_actions");
 const UserActions = require('../actions/user_actions');
 const ReviewItem = require('./restaurant_review_item');
 const hashHistory = require('react-router').hashHistory;
+const UserReview = require('./user_reviews');
+const UserReservation = require('./user_reservations');
 
 const UserProfile = React.createClass({
   getInitialState: function () {
     let user = UserStore.getUser();
-    return {user: user};
+    return {user: user, reviewVisibility: false};
   },
 
   componentDidMount: function() {
@@ -24,6 +26,16 @@ const UserProfile = React.createClass({
 
   update: function () {
     this.setState({user: UserStore.getUser()})
+  },
+
+  updateReviews: function(e) {
+    e.preventDefault();
+    this.setState({reviewVisibility: true});
+  },
+
+  updateReservations: function(e) {
+    e.preventDefault();
+    this.setState({reviewVisibility: false});
   },
 
   logout: function() {
@@ -43,11 +55,29 @@ const UserProfile = React.createClass({
 
     return (
       <div className="restaurant-box">
-        <div className="form-header" onClick={this.logout}><h4>LOGOUT</h4></div>
-        <h3>Reviews</h3>
-        <ul>
-          {reviews}
-        </ul>
+        <div className="restaurant-header">
+          <div>
+            <h2>
+              {this.state.user.name}
+            </h2>
+          </div>
+          <div className="form-header" onClick={this.logout}>
+            <h4>
+              LOGOUT
+            </h4>
+          </div>
+        </div>
+        <div onClick={this.updateReservations}>
+          <h2>
+            Reservations
+          </h2>
+        </div>
+        <div onClick={this.updateReviews}>
+          <h2>
+            Reviews
+          </h2>
+        </div>
+        {this.state.reviewVisibility ? <UserReview user={this.state.user} /> : <UserReservation user={this.state.user} />}
       </div>
     );
   }

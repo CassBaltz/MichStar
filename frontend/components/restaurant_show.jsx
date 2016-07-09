@@ -29,6 +29,11 @@ const RestaurantShow = React.createClass({
 
     return (
       <div className="restaurant-box">
+        <div className="button-links">
+          <div><Link to="/">BACK TO RESTAURANTS</Link></div>
+          <div><Link to={reservationPath}>RESERVATIONS</Link></div>
+          <div><Link to={reviewsPath}>REVIEWS</Link></div>
+        </div>
         <div className="header-div">
           <h1 className="restaurant-header">{this.state.restaurant.name}</h1>
           <h1 className="restaurant-header">|</h1>
@@ -39,7 +44,7 @@ const RestaurantShow = React.createClass({
             <h3>Cuisine: {this.state.restaurant.cuisine}</h3>
             <h3>Chef: {this.state.restaurant.head_chef}</h3>
             <h3>Phone: {this.state.restaurant.phone}</h3>
-            <h3><a href={this.state.restaurant.website}>Visit Website</a></h3>
+            <h3><a href={this.state.restaurant.website} target="blank">Visit Website</a></h3>
             <h3>Address: {this.state.restaurant.address}</h3>
           </div>
           <div className="restaurant-picture">
@@ -47,14 +52,7 @@ const RestaurantShow = React.createClass({
           </div>
         </div>
         <div className="michelin-review">
-          <h3>Michelin Review: {this.state.restaurant.mich_review}</h3>
-        </div>
-        <div className="button-links">
-          <div><Link to="/">BACK TO RESTAURANTS</Link></div>
-          <div>|</div>
-          <div><Link to={reservationPath}>RESERVATIONS</Link></div>
-          <div>|</div>
-          <div><Link to={reviewsPath}>REVIEWS</Link></div>
+          <h3>{this.state.restaurant.mich_review}</h3>
         </div>
       </div>
     );

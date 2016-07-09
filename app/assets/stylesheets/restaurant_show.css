@@ -14,10 +14,11 @@ div.restaurant-box {
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
-  opacity: .9;
+  opacity: 1;
   padding: 2%;
   justify-content: space-between;
   align-items: stretch;
+  min-height: 849px;
 }
 
 div.michelin-review {
@@ -30,6 +31,7 @@ div.header-div {
   padding: 1%;
   margin: 1%;
   align-items: center;
+  border: 1px solid #ccc
 }
 
 h1.restaurant-header {

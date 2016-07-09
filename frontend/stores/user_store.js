@@ -7,7 +7,9 @@ const RestaurantConstants = require('../constants/restaurant_constants');
 
 const UserStore = new Store(AppDispatcher);
 
-let _user = {}
+let _user = {};
+let _reviews = {};
+let _reservations = {};
 
 UserStore.getUser = () => _user
 
@@ -53,6 +55,7 @@ function deleteReservation(reservationId) {
 
 function updateReviews (userData) {
   _reviews = {};
+  debugger
   let reviews = userData['reviews'];
   reviews.forEach(review => {
     _reviews[review.id] = review;

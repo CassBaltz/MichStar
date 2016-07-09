@@ -22,7 +22,7 @@ function updateRestaurants (restaurant) {
 };
 
 function updateReview(review) {
-  _restaurants[review["rest_id"]].reviews.push(review);
+  _restaurants[review["rest_id"]].reviews.unshift(review);
 };
 
 RestaurantStore.find = function(id) {

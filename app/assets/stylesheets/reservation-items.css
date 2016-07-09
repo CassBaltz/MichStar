@@ -1,0 +1,61 @@
+div.reservation-items-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+div.reservation-item {
+  width: 25%;
+  max-height: 20%;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  border: 1px solid #ccc;
+  margin: 1%;
+  padding: 1%;
+}
+
+div.reservation-item > h3 {
+  font-size: 2em;
+  display: block;
+  text-align: center;
+  background: black;
+  color: white;
+}
+
+input[type=date] {
+  height: 3em;
+  width: 11em;
+  text-align: center;
+  margin: 1em;
+}
+
+select, input[type="color" i][list] {
+  height: 4em;
+  width: 11em;
+  border-radius: 0px
+}
+
+div.reservation-item > h4 {
+  font-size: 2em;
+  display: block;
+  text-align: center;
+}
+
+div.button-links > div {
+  border: 1px solid #ccc;
+  padding: 1%;
+  margin-bottom: 2%;
+}
+
+div.reservation-item > h2 {
+  font-size: 2em;
+  display: block;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+div.reservation-item > h2:hover {
+  cursor: pointer
+}

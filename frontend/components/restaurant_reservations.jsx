@@ -35,15 +35,21 @@ const RestaurantReservations = React.createClass({
       })
     }
     
+    let hashPath = `/restaurants/${this.state.restaurant.id}`
+
     return (
-        <div className="restaurant-box">
-          <h2>{this.state.restaurant.name}</h2>
+      <div className="restaurant-box">
+        <div className="restaurant-header">
           <ReservationSearch restaurantId={parseInt(this.props.params.restaurantId)} />
-          <h3>Reservation Options</h3>
-          <ul>
-            {resItems}
-          </ul>
+          <div className="restaurant-name">
+            <h2>{this.state.restaurant.name} Reservation Options</h2>
+          </div>
+          <div className="link-back"><Link to={hashPath}>BACK TO {this.state.restaurant.name}</Link></div>
         </div>
+        <div className="reservation-items-container">
+          {resItems}
+        </div>
+      </div>
     );
   }
 });

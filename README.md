@@ -1,131 +1,38 @@
-# Michstar
+# MichStar
 
-[Heroku link](https://michstarapp.herokuapp.com)
+[Live MichStar](https://michstarapp.herokuapp.com)
 
-## Minimum Viable Product
+MichStar is a web application inspired by OpenTable for all the Michelin star restaurants located around San Francisco (2016 awards). MichStar was built using Ruby on Rails for the backend data management and routing actions. The rest of the application uses the JavaScript React library to offer a responsive, single page application that uses Ajax for database correspondence and the flux architecture system for front-end component and data management.
 
-Michstar is a web application inspired by OpenTable for all the 2 and 3 Michelin star restaurants located in San Francisco (2016 awards).  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
+## Reservation Filtering
+Users are able to browse and choose restaurants from a google maps integration showing all "participating" restaurants. Selecting from the map then takes them to a restaurant page where they can learn more about the particular restaurant of interest or search through that restaurant's available reservations and filter by date and/or table size.
 
-- [x] Hosting on Heroku
-- [x] New account creation, login, and guest/demo login
-- [ ] A production README, replacing this README
-- [x] Restaurants Directory
-  - [x] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Reservation System
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Restaurant Information (Ratings, Reviews, Description)
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] User History (Favorites, Restaurants Visited, Reviews)
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
+```Ruby
+def show
+  @restaurant = Restaurant.find(params[:id])
+  @reviews = @restaurant.build_reviews
 
-Bonus
+  @reservation_options = ReservationOption.where('reservation_time > ? AND reserved = ? AND rest_id = ?', Time.now, false, params[:id]).order("reservation_time ASC").limit(400)
+  if (params[:date]) && (params[:date] != "")
+    @reservation_options = @reservation_options.select{ |r_o| r_o.reservation_time.to_date.to_s == params[:date] }
+  end
 
-- [ ] Custom URL
-- [ ] Create Restaurant
-  - [ ] Ability for a restaurant owner to enter information and assign reservation options on the site
-- [ ] Michelin Star (viaMichelin) api integration
-  - [ ] Use the api provided by the [michelin guide](http://dev.viamichelin.com/guides-michelin-js-en.html) to grab data for the about the guides section.
-- [ ] User stars
- - [ ] Provide users with three stars they can award to any restaurant they have visited through the app and seems worthy. If the user wants to give a fourth star, he or she will be asked which restaurant to take a star from. In other words, create a top three for each user.
+  if (params[:seats]) && (params[:seats] != "")
+    @reservation_options = @reservation_options.select{ |r_o| r_o.table_size == params[:seats].to_i }
+  end
+end
+```
 
-## Design Docs
-* [View Wireframes][views]
-* [React Components][components]
-* [Flux Cycles][flux-cycles]
-* [API endpoints][api-endpoints]
-* [DB schema][schema]
+Filtering happens in the rails controller which queries the database and then selects through relevant data. The front-end RestaurantStore then updates with the returned filtered ruby results which were previously converted to json objects with the jbuilder view template for that restaurant's show page. The store emits a change callback to the "RestaurantReservations" component that will then re-render due to a state reset, thus rendering only the ReservationOptions that fit the search parameters. A reservation can then be placed directly from the page and the user will be redirected to her or his profile page. If this was a production application, there would likely be an action mailer call to send a confirmation email to both the user and restaurant email accounts.
 
-[views]: docs/views.md
-[components]: docs/components.md
-[flux-cycles]: docs/flux-cycles.md
-[api-endpoints]: docs/api-endpoints.md
-[schema]: docs/schema.md
+## Reviews
+Additionally, a prospective diner can read reviews from each of the participating restaurants and submit his or her own opinions on his or her dining experience at a particular establishment. However, a browsing diner is not permitted to write a review on a restaurant unless he or she is signed into MichStar's platform.
 
-## Implementation Timeline
+## Front-end Authentication
+This brings me to the next feature implemented in MichStar. Users are able to sign-in and register sessions with their browser using a combination of back-end ruby code (for setting/storing password digests and session tokens), while JavaScript maintains constant access to the current user, or lack thereof, through its session store, which is included in any relevant component that would need to know user status.
 
-### Phase 1: Backend setup and Front End User Authentication (1 day, W1 Tu 6pm)
+## General Usability
+For the purposes of demonstration, reservation availability was mocked in the database using a bunch of loops and reviews were seeded from yelp to provide a more realistic experience.  
 
-**Objective:** Functioning rails project with Authentication
-
-- [ ] create new project
-- [ ] get something to show on Heroku relating to my page before I start working
-- [ ] set-up all necessary javascript files
-- [ ] create `User` model
-- [ ] create `Session` controller
-- [ ] front end authentication
-- [ ] user signup/signin pages
-- [ ] build nav bar
-- [ ] redirect to index after sign in
-- [ ] preliminary styling for the auth form
-
-### Phase 2: Restaurant Model and Database Seeding (1.5 days, W1 Th 12pm)
-
-**Objective:** Build the Restaurant model and seed the database
-
-- [ ] create `restaurant` model
-- [ ] create `reservation_options` model
-- [ ] seed the database with all 2 & 3 star restaurants in San Francisco (not sure if I will use the Michelin API or do it by hand yet)
-- [ ] Read API for restaurant AJAX
-- [ ] jBuilder views for Restaurants#show and Restaurant#index
-- [ ] setup `APIUtil` to interact with the Restaurant API
-- [ ] begin setup for flux loop
-- [ ] figure out remote photo hosting for background and restaurant pictures.
-
-### Phase 3: Restaurant Flux Architecture and Router (1.5 days, W1 F 6pm)
-
-**Objective:** All restaurant related components other than submitting a reservation should be working by the end of today
-
-- [ ] integrate the flux loop with skeleton files
-- [ ] integrate React Router
-- [ ] get preliminary google map integration working and filled with restaurants in DB using flux loop
-
-### Phase 4: Start Styling (0.5 days, W2 M 12pm)
-
-**Objective:** Existing pages will look good
-
-- [ ] use the weekend to clean up code and get all existing components styled
-- [ ] placeholder div styled for Restaurant reservation section
-- [ ] create a basic style guide
-- [ ] position elements on the page
-- [ ] add basic colors & styles
-- [ ] incorporate footer components (About, Contact, MichelinStar)
-
-### Phase 5: Reservation Components (1 day, W2 Tu 12pm)
-
-**Objective:** Allow only signed in customers to make a reservation at a restaurant. Update databases accordingly and have listeners in customer and restaurant components reflect these changes.
-
-- [ ] build the reservation placement interface (customer submitting reservation)
-- [ ] style the reservation placement interface (customer submitting reservation)
-- [ ] customer reservations component interface (past reservations in one color, pending reservations in another color)
-- [ ] email functionality when a reservation is placed (send to me if guest, send to user if signed in separately)
-
-### Phase 6: User Profile Components (2 days, W2 Th 12pm)
-
-**Objective:** Build out pages for customer -- this includes current reservations, visited restaurants, and a review/rating form for restaurants.
-
-- [ ] new components for restaurants visited index
-- [ ] new components for restaurant review form
-- [ ] new components for restaurant review index
-- [ ] style all user profile components and make them look good
-
-### Phase 7: Touch-up (1.5 days, W2 Fr 6pm)
-
-**objective:** Add Finishing Touches
-
-- [ ] fix bugs and update styling
-- [ ] add bonus features if time allows
-
-
-[phase-one]: (docs/phases/phase1.md)
-[phase-two]: (docs/phases/phase2.md)
-[phase-three]: (docs/phases/phase3.md)
-[phase-four]: (docs/phases/phase4.md)
-[phase-five]: (docs/phases/phase5.md)
+## Future Implementation
+If I were to continue this project, I would likely want to implement a navigation search bar that could filter through large swaths of text related to each restaurant returning that restaurant and its associated data (e.g., customer review excerpt, that restaurant's Michelin review, or perhaps the restaurant category). This seems like the most interesting and useful feature for my project.

@@ -20,22 +20,40 @@ const ReviewForm = React.createClass({
   oneStar: function(e) {
     e.preventDefault();
     this.setState({rating: 1});
+    $("#two-star").removeClass("clicked");
+    $("#one-star").addClass("clicked");
+    $("#three-star").removeClass("clicked");
   },
 
   twoStar: function(e) {
     e.preventDefault();
     this.setState({rating: 2});
+    $("#two-star").addClass("clicked");
+    $("#one-star").removeClass("clicked");
+    $("#three-star").removeClass("clicked");
   },
 
   threeStar: function(e) {
     e.preventDefault();
     this.setState({rating: 3});
+    $("#two-star").removeClass("clicked");
+    $("#one-star").removeClass("clicked");
+    $("#three-star").addClass("clicked");
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    UserActions.postReview({content: this.state.content, rest_id: parseInt(this.props.restaurantId), user_id: SessionStore.currentUser().id, rating: this.state.rating});
-    this.setState({content: ''})
+    if (this.state.rating === null || this.state.content === "") {
+      this.setState({content: "You must have a review and rating to submit"});
+    } else {
+      UserActions.postReview({content: this.state.content, rest_id: parseInt(this.props.restaurantId), user_id: SessionStore.currentUser().id, rating: this.state.rating});
+      this.setState({content: ''})
+      $("#two-star").removeClass("clicked");
+      $("#one-star").removeClass("clicked");
+      $("#three-star").removeClass("clicked");
+
+      this.props.closeModal();
+    }
   },
 
   updateContent: function(e) {
@@ -44,29 +62,28 @@ const ReviewForm = React.createClass({
 
   render: function() {
     return(
-      <div className="login-form">
+      <div className="review-form">
 				<form className="form-fieldset" onSubmit={this.handleSubmit}>
-	        <div className="form-header">
+	        <div className="form-h">
 						<h2>Leave a Review</h2>
+            <h2>{SessionStore.currentUser().name}</h2>
 					</div>
+					<label className="form-label">Review</label>
+					<textarea
+            placeholder="Leave a review (must be signed in)" value={this.state.content}
+            onChange={this.updateContent}
+						className="review-input" />
+          <div className="rating">
+            <h5>Rating</h5>
+          </div>
+          <div className="input-block">
+            <div id="one-star" onClick={this.oneStar}>✩</div>
+            <div id="two-star"onClick={this.twoStar}>✩✩</div>
+            <div id="three-star" onClick={this.threeStar}>✩✩✩</div>
+          </div>
 
-				<div className="login-form">
-
-						<label className="form-label">Review</label>
-							<textarea
-		            placeholder="Leave a comment (must be signed in)" value={this.state.content}
-		            onChange={this.updateContent}
-								className="login-input" />
-
-              <ul className="input block">
-                <li onClick={this.oneStar}>*</li>
-                <li onClick={this.twoStar}>**</li>
-                <li onClick={this.threeStar}>***</li>
-              </ul>
-
-						<div className="button-wrapper">
-							<button type="submit" disabled={this.state.buttonDisable} className="form-submit" type="submit">Leave Review</button>
-						</div>
+					<div className="button-wrapper">
+						<button type="submit" disabled={this.state.buttonDisable} className="form-submit" type="submit">Leave Review</button>
 					</div>
 				</form>
 			</div>

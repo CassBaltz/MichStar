@@ -56,7 +56,7 @@ const NavBar = React.createClass({
     return (
       <div className="container">
         <HomeButton status={this.state.status} location={this.state.location} />
-        <h2 className="logo">MichStar</h2>
+        <h2 className="logo">✩MichStar✩</h2>
         <PersonalButton status={this.state.status} location={this.state.location} />
       </div>
     );
