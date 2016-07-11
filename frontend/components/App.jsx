@@ -9,7 +9,6 @@ const NavBar = require('./navbar');
 let name = SessionStore.currentUser().name;
 
 const App = React.createClass({
-
   componentDidMount() {
     SessionStore.addListener(this.forceUpdate.bind(this));
   },

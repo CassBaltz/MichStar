@@ -1,0 +1,25 @@
+div.user-profile-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 1%;
+  background: black;
+  color: white;
+  align-items: center;
+  justify-content: space-between;
+}
+
+div.user-profile-header > h2 {
+  font-size: 22px;
+  padding: 1%;
+}
+
+div.user-profile-header > h2.button:hover {
+  cursor: pointer;
+}
+
+h2.header-text {
+  text-align: center;
+  padding: 3%;
+  font-size: 2em;
+}

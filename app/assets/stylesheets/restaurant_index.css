@@ -1,9 +1,62 @@
 div.top-spacer {
-  height: 3%;
-  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+.hidden {
+  display: none;
+}
+
+.splash {
+  position: absolute;
+  margin-top: 15%;
+  background: black;
+  color: white;
+  z-index: 10000000000;
+}
+
+.splash > h1 {
+  font-size: 35px;
+  text-align: center;
+  margin: 5% 20% 1% 20%;
+  font-family: 'Cinzel', serif;
+}
+
+.splash > h2 {
+  font-size: 27px;
+  text-align: center;
+  margin: 0 20% 2% 20%;
+}
+
+.splash > h3 {
+  float: right;
+  font-size: 22px;
+  text-align: center;
+  margin: 2% 2% 0 0;
+  padding: 1%;
+  border: 1px white solid;
+}
+
+.splash > h3:hover {
+  cursor: pointer;
+}
+
+
+.splash > h4 {
+  font-size: 22px;
+  text-align: center;
+  margin: 0 20% 5% 20%;
 }
 
 h1.index-header {
   font-size: 35px;
-  text-align: center; 
+  text-align: center;
+  margin-top: 40vh;
+  color: white;
+  background: black;
+}
+
+div.index-full-content {
+  background: url(http://res.cloudinary.com/cassbaltz/image/upload/q_auto:good/v1467431850/ot-background.jpg) no-repeat;
+  width: 100%;
 }

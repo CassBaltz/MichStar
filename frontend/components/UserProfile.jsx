@@ -12,7 +12,7 @@ const UserReservation = require('./user_reservations');
 const UserProfile = React.createClass({
   getInitialState: function () {
     let user = UserStore.getUser();
-    return {user: user, reviewVisibility: false};
+    return {user: user, reviewVisibility: false, buttonText: "My Reviews", headerText: "Reservations"};
   },
 
   componentDidMount: function() {
@@ -28,14 +28,13 @@ const UserProfile = React.createClass({
     this.setState({user: UserStore.getUser()})
   },
 
-  updateReviews: function(e) {
+  toggleButton: function(e) {
     e.preventDefault();
-    this.setState({reviewVisibility: true});
-  },
-
-  updateReservations: function(e) {
-    e.preventDefault();
-    this.setState({reviewVisibility: false});
+    if (this.state.reviewVisibility === true) {
+      this.setState({reviewVisibility: false, buttonText: "My Reviews", headerText: "Reservations"});
+    } else {
+      this.setState({reviewVisibility: true, buttonText: "My Reservations", headerText: "Reviews"});
+    }
   },
 
   logout: function() {
@@ -44,38 +43,15 @@ const UserProfile = React.createClass({
   },
 
   render: function() {
-    let reviews;
-    if (Object.keys(this.state.user).length === 0) {
-      reviews = <div>No Reviews</div>;
-    } else {
-      reviews = this.state.user.reviews.map((review, idx) => {
-       return <ReviewItem key={idx} review={review} />
-     })
-    }
-
     return (
       <div className="restaurant-box">
-        <div className="restaurant-header">
-          <div>
-            <h2>
-              {this.state.user.name}
-            </h2>
-          </div>
-          <div className="form-header" onClick={this.logout}>
-            <h4>
-              LOGOUT
-            </h4>
-          </div>
+        <div className="user-profile-header">
+            <h2>{this.state.user.name}</h2>
+            <h2 className="button" onClick={this.toggleButton}>{this.state.buttonText}</h2>
+            <h2  className="button" onClick={this.logout}>Logout</h2>
         </div>
-        <div onClick={this.updateReservations}>
-          <h2>
-            Reservations
-          </h2>
-        </div>
-        <div onClick={this.updateReviews}>
-          <h2>
-            Reviews
-          </h2>
+        <div>
+          <h2 className="header-text">{this.state.headerText}</h2>
         </div>
         {this.state.reviewVisibility ? <UserReview user={this.state.user} /> : <UserReservation user={this.state.user} />}
       </div>

@@ -90,6 +90,7 @@ UserStore.__onDispatch = function (payload) {
       break;
     case UserConstants.UPDATE_USER:
       updateUser(payload.user);
+      UserStore.__emitChange();
       break;
   }
 }

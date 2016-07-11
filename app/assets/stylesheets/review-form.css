@@ -18,15 +18,26 @@
   text-align: center
 }
 
-.form-h {
+div.form-h {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  margin-bottom: 2%;
+  justify-content: center;
+  margin: 2%;
+}
+
+h3.close-button {
+  float: right;
+  padding: 1%;
+  border: 1px solid black
+}
+
+h3.close-button:hover {
+  cursor: pointer;
 }
 
 .form-h > h2 {
   font-size: 2em;
+  padding: 2%;
 }
 
 .review-input.input {
@@ -37,8 +48,14 @@
 
 textarea.review-input {
   width: 75%;
-  height: 45vh;
+  height: 25vh;
   margin: auto;
+  font-size: 20px;
+  padding: 2%;
+}
+
+div.input-block {
+  margin-bottom: 2%;
 }
 
 .input-block > div {
@@ -60,7 +77,8 @@ div.ReactModal__Content.ReactModal__Content--after-open {
 div.rating > h5{
   font-size: 2em;
   text-align: center;
-  margin-bottom: 0;
+  margin-bottom: 2%;
+  margin-top: 2%;
 }
 
 .clicked {

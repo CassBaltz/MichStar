@@ -24,8 +24,8 @@ class Api::UsersController < ApplicationController
 	def profile
 		@user = current_user
 		if @user
-			@reviews = @user.reviews
-			@reservations = @user.reservations
+			@reviews = @user.build_reviews
+			@reservations = @user.build_reservations
 		else
 			render json: nil, status: 404
 		end

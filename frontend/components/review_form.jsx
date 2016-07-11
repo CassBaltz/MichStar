@@ -41,6 +41,10 @@ const ReviewForm = React.createClass({
     $("#three-star").addClass("clicked");
   },
 
+  closeForm: function(e) {
+    this.props.closeModal();
+  },
+
   handleSubmit: function(e) {
     e.preventDefault();
     if (this.state.rating === null || this.state.content === "") {
@@ -63,10 +67,10 @@ const ReviewForm = React.createClass({
   render: function() {
     return(
       <div className="review-form">
+        <h3 onClick={this.closeForm} className="close-button">Close</h3>
 				<form className="form-fieldset" onSubmit={this.handleSubmit}>
 	        <div className="form-h">
-						<h2>Leave a Review</h2>
-            <h2>{SessionStore.currentUser().name}</h2>
+            <h2>{SessionStore.currentUser().name + "'s Review"}</h2>
 					</div>
 					<label className="form-label">Review</label>
 					<textarea

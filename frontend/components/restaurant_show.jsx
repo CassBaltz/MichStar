@@ -27,28 +27,31 @@ const RestaurantShow = React.createClass({
     let reservationPath = `restaurants/${this.state.restaurant.id}/reservations`
     let reviewsPath = `restaurants/${this.state.restaurant.id}/reviews`
 
+    var imgUrl = this.state.restaurant.photo
+
+    var divStyle = {
+    backgroundImage: 'url(' + imgUrl + ')',
+    }
+
     return (
       <div className="restaurant-box">
         <div className="button-links">
-          <div><Link to="/">BACK TO RESTAURANTS</Link></div>
-          <div><Link to={reservationPath}>RESERVATIONS</Link></div>
-          <div><Link to={reviewsPath}>REVIEWS</Link></div>
+          <div className="rs"><Link to="/">BACK TO RESTAURANTS</Link></div>
+          <div className="rs"><Link to={reservationPath}>RESERVATIONS</Link></div>
+          <div className="rs"><Link to={reviewsPath}>REVIEWS</Link></div>
         </div>
         <div className="header-div">
           <h1 className="restaurant-header">{this.state.restaurant.name}</h1>
           <h1 className="restaurant-header">|</h1>
-          <h1 className="restaurant-header">{this.state.restaurant.stars} Stars</h1>
+          <h1 className="restaurant-header">{this.state.restaurant.stars} ✩</h1>
         </div>
-        <div className="restaurant-show">
+        <div className="restaurant-show" style={divStyle}>
           <div className="restaurant-text">
             <h3>Cuisine: {this.state.restaurant.cuisine}</h3>
             <h3>Chef: {this.state.restaurant.head_chef}</h3>
             <h3>Phone: {this.state.restaurant.phone}</h3>
             <h3><a href={this.state.restaurant.website} target="blank">Visit Website</a></h3>
             <h3>Address: {this.state.restaurant.address}</h3>
-          </div>
-          <div className="restaurant-picture">
-            <img className="flex-image" src={this.state.restaurant.photo} alt={this.state.restaurant.name} />
           </div>
         </div>
         <div className="michelin-review">

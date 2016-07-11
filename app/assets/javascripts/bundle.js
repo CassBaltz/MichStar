@@ -26053,6 +26053,7 @@
 	
 	var _currentUser = {};
 	var _currentUserHasBeenFetched = false;
+	var _bannerClicked = false;
 	
 	var _login = function _login(currentUser) {
 	  _currentUser = currentUser;
@@ -26075,6 +26076,14 @@
 	      SessionStore.__emitChange();
 	      break;
 	  }
+	};
+	
+	SessionStore.getClicked = function () {
+	  return _bannerClicked;
+	};
+	
+	SessionStore.updateClicked = function () {
+	  _bannerClicked = true;
 	};
 	
 	SessionStore.currentUser = function () {
@@ -33572,7 +33581,7 @@
 	  displayName: "RestaurantIndex",
 	
 	  getInitialState: function getInitialState() {
-	    return { restaurants: RestaurantStore.allRestaurants() };
+	    return { restaurants: RestaurantStore.allRestaurants(), clicked: SessionStore.getClicked() };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -33584,22 +33593,54 @@
 	    this.setState({ restaurants: RestaurantStore.allRestaurants() });
 	  },
 	
+	  clicked: function clicked(e) {
+	    e.preventDefault();
+	    SessionStore.updateClicked();
+	    this.setState({ clicked: true });
+	  },
+	
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.listener.remove();
 	  },
 	
 	  render: function render() {
 	
+	    var bannerClass = this.state.clicked ? "hidden" : "splash";
+	
+	    debugger;
+	
 	    return React.createElement(
 	      "div",
-	      { className: "map-container" },
-	      React.createElement("div", { className: "top-spacer" }),
+	      { className: "index-full-content" },
 	      React.createElement(
-	        "h1",
-	        { className: "index-header" },
-	        "Reservations At San Francisco's Top Restaurants"
-	      ),
-	      React.createElement(RestaurantMap, null)
+	        "div",
+	        { className: "map-container" },
+	        React.createElement(
+	          "div",
+	          { className: bannerClass },
+	          React.createElement(
+	            "h3",
+	            { onClick: this.clicked },
+	            "Close"
+	          ),
+	          React.createElement(
+	            "h1",
+	            null,
+	            "✩MichStar✩"
+	          ),
+	          React.createElement(
+	            "h2",
+	            null,
+	            "Reservations At San Francisco's Top Restaurants"
+	          ),
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Visit restaurants on the map by clicking an icon and then the clicking the link to the restaurant page at the top of the map. Make reservations at the restaurant by visiting the reservation page. You can also read and write reviews by clicking the restaurant reviews page at each restaurant."
+	          )
+	        ),
+	        React.createElement(RestaurantMap, null)
+	      )
 	    );
 	  }
 	});
@@ -33781,6 +33822,12 @@
 	    var reservationPath = "restaurants/" + this.state.restaurant.id + "/reservations";
 	    var reviewsPath = "restaurants/" + this.state.restaurant.id + "/reviews";
 	
+	    var imgUrl = this.state.restaurant.photo;
+	
+	    var divStyle = {
+	      backgroundImage: 'url(' + imgUrl + ')'
+	    };
+	
 	    return React.createElement(
 	      "div",
 	      { className: "restaurant-box" },
@@ -33789,7 +33836,7 @@
 	        { className: "button-links" },
 	        React.createElement(
 	          "div",
-	          null,
+	          { className: "rs" },
 	          React.createElement(
 	            Link,
 	            { to: "/" },
@@ -33798,7 +33845,7 @@
 	        ),
 	        React.createElement(
 	          "div",
-	          null,
+	          { className: "rs" },
 	          React.createElement(
 	            Link,
 	            { to: reservationPath },
@@ -33807,7 +33854,7 @@
 	        ),
 	        React.createElement(
 	          "div",
-	          null,
+	          { className: "rs" },
 	          React.createElement(
 	            Link,
 	            { to: reviewsPath },
@@ -33832,12 +33879,12 @@
 	          "h1",
 	          { className: "restaurant-header" },
 	          this.state.restaurant.stars,
-	          " Stars"
+	          " ✩"
 	        )
 	      ),
 	      React.createElement(
 	        "div",
-	        { className: "restaurant-show" },
+	        { className: "restaurant-show", style: divStyle },
 	        React.createElement(
 	          "div",
 	          { className: "restaurant-text" },
@@ -33874,11 +33921,6 @@
 	            "Address: ",
 	            this.state.restaurant.address
 	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "restaurant-picture" },
-	          React.createElement("img", { className: "flex-image", src: this.state.restaurant.photo, alt: this.state.restaurant.name })
 	        )
 	      ),
 	      React.createElement(
@@ -34012,7 +34054,7 @@
 	    var hashPath = "/restaurants/" + this.state.restaurant.id;
 	    return React.createElement(
 	      "div",
-	      { className: "restaurant-box" },
+	      { className: "review-box" },
 	      React.createElement(
 	        "div",
 	        { className: "restaurant-header" },
@@ -34100,7 +34142,8 @@
 	          this.state.review.name,
 	          ' / ',
 	          this.state.review.rating,
-	          '✩'
+	          '✩ / ',
+	          this.state.review.date
 	        )
 	      ),
 	      React.createElement(
@@ -36125,6 +36168,10 @@
 	    $("#three-star").addClass("clicked");
 	  },
 	
+	  closeForm: function closeForm(e) {
+	    this.props.closeModal();
+	  },
+	
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
 	    if (this.state.rating === null || this.state.content === "") {
@@ -36149,6 +36196,11 @@
 	      "div",
 	      { className: "review-form" },
 	      React.createElement(
+	        "h3",
+	        { onClick: this.closeForm, className: "close-button" },
+	        "Close"
+	      ),
+	      React.createElement(
 	        "form",
 	        { className: "form-fieldset", onSubmit: this.handleSubmit },
 	        React.createElement(
@@ -36157,12 +36209,7 @@
 	          React.createElement(
 	            "h2",
 	            null,
-	            "Leave a Review"
-	          ),
-	          React.createElement(
-	            "h2",
-	            null,
-	            SessionStore.currentUser().name
+	            SessionStore.currentUser().name + "'s Review"
 	          )
 	        ),
 	        React.createElement(
@@ -36316,6 +36363,7 @@
 	      break;
 	    case UserConstants.UPDATE_USER:
 	      updateUser(payload.user);
+	      UserStore.__emitChange();
 	      break;
 	  }
 	};
@@ -36673,7 +36721,7 @@
 	      null,
 	      React.createElement(
 	        'form',
-	        null,
+	        { className: 'reservation-form' },
 	        React.createElement('input', { type: 'date', onChange: this.updateDate }),
 	        React.createElement(
 	          'select',
@@ -36721,14 +36769,14 @@
 	var ReviewItem = __webpack_require__(271);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var UserReview = __webpack_require__(301);
-	var UserReservation = __webpack_require__(302);
+	var UserReservation = __webpack_require__(303);
 	
 	var UserProfile = React.createClass({
 	  displayName: "UserProfile",
 	
 	  getInitialState: function getInitialState() {
 	    var user = UserStore.getUser();
-	    return { user: user, reviewVisibility: false };
+	    return { user: user, reviewVisibility: false, buttonText: "My Reviews", headerText: "Reservations" };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -36744,14 +36792,13 @@
 	    this.setState({ user: UserStore.getUser() });
 	  },
 	
-	  updateReviews: function updateReviews(e) {
+	  toggleButton: function toggleButton(e) {
 	    e.preventDefault();
-	    this.setState({ reviewVisibility: true });
-	  },
-	
-	  updateReservations: function updateReservations(e) {
-	    e.preventDefault();
-	    this.setState({ reviewVisibility: false });
+	    if (this.state.reviewVisibility === true) {
+	      this.setState({ reviewVisibility: false, buttonText: "My Reviews", headerText: "Reservations" });
+	    } else {
+	      this.setState({ reviewVisibility: true, buttonText: "My Reservations", headerText: "Reviews" });
+	    }
 	  },
 	
 	  logout: function logout() {
@@ -36760,60 +36807,35 @@
 	  },
 	
 	  render: function render() {
-	    var reviews = void 0;
-	    if (Object.keys(this.state.user).length === 0) {
-	      reviews = React.createElement(
-	        "div",
-	        null,
-	        "No Reviews"
-	      );
-	    } else {
-	      reviews = this.state.user.reviews.map(function (review, idx) {
-	        return React.createElement(ReviewItem, { key: idx, review: review });
-	      });
-	    }
-	
 	    return React.createElement(
 	      "div",
 	      { className: "restaurant-box" },
 	      React.createElement(
 	        "div",
-	        { className: "restaurant-header" },
+	        { className: "user-profile-header" },
 	        React.createElement(
-	          "div",
+	          "h2",
 	          null,
-	          React.createElement(
-	            "h2",
-	            null,
-	            this.state.user.name
-	          )
+	          this.state.user.name
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "form-header", onClick: this.logout },
-	          React.createElement(
-	            "h4",
-	            null,
-	            "LOGOUT"
-	          )
+	          "h2",
+	          { className: "button", onClick: this.toggleButton },
+	          this.state.buttonText
+	        ),
+	        React.createElement(
+	          "h2",
+	          { className: "button", onClick: this.logout },
+	          "Logout"
 	        )
 	      ),
 	      React.createElement(
 	        "div",
-	        { onClick: this.updateReservations },
+	        null,
 	        React.createElement(
 	          "h2",
-	          null,
-	          "Reservations"
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { onClick: this.updateReviews },
-	        React.createElement(
-	          "h2",
-	          null,
-	          "Reviews"
+	          { className: "header-text" },
+	          this.state.headerText
 	        )
 	      ),
 	      this.state.reviewVisibility ? React.createElement(UserReview, { user: this.state.user }) : React.createElement(UserReservation, { user: this.state.user })
@@ -36834,38 +36856,31 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
-	var ReviewItem = __webpack_require__(271);
+	var UserReviewItem = __webpack_require__(302);
 	var ReviewForm = __webpack_require__(292);
 	var ReactDOM = __webpack_require__(38);
 	
 	var UserReviews = React.createClass({
 	  displayName: "UserReviews",
 	
-	  getInitialState: function getInitialState() {
-	    return { user: {} };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(props) {
-	    this.setState({ user: props.user });
-	  },
 	
 	  render: function render() {
 	    var reviews = void 0;
-	    if (Object.keys(this.state.user).length === 0) {
+	    if (Object.keys(this.props.user).length === 0) {
 	      reviews = React.createElement(
 	        "div",
 	        null,
 	        "No Reviews"
 	      );
 	    } else {
-	      reviews = this.state.reviews.map(function (review, idx) {
+	      reviews = this.props.user.reviews.map(function (review, idx) {
 	        return React.createElement(UserReviewItem, { key: idx, review: review });
 	      });
 	    }
 	
 	    return React.createElement(
 	      "div",
-	      { className: "restaurant-box" },
+	      null,
 	      reviews
 	    );
 	  }
@@ -36877,6 +36892,53 @@
 /* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var ReactDOM = __webpack_require__(38);
+	
+	var UserReviewItem = React.createClass({
+	  displayName: 'UserReviewItem',
+	
+	
+	  render: function render() {
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'review-item' },
+	      React.createElement(
+	        'div',
+	        { className: 'top-header' },
+	        React.createElement(
+	          'h3',
+	          { className: 'name-date' },
+	          this.props.review.rest_name,
+	          ' / ',
+	          this.props.review.rating,
+	          '✩ / ',
+	          this.props.review.date
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'review' },
+	        React.createElement(
+	          'h4',
+	          null,
+	          this.props.review.content
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserReviewItem;
+
+/***/ },
+/* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var React = __webpack_require__(1);
@@ -36884,31 +36946,23 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
-	var ReservationItem = __webpack_require__(298);
-	var ReservationSearch = __webpack_require__(299);
+	var UserReservationItem = __webpack_require__(304);
 	
 	var UserReservations = React.createClass({
 	  displayName: "UserReservations",
 	
-	  getInitialState: function getInitialState() {
-	    return { user: {} };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(props) {
-	    this.setState({ user: props.user });
-	  },
 	
 	  render: function render() {
 	    var resItems = void 0;
-	    if (Object.keys(this.state.user).length === 0) {
+	    if (Object.keys(this.props.user).length === 0) {
 	      resItems = React.createElement(
 	        "div",
 	        null,
 	        "No Reservations"
 	      );
 	    } else {
-	      resItems = this.state.restaurant.reservations.map(function (resItem, idx) {
-	        return React.createElement(ReservationItem, { key: idx, resItem: resItem });
+	      resItems = this.props.user.reservations.map(function (resItem, idx) {
+	        return React.createElement(UserReservationItem, { key: idx, resItem: resItem });
 	      });
 	    }
 	
@@ -36921,6 +36975,75 @@
 	});
 	
 	module.exports = UserReservations;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var UserActions = __webpack_require__(295);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	
+	var DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+	
+	var UserReservationItem = React.createClass({
+	  displayName: 'UserReservationItem',
+	
+	
+	  render: function render() {
+	    var resItem = this.props.resItem;
+	    var user = this.props.user;
+	    return React.createElement(
+	      'div',
+	      { className: 'reservation-item' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        React.createElement(
+	          Link,
+	          { to: '/restaurants/' + resItem.rest_id },
+	          resItem.rest_name
+	        )
+	      ),
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Party Size: ',
+	        resItem.res_table_size
+	      ),
+	      React.createElement(
+	        'h3',
+	        null,
+	        resItem.time
+	      ),
+	      React.createElement(
+	        'h3',
+	        null,
+	        resItem.date
+	      ),
+	      React.createElement(
+	        'h3',
+	        null,
+	        resItem.day
+	      )
+	    );
+	  }
+	});
+	
+	// rest_name: restaurant.name,
+	// rest_id: restaurant.id,
+	// rest_website: restaurant.website,
+	// rest_address: restaurant.address,
+	// rest_phone: restaurant.phone,
+	// res_time: reservation_option.reservation_time.parse_time,
+	// res_table_size: reservation_option.table_size
+	// }
+	// reservation_ary.push(reservationItem)
+	
+	module.exports = UserReservationItem;
 
 /***/ }
 /******/ ]);

@@ -14,16 +14,13 @@ h3.map-overlay {
   padding-bottom: 1%;
   background: white;
   opacity: .9;
+  width: 80vw;
 }
 
 h3.map-overlay:hover {
   cursor: pointer;
 }
 
-
-div.map-container {
-  margin-top: 30px;
-}
 
 div.map-div {
   width: 75%;
@@ -38,6 +35,5 @@ div.map-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
-  padding-bottom: 5%;
+  margin: 7% auto 7%;
 }

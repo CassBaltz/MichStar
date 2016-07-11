@@ -26,7 +26,7 @@ const ReservationSearch = React.createClass({
   render: function() {
     return (
      <div>
-       <form>
+       <form className="reservation-form">
          <input type="date" onChange={this.updateDate} />
          <select onChange={this.updateTableSize} name="table_size">
            <option selected disabled>Number of Diners</option>

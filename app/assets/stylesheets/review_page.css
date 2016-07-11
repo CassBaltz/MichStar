@@ -1,9 +1,9 @@
 
-div.restaurant-box {
+div.review-box {
   width: 80%;
   height: 80%;
   background: white;
-  margin: 0 auto;
+  margin: 7% auto;
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
@@ -25,10 +25,9 @@ div.link-back {
 
 div.restaurant-header {
   display: flex;
-  position: sticky; 
+  position: sticky;
   flex-direction: row;
   width: 100%;
-  height: 10%;
   margin-bottom: 3%;
   background: white;
   align-items: center;
@@ -106,8 +105,7 @@ div.name-date {
 div.top-header {
   display: block;
   align-items: center;
-  justify-content: flex-start;;
-  height: 10%;
+  justify-content: flex-start;
   background: black;
   color: white;
 }
@@ -122,6 +120,8 @@ div.stars {
 h3.name-date {
   float: left;
   margin-left: 5%;
+  padding: 1%;
+  font-size: 18px;
 }
 
 h3.rating {
@@ -150,4 +150,5 @@ div.review > h4 {
 
 div.review {
   width: 100%;
+  padding: 1% 0 1% 0;
 }

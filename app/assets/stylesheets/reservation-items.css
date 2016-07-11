@@ -16,10 +16,16 @@ div.reservation-item {
   padding: 1%;
 }
 
-div.reservation-item > h3 {
-  font-size: 2em;
+div.reservation-item > h3{
+  font-size: 1.5em;
   display: block;
   text-align: center;
+  background: white;
+  color: black;
+}
+
+div.reservation-item > h2 {
+  font-size: 2em;
   background: black;
   color: white;
 }
@@ -34,20 +40,25 @@ input[type=date] {
 select, input[type="color" i][list] {
   height: 4em;
   width: 11em;
-  border-radius: 0px
+  border-radius: 0px;
 }
 
 div.reservation-item > h4 {
-  font-size: 2em;
+  font-size: 1em;
   display: block;
   text-align: center;
 }
 
-div.button-links > div {
+form.reservation-form {
+  display: flex;
+  align-items: center;
+}
+
+/*div.button-links > div.ri {
   border: 1px solid #ccc;
   padding: 1%;
   margin-bottom: 2%;
-}
+}*/
 
 div.reservation-item > h2 {
   font-size: 2em;

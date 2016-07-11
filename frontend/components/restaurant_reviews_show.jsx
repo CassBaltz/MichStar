@@ -99,7 +99,7 @@ const RestaurantReviews = React.createClass({
     let hashPath = `/restaurants/${this.state.restaurant.id}`
     return (
 
-        <div className="restaurant-box">
+        <div className="review-box">
           <div className="restaurant-header">
             <div onClick={this.openModal} className="review-button"><h2>Leave Review +</h2></div>
             <Modal

@@ -8,6 +8,7 @@ const SessionStore = new Store(AppDispatcher);
 
 let _currentUser = {};
 let _currentUserHasBeenFetched = false;
+let _bannerClicked = false;
 
 const _login = function(currentUser) {
   _currentUser = currentUser;
@@ -30,6 +31,14 @@ SessionStore.__onDispatch = payload => {
       SessionStore.__emitChange();
       break;
   }
+};
+
+SessionStore.getClicked = function() {
+  return _bannerClicked;
+};
+
+SessionStore.updateClicked = function() {
+  _bannerClicked = true;
 };
 
 SessionStore.currentUser = function() {

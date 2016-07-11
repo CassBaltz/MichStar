@@ -19,7 +19,7 @@ const RestaurantReviewItem = React.createClass({
     return (
       <div className="review-item">
         <div className="top-header">
-          <h3 className="name-date">{this.state.review.name} / {this.state.review.rating}✩</h3>
+          <h3 className="name-date">{this.state.review.name} / {this.state.review.rating}✩ / {this.state.review.date}</h3>
         </div>
         <div className="review">
           <h4>{this.state.review.content}</h4>

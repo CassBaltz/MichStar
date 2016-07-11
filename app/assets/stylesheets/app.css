@@ -1,18 +1,14 @@
 .main-content {
   font-family: 'Noto Serif', serif;
   width: auto;
-  height: auto;
   display: flex;
+  min-height: 100%;
 }
 
 #content {
   position: absolute;
-  padding-top: 7%;
   width: 100%;
-  height: 100%;
-  background-image: url(http://res.cloudinary.com/cassbaltz/image/upload/q_auto:good/v1467431850/ot-background.jpg);
-  overflow: auto;
-  padding-bottom: 7%;
+  background: #9E3E47;
 }
 
 .header-name {

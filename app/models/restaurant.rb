@@ -19,7 +19,7 @@ class Restaurant < ActiveRecord::Base
     reviews = []
     self.reviews.each do |review|
       reviewer_name = User.find(review.user_id).name
-      reviews.push({id: review.id, name: reviewer_name, content: review.content, rating: review.rating})
+      reviews.push({id: review.id, name: reviewer_name, content: review.content, rating: review.rating, date: review.created_at.strftime("%m.%d.%y")})
     end
     reviews
   end
