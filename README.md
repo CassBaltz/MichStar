@@ -1,6 +1,6 @@
 # MichStar
 
-[Live MichStar](https://michstarapp.herokuapp.com)
+[Live MichStar](https:www.michstar.co)
 
 MichStar is a web application inspired by OpenTable for all the Michelin star restaurants located around San Francisco (2016 awards). MichStar was built using Ruby on Rails for the backend data management and routing actions. The rest of the application uses the JavaScript React library to offer a responsive, single page application that uses Ajax for database correspondence and the flux architecture system for front-end component and data management.
 
@@ -23,7 +23,7 @@ def show
 end
 ```
 
-Filtering happens in the rails controller which queries the database and then selects through relevant data. The front-end RestaurantStore then updates with the returned filtered ruby results which were previously converted to json objects with the jbuilder view template for that restaurant's show page. The store emits a change callback to the "RestaurantReservations" component that will then re-render due to a state reset, thus rendering only the ReservationOptions that fit the search parameters. A reservation can then be placed directly from the page and the user will be redirected to her or his profile page. If this was a production application, there would likely be an action mailer call to send a confirmation email to both the user and restaurant email accounts.
+Filtering happens in the rails controller which queries the database and then selects through relevant data. The front-end RestaurantStore then updates with the returned filtered ruby results which were previously converted to JSON objects with the jbuilder view template for that restaurant's show page. The store emits a change callback to the "RestaurantReservations" component that will then re-render due to a state reset, thus rendering only the ReservationOptions that fit the search parameters. A reservation can then be placed directly from the page and the user will be redirected to her or his profile page. If this was a production application, there would likely be an action mailer call to send a confirmation email to both the user and restaurant email accounts.
 
 ## Reviews
 Additionally, a prospective diner can read reviews from each of the participating restaurants and submit his or her own opinions on his or her dining experience at a particular establishment. However, a browsing diner is not permitted to write a review on a restaurant unless he or she is signed into MichStar's platform.
