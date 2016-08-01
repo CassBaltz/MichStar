@@ -46,7 +46,7 @@ const RestaurantMap = React.createClass({
   updateRestaurants() {
     const restaurants = RestaurantStore.allRestaurants();
     for (let i = 0; i < restaurants.length; i++) {
-      markerIcon = restaurants[i]['stars'] === 2 ? "silver_star.png" : "gold_star.png";
+      markerIcon = restaurants[i]['stars'] === 2 ? "images/silver_star.png" : "images/gold_star.png";
       linkPath = restaurants[i]['id'];
       marker = new google.maps.Marker({
         position: {lat: restaurants[i]['lat'], lng: restaurants[i]['lon']},
