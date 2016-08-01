@@ -31,7 +31,7 @@ const RestaurantIndex = React.createClass({
 
   render: function () {
 
-  let bannerClass = this.state.clicked ? "hidden" : "splash";
+  let bannerClass = this.state.clicked || SessionStore.isUserLoggedIn() ? "hidden" : "splash";
 
     return (
     <div className="index-full-content">

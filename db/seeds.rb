@@ -257,7 +257,7 @@ The menu:
 
 I think Benu could specialize in their xiao long bao and still make a killing.")
 
-Review.create(rating: 3, rest_id: benu.id, user_id: 1, content: "Long overdue review of this fantastic \"Asian French Laundry\". We weren't sure what to expect, given the mixed reviews, but we were tantalized and delighted with each course. The style of food is Asian with a modern twist. Everything was artfully plated and service was impeccable. Hot teas and various infusions are actually included in the price. Most dishes were unique and delicious, which is hard to achieve. I disagree with the people who said it's \"just Asian food\". It's not. For the price, you're getting a whole experience, not just the food.
+Review.create(rating: 3, rest_id: benu.id, user_id: 4, content: "Long overdue review of this fantastic \"Asian French Laundry\". We weren't sure what to expect, given the mixed reviews, but we were tantalized and delighted with each course. The style of food is Asian with a modern twist. Everything was artfully plated and service was impeccable. Hot teas and various infusions are actually included in the price. Most dishes were unique and delicious, which is hard to achieve. I disagree with the people who said it's \"just Asian food\". It's not. For the price, you're getting a whole experience, not just the food.
 
 Some highlights included: caviar with winter melon porridge and chicken cream, preserved chicken egg with bacon bits and a warm piece of taro wrapped in a paper-thin shaving of black truffle. The egg yolk was liquid inside. Oyster kimchi which was creamy with some spiciness, held in a delicate crunchy shell that needed to be eaten quickly. I loved the mini eel \"taco\" with shiso leaf and lime. The shell was also super-thin and crispy, made of delicate feuille de brick pastry layers. It was plated on a folded piece of \"newsprint\", to bring back memories of street tacos. So playful and delicious!
 
@@ -267,7 +267,7 @@ Dessert wasn't the strong part of this meal. There was a apricot sauce, osmanthu
 
 The cost was $248/person, not including a 20% mandatory service charge. Beverage pairing was an additional $185. DH's parents came here when they first opened and said the whole experience has gotten much better. Overall, a fantastic experience everyone should try at least once!")
 
-Review.create(rating: 2, rest_id: benu.id, user_id: ary[rand(8)].id, content: "I came here for a Valentine's Day meal after securing a reservation about 2 months in advance.
+Review.create(rating: 2, rest_id: benu.id, user_id: 2, content: "I came here for a Valentine's Day meal after securing a reservation about 2 months in advance.
 
 We were promptly seated and at first glance, I admired the minimalistic and simple decor. It was very comfortable and the servers were quite friendly. We got to chatting about their flatware and everybody was very willing to share. I dislike pretentious environments even when it's very fine dining and the ambience here suited me very much. It also isn't claustrophobic/cramped and comfortable which is important when you're sitting there for 3 hours.
 
@@ -301,7 +301,7 @@ Overall I would recommend dining here if you have someone else get the reservati
 
 Or I would recommend Per Se in NYC if you want to go to a Thomas Keller 3 star restaurant.  Been to Per Se multiple times and the meal was as good as French Laundry and never had an issue getting in.")
 
-Review.create(rating: 2, rest_id: french_laundry.id, user_id: ary[rand(8)].id, content: "Based on other Yelpers' feedback (those that only gave 3-4 stars), I set my expectations low but was totally blown out of the water by the total experience.
+Review.create(rating: 2, rest_id: french_laundry.id, user_id: 4, content: "Based on others' feedback, I set my expectations low but was totally blown out of the water by the total experience.
 
 From start to finish, service was exceptional. You really felt like the folks working here were going above and beyond to ensure you had a great dining experience.
 
@@ -392,7 +392,7 @@ Food: 6/5 Wow wow wow!!!!! The food left me speechless! Every single edible thin
 
 Overall: 5/5 I'm going to have a hard time finding a restaurant in the world that can beat this one! Highly recommend!")
 
-Review.create(rating: 3, rest_id: restuarant_at_meadowood.id, user_id: ary[rand(8)].id, content: "First time at a 3 star Michelin restaurant and it lived up to expectations.
+Review.create(rating: 3, rest_id: restuarant_at_meadowood.id, user_id: 1, content: "First time at a 3 star Michelin restaurant and it lived up to expectations.
 
 The place is impeccable. Very clear lines, everything in its location and flowing.
 
@@ -412,7 +412,7 @@ I loved that the dishes were just presented and that I didn't have a preview of 
 
 That night we had about 13 courses.  I loved every course and my favorites were the eel, oysters, and poussin.  All the courses were beautifully presented.  Dining at the Restaurant At Meadowood is definitely one of my top dining experiences.  I would return given the chance.")
 
-Review.create(rating: 2, rest_id: restuarant_at_meadowood.id, user_id: 1, content: "I feel very lucky to have had the opportunity to dine at the chefs table at the extraordinary Restaurant at Meadowood. We were escorted through the kitchen and after receiving a tour, we were shown to our seats with a full view of all the action.
+Review.create(rating: 2, rest_id: restuarant_at_meadowood.id, user_id: 7, content: "I feel very lucky to have had the opportunity to dine at the chefs table at the extraordinary Restaurant at Meadowood. We were escorted through the kitchen and after receiving a tour, we were shown to our seats with a full view of all the action.
 
 Liz, our host, was so kind and knowledgeable about everything that Meadowood had to offer. We started with a glass of sparkling wine and each dish that arrived was fresh and played beautifully. I wish I could re-name each of the 16 courses, but I am not a chef and each course was so intricate.
 
@@ -446,7 +446,7 @@ Food: 4/5 While most of the dishes were great there were two dishes that stood o
 
 Overall: 4/5 Overall a pleasant experience but not flawless. I hope to give this restaurant another try after I finish my rounds of other Michelin star restaurants.")
 
-Review.create(rating: 3, rest_id: saison.id, user_id: 6, content: "3 Michelin Star restaurant with a 4 Star Yelp review. I had very high expectations for this place.
+Review.create(rating: 3, rest_id: saison.id, user_id: 6, content: "3 Michelin Star restaurant, I had very high expectations for this place.
 
 The price of the tasting menu I felt was double the worth...the menu, on paper, was inventive and adventurous but the menu on my palate was lacking that wow factor that is expected for a Michelin Star restaurant. No, I had never tried celery root until this night. Was it a mind blowing experience? NO. It was still all very good,
 
@@ -454,7 +454,7 @@ I paid 1/2 the amount at Benu (another 3 Michelin Star) and it was THE BEST DINI
 
 If you've never done the whole 25 course meal type thing I would recommend going for entertainment only, watching the kitchen staff chug along.")
 
-Review.create(rating: 3, rest_id: saison.id, user_id: 1, content: "One of the best meals I've ever had. Saison is also one of the most expensive meals I've had but definitely worth it. Relatively to other 5 star restaurants on Yelp, this one deserves 6. And no surprise it has 3 Michelin stars.
+Review.create(rating: 3, rest_id: saison.id, user_id: 1, content: "One of the best meals I've ever had. Saison is also one of the most expensive meals I've had but definitely worth it. No surprise it has 3 Michelin stars.
 
 The service and food where top notch. We were greeted with some 'complementary' amazing champagne and it felt like the staff consistently went out of their way to make it a better experience. Inside the restaurant there is a clear view to both a bar where a bartender is coming up with some cocktails (we tried one and I can confirm they are ) and there is also a good view to the kitchen where you can see the chefs doing their magic.
 
@@ -464,7 +464,7 @@ We had a set menu (I'm not sure if there is another option) which was incredible
 
 My one criticism is that the music played is slightly strange. The atmosphere is brilliant apart from the fact that casual, low key 80s music was being played. Although they were great songs, it think a chilled out music track like that at Buddha bar would work better. We asked about it and it seems that the chef is into that music which explains a lot.")
 
-Review.create(rating: 2, rest_id: acquerello.id, user_id: 2, content: "Amazing service, really went above and beyond what I expected.
+Review.create(rating: 2, rest_id: acquerello.id, user_id: 8, content: "Amazing service, really went above and beyond what I expected.
 
 You get way more food that you expect here, with the chef giving out the occasional complimentary dish. The appetizers are amazing and the foie gras pasta is superb. The main courses on the Prix Fixe menu are decent, but not as amazing as the appetizers.
 
@@ -678,13 +678,13 @@ We went there to celebrate our honeymoon and they truly went above & beyond to m
 
 I will absolutely go back the next time I'm in San Francisco - thank you for a phenomenal experience!!!")
 
-Review.create(rating: 3, rest_id: quince.id, user_id: 8, content: "I'll definitely come back here. This 2 Michelin star restaurant comes with the 5 Yelp stars because they truly deserves it!!! The customer satisfaction and services they give here is beyond professional. The waiters are very tentative and professional, making sure everything was okay and checked in with us every now and down. Excellent! The menu I had was very special for me because it was for my special day - Birthday ^___^ the chef and Quince team did a great job on  putting together the menu for me because it was everything that I love! I'm so grateful to have the opportunity to dine here tonight.
+Review.create(rating: 3, rest_id: quince.id, user_id: 8, content: "I'll definitely come back here. This 2 Michelin star restaurant truly deserves it!!! The customer satisfaction and services they give here is beyond professional. The waiters are very tentative and professional, making sure everything was okay and checked in with us every now and down. Excellent! The menu I had was very special for me because it was for my special day - Birthday ^___^ the chef and Quince team did a great job on  putting together the menu for me because it was everything that I love! I'm so grateful to have the opportunity to dine here tonight.
 
 Every course was very delicious and well proportioned. The lighting and ambience in there was very classy and calm. Food was impeccable. There was not one dish that I did not enjoy. This place should be crowded in the later evening (around 8 PM) that's when the restaurant start to fill up and noise levels gets higher. If you want to dine in peace, try to aim for a reservation at 6ish.
 
 Price is $$$$ but it is definitely worth it. If you're a true foodie and like fine dinning. Try out Quince!!! :)")
 
-Review.create(rating: 3, rest_id: quince.id, user_id: 2, content: "Make sure you have a reservation and prepare to be spoiled. We had the chefs tasting menu along with the suggested wine pairings. Absolutely insane night of flavors and treats.
+Review.create(rating: 3, rest_id: quince.id, user_id: 9, content: "Make sure you have a reservation and prepare to be spoiled. We had the chefs tasting menu along with the suggested wine pairings. Absolutely insane night of flavors and treats.
 It is expensive. About $400/head for both meal and wine before tip. But for sure next time I'm in San Fran I will return.
 
 The service is top notch. Extremely knowledgeable staff.

@@ -56,12 +56,14 @@ div.overlay-action {
 div.overlay-action > h5 {
   margin: 3%;
   padding: 3%;
-  border: 1px solid black
+  border: 1px solid black;
+  transition: background 500ms, color 500ms;
 }
 
 div.overlay-action > h5:hover {
-  background: black;
+  background: #333;
   color: white;
+  border-color: transparent;
   cursor: pointer;
 }
 

@@ -55,7 +55,6 @@ function deleteReservation(reservationId) {
 
 function updateReviews (userData) {
   _reviews = {};
-  debugger
   let reviews = userData['reviews'];
   reviews.forEach(review => {
     _reviews[review.id] = review;

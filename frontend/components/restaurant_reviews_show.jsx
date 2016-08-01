@@ -54,6 +54,11 @@ const RestaurantReviews = React.createClass({
     Modal.setAppElement(document.body);
   },
 
+  saveLocation: function(e) {
+    e.preventDefault();
+    SessionStore.setRestaurantId(this.props.restaurant.id);
+  },
+
   render: function() {
     let reviews;
     if (Object.keys(this.props.restaurant).length === 0) {

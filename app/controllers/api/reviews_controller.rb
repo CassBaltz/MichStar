@@ -3,7 +3,6 @@ class Api::ReviewsController < ApplicationController
 	def create
 		review = Review.new(review_params)
 		if review.save
-			@review = review.build_review
 			redirect_to api_review_url(review)
 		else
 			@errors = @user.errors.full_messages

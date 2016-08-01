@@ -10,6 +10,6 @@ class Review < ActiveRecord::Base
 
   def build_review
     reviewer_name = User.find(self.user_id).name
-    {id: self.id, name: reviewer_name, content: self.content, rating: self.rating, rest_id: self.rest_id, date: self.created_at.to_date.to_s}
+    {id: self.id, name: reviewer_name, content: self.content, rating: self.rating, rest_id: self.rest_id, date: self.created_at.strftime("%m.%d.%y")}
   end
 end

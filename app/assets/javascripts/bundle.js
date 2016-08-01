@@ -33654,7 +33654,7 @@
 	
 	  render: function render() {
 	
-	    var bannerClass = this.state.clicked ? "hidden" : "splash";
+	    var bannerClass = this.state.clicked || SessionStore.isUserLoggedIn() ? "hidden" : "splash";
 	
 	    return React.createElement(
 	      "div",
@@ -34670,6 +34670,11 @@
 	
 	  componentWillMount: function componentWillMount() {
 	    Modal.setAppElement(document.body);
+	  },
+	
+	  saveLocation: function saveLocation(e) {
+	    e.preventDefault();
+	    SessionStore.setRestaurantId(this.props.restaurant.id);
 	  },
 	
 	  render: function render() {
@@ -36971,7 +36976,6 @@
 	
 	function updateReviews(userData) {
 	  _reviews = {};
-	  debugger;
 	  var reviews = userData['reviews'];
 	  reviews.forEach(function (review) {
 	    _reviews[review.id] = review;
