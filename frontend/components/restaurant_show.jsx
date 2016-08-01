@@ -20,8 +20,7 @@ const RestaurantShow = React.createClass({
   },
 
   updateRestaurant: function () {
-    let restaurant = RestaurantStore.find( parseInt(this.props.params.restaurantId))
-    this.setState({restaurant: restaurant});
+    this.setState({restaurant: RestaurantStore.find(parseInt(this.props.params.restaurantId))});
   },
 
   componentWillUnmount: function() {

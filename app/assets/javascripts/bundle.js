@@ -33804,7 +33804,7 @@
 	  updateRestaurants: function updateRestaurants() {
 	    var restaurants = RestaurantStore.allRestaurants();
 	    for (var i = 0; i < restaurants.length; i++) {
-	      markerIcon = restaurants[i]['stars'] === 2 ? "assets/silver_star.png" : "assets/gold_star.png";
+	      markerIcon = restaurants[i]['stars'] === 2 ? "images/silver_star.png" : "images/gold_star.png";
 	      linkPath = restaurants[i]['id'];
 	      marker = new google.maps.Marker({
 	        position: { lat: restaurants[i]['lat'], lng: restaurants[i]['lon'] },
@@ -33973,8 +33973,7 @@
 	  },
 	
 	  updateRestaurant: function updateRestaurant() {
-	    var restaurant = RestaurantStore.find(parseInt(this.props.params.restaurantId));
-	    this.setState({ restaurant: restaurant });
+	    this.setState({ restaurant: RestaurantStore.find(parseInt(this.props.params.restaurantId)) });
 	  },
 	
 	  componentWillUnmount: function componentWillUnmount() {
@@ -34132,6 +34131,8 @@
 	      backgroundImage: 'url(' + imgUrl + ')'
 	    };
 	
+	    var michRating = "✩".repeat(this.props.restaurant.rating);
+	
 	    if (Object.keys(this.props.restaurant).length > 0) {
 	      review = this.props.restaurant.reviews[0];
 	      reviewer = review['name'];
@@ -34227,7 +34228,7 @@
 	              'span',
 	              { className: 'rev-header' },
 	              'Michelin Review | ',
-	              rating,
+	              michRating,
 	              ' '
 	            ),
 	            this.props.restaurant.mich_review
