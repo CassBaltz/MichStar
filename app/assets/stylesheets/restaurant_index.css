@@ -35,10 +35,13 @@ div.top-spacer {
   margin: 2% 2% 0 0;
   padding: 1%;
   border: 1px white solid;
+  transition: background 500ms;
 }
 
 .splash > h3:hover {
   cursor: pointer;
+  background: #333;
+  border-color: transparent;
 }
 
 
@@ -58,5 +61,7 @@ h1.index-header {
 
 div.index-full-content {
   background: url(http://res.cloudinary.com/cassbaltz/image/upload/q_auto:good/v1467431850/ot-background.jpg) no-repeat;
+  background-size: cover;
   width: 100%;
+  min-height: 100vh;
 }

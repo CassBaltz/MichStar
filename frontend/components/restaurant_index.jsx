@@ -33,8 +33,6 @@ const RestaurantIndex = React.createClass({
 
   let bannerClass = this.state.clicked ? "hidden" : "splash";
 
-  debugger
-
     return (
     <div className="index-full-content">
       <div className="map-container">

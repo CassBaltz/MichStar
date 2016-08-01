@@ -71,3 +71,25 @@ button.form-submit {
   border: 1px solid #ccc;
   text-decoration:none;
 }
+
+#one-star:hover {
+  background: black;
+  color: white
+}
+
+#two-star:hover {
+  background: black;
+  color: white
+}
+
+#three-star:hover {
+  background: black;
+  color: white
+}
+
+button.form-submit:hover {
+  background-color: black;
+  color: white;
+  border: 1px solid #ccc;
+  text-decoration:none;
+}

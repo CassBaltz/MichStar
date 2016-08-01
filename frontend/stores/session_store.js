@@ -9,6 +9,7 @@ const SessionStore = new Store(AppDispatcher);
 let _currentUser = {};
 let _currentUserHasBeenFetched = false;
 let _bannerClicked = false;
+let _restaurantId = null;
 
 const _login = function(currentUser) {
   _currentUser = currentUser;
@@ -35,6 +36,14 @@ SessionStore.__onDispatch = payload => {
 
 SessionStore.getClicked = function() {
   return _bannerClicked;
+};
+
+SessionStore.setRestaurantId = function (id) {
+  _restaurantId = id;
+};
+
+SessionStore.getRestaurantId = function () {
+  return _restaurantId;
 };
 
 SessionStore.updateClicked = function() {

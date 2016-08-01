@@ -28,15 +28,6 @@ const UserProfile = React.createClass({
     this.setState({user: UserStore.getUser()})
   },
 
-  toggleButton: function(e) {
-    e.preventDefault();
-    if (this.state.reviewVisibility === true) {
-      this.setState({reviewVisibility: false, buttonText: "My Reviews", headerText: "Reservations"});
-    } else {
-      this.setState({reviewVisibility: true, buttonText: "My Reservations", headerText: "Reviews"});
-    }
-  },
-
   logout: function() {
     SessionActions.logOut();
     hashHistory.push('/');
@@ -44,16 +35,16 @@ const UserProfile = React.createClass({
 
   render: function() {
     return (
-      <div className="restaurant-box">
-        <div className="user-profile-header">
-            <h2>{this.state.user.name}</h2>
-            <h2 className="button" onClick={this.toggleButton}>{this.state.buttonText}</h2>
-            <h2  className="button" onClick={this.logout}>Logout</h2>
+      <div className="user-box">
+        <div className="user-reservations-box">
+          <h3>My Reservations</h3>
+          <UserReservation user={this.state.user} />
         </div>
-        <div>
-          <h2 className="header-text">{this.state.headerText}</h2>
+        <div className="user-reviews-box">
+          <h3>My Reviews</h3>
+          <UserReview user={this.state.user} />
         </div>
-        {this.state.reviewVisibility ? <UserReview user={this.state.user} /> : <UserReservation user={this.state.user} />}
+
       </div>
     );
   }

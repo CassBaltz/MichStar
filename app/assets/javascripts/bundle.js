@@ -66,11 +66,8 @@
 	
 	var RestaurantIndex = __webpack_require__(266);
 	var RestaurantShow = __webpack_require__(269);
-	var RestaurantReviews = __webpack_require__(270);
 	
-	var RestaurantReservations = __webpack_require__(297);
-	
-	var UserProfile = __webpack_require__(300);
+	var UserProfile = __webpack_require__(301);
 	
 	var appRouter = React.createElement(
 	  Router,
@@ -81,8 +78,6 @@
 	    React.createElement(IndexRoute, { component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants/:restaurantId', component: RestaurantShow }),
-	    React.createElement(Route, { path: '/restaurants/:restaurantId/reviews', component: RestaurantReviews }),
-	    React.createElement(Route, { path: '/restaurants/:restaurantId/reservations', onEnter: _ensureLoggedIn, component: RestaurantReservations }),
 	    React.createElement(Route, { path: '/login', component: LoginForm }),
 	    React.createElement(Route, { path: '/signup', component: LoginForm }),
 	    React.createElement(Route, { path: '/profile', component: UserProfile, onEnter: _ensureLoggedIn })
@@ -26054,6 +26049,7 @@
 	var _currentUser = {};
 	var _currentUserHasBeenFetched = false;
 	var _bannerClicked = false;
+	var _restaurantId = null;
 	
 	var _login = function _login(currentUser) {
 	  _currentUser = currentUser;
@@ -26080,6 +26076,14 @@
 	
 	SessionStore.getClicked = function () {
 	  return _bannerClicked;
+	};
+	
+	SessionStore.setRestaurantId = function (id) {
+	  _restaurantId = id;
+	};
+	
+	SessionStore.getRestaurantId = function () {
+	  return _restaurantId;
 	};
 	
 	SessionStore.updateClicked = function () {
@@ -33055,6 +33059,7 @@
 	
 	  componentDidMount: function componentDidMount() {
 	    this.listener = SessionStore.addListener(this.userChange);
+	    this.userChange();
 	    window.addEventListener('hashchange', this.hashChange, false);
 	  },
 	
@@ -33159,6 +33164,7 @@
 	var SessionStore = __webpack_require__(231);
 	var ReactRouter = __webpack_require__(168);
 	var hashHistory = ReactRouter.hashHistory;
+	var SessionActions = __webpack_require__(254);
 	
 	var linkText = void 0,
 	    linkPath = void 0,
@@ -33172,7 +33178,7 @@
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(navProps) {
 	    if (navProps.status) {
-	      linkText = SessionStore.currentUser().name + " +";
+	      linkText = SessionStore.currentUser().name;
 	      linkPath = '/profile';
 	      personalClass = this.updateClass(navProps);
 	    } else {
@@ -33197,11 +33203,44 @@
 	    hashHistory.push(this.state.linkPath);
 	  },
 	
+	  signOut: function signOut(e) {
+	    e.preventDefault();
+	    SessionActions.logOut();
+	  },
+	
 	  render: function render() {
+	    var profileSec = void 0;
+	    if (SessionStore.isUserLoggedIn()) {
+	      profileSec = React.createElement(
+	        'div',
+	        { className: 'inner-profile-container' },
+	        React.createElement(
+	          'h3',
+	          { onClick: this.update, className: this.state.personalClass },
+	          this.state.text
+	        ),
+	        React.createElement(
+	          'h4',
+	          { onClick: this.signOut, className: this.state.personalClass },
+	          'Sign Out'
+	        )
+	      );
+	    } else {
+	      profileSec = React.createElement(
+	        'div',
+	        { className: 'inner-profile-container' },
+	        React.createElement(
+	          'h3',
+	          { onClick: this.update, className: this.state.personalClass },
+	          this.state.text
+	        )
+	      );
+	    };
+	
 	    return React.createElement(
-	      'h3',
-	      { onClick: this.update, className: this.state.personalClass },
-	      this.state.text
+	      'div',
+	      { className: 'profile-container' },
+	      profileSec
 	    );
 	  }
 	});
@@ -33254,7 +33293,13 @@
 		},
 		redirectIfLoggedIn: function redirectIfLoggedIn() {
 			if (SessionStore.isUserLoggedIn()) {
-				this.context.router.push("/");
+				if (SessionStore.getRestaurantId() !== null) {
+					var id = SessionStore.getRestaurantId();
+					SessionStore.setRestaurantId(null);
+					this.context.router.push('/restaurants/' + id);
+				} else {
+					this.context.router.push("/");
+				}
 			}
 		},
 		handleSubmit: function handleSubmit(e) {
@@ -33336,77 +33381,81 @@
 	
 			return React.createElement(
 				'div',
-				{ className: 'login-form' },
+				{ className: 'index-full-content' },
 				React.createElement(
-					'form',
-					{ className: 'form-fieldset', onSubmit: this.handleSubmit },
+					'div',
+					{ className: 'login-form' },
 					React.createElement(
-						'div',
-						{ className: 'form-header' },
+						'form',
+						{ className: 'form-fieldset', onSubmit: this.handleSubmit },
 						React.createElement(
-							'h2',
-							null,
-							formHeader
-						),
-						React.createElement(
-							'h4',
-							null,
-							' ',
-							navLink,
-							' '
-						)
-					),
-					this.fieldErrors("base"),
-					React.createElement(
-						'div',
-						{ className: 'login-form' },
-						this.formType() === "signup" ? React.createElement(
 							'div',
-							{ className: 'form-input-div' },
+							{ className: 'form-header' },
+							React.createElement(
+								'h2',
+								null,
+								formHeader
+							),
+							React.createElement(
+								'h4',
+								null,
+								' ',
+								navLink,
+								' '
+							)
+						),
+						this.fieldErrors("base"),
+						React.createElement(
+							'div',
+							{ className: 'login-form' },
+							this.formType() === "signup" ? React.createElement(
+								'div',
+								{ className: 'form-input-div' },
+								React.createElement(
+									'label',
+									{ className: 'form-label' },
+									'Name'
+								),
+								this.fieldErrors("name"),
+								React.createElement('input', { type: 'text', placeholder: 'Name',
+									value: this.state.name,
+									onChange: this.update("name"),
+									className: 'login-input' })
+							) : React.createElement('div', null),
 							React.createElement(
 								'label',
 								{ className: 'form-label' },
-								'Name'
+								' Email'
 							),
-							this.fieldErrors("name"),
-							React.createElement('input', { type: 'text', placeholder: 'Name',
-								value: this.state.name,
-								onChange: this.update("name"),
-								className: 'login-input' })
-						) : React.createElement('div', null),
-						React.createElement(
-							'label',
-							{ className: 'form-label' },
-							' Email'
-						),
-						this.fieldErrors("email"),
-						React.createElement('input', { type: 'text',
-							placeholder: 'Email', value: this.state.email,
-							onChange: this.update("email"),
-							className: 'login-input' }),
-						React.createElement(
-							'label',
-							{ className: 'form-label' },
-							' Password'
-						),
-						this.fieldErrors("password"),
-						React.createElement('input', { type: 'password',
-							placeholder: 'Password',
-							value: this.state.password,
-							onChange: this.update("password"),
-							className: 'login-input' }),
-						React.createElement(
-							'div',
-							{ className: 'button-wrapper' },
+							this.fieldErrors("email"),
+							React.createElement('input', { type: 'text',
+								placeholder: 'Email', value: this.state.email,
+								onChange: this.update("email"),
+								className: 'login-input' }),
 							React.createElement(
-								'button',
-								{ onClick: this.handleGuestLogin, className: 'form-submit' },
-								'Guest'
+								'label',
+								{ className: 'form-label' },
+								' Password'
 							),
+							this.fieldErrors("password"),
+							React.createElement('input', { type: 'password',
+								placeholder: 'Password',
+								value: this.state.password,
+								onChange: this.update("password"),
+								className: 'login-input' }),
 							React.createElement(
-								'button',
-								{ className: 'form-submit', type: 'submit' },
-								'Submit'
+								'div',
+								{ className: 'button-wrapper' },
+								React.createElement(
+									'button',
+									{ onClick: this.handleGuestLogin, className: 'form-submit' },
+									'Guest'
+								),
+								React.createElement(
+									'button',
+									{ className: 'form-submit', type: 'submit' },
+									'Submit'
+								)
 							)
 						)
 					)
@@ -33607,8 +33656,6 @@
 	
 	    var bannerClass = this.state.clicked ? "hidden" : "splash";
 	
-	    debugger;
-	
 	    return React.createElement(
 	      "div",
 	      { className: "index-full-content" },
@@ -33721,41 +33768,62 @@
 	var ReactRouter = __webpack_require__(168);
 	var hashHistory = ReactRouter.hashHistory;
 	
-	var marker, self, linkPath, currentRestaurant;
+	var marker, self, linkPath, currentRestaurant, markerIcon, clicked, map;
+	
+	clicked = false;
 	
 	var RestaurantMap = React.createClass({
 	  displayName: "RestaurantMap",
 	  getInitialState: function getInitialState() {
-	    return { mapHeader: "Click A Tag to Find A Restaurant", linkId: "" };
+	    return { mapHeader: null };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    RestaurantStore.addListener(this.updateRestaurants);
 	    var mapDOMNode = ReactDOM.findDOMNode(this.refs.map);
 	    var mapOptions = {
-	      center: { lat: 37.7758, lng: -122.435 }, // this is SF
-	      zoom: 10,
+	      center: { lat: 37.867853, lng: -122.001649 }, // this is SF
+	      zoom: 9,
 	      styles: [{ "featureType": "landscape", "stylers": [{ "saturation": -100 }, { "lightness": 65 }, { "visibility": "on" }] }, { "featureType": "poi", "stylers": [{ "saturation": -100 }, { "lightness": 51 }, { "visibility": "simplified" }] }, { "featureType": "road.highway", "stylers": [{ "saturation": -100 }, { "visibility": "simplified" }] }, { "featureType": "road.arterial", "stylers": [{ "saturation": -100 }, { "lightness": 30 }, { "visibility": "on" }] }, { "featureType": "road.local", "stylers": [{ "saturation": -100 }, { "lightness": 40 }, { "visibility": "on" }] }, { "featureType": "transit", "stylers": [{ "saturation": -100 }, { "visibility": "simplified" }] }, { "featureType": "administrative.province", "stylers": [{ "visibility": "off" }] }, { "featureType": "water", "elementType": "labels", "stylers": [{ "visibility": "on" }, { "lightness": -25 }, { "saturation": -100 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "hue": "#ffff00" }, { "lightness": -25 }, { "saturation": -97 }] }]
 	    };
 	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	    map = this.map;
+	    map.addListener('click', function (e) {
+	      map.panTo(e.latLng);
+	    });
 	  },
 	  updateHeader: function updateHeader(marker) {
+	    if (clicked) {
+	      map.panTo(marker.getPosition());
+	      if (map.getZoom() < 12) {
+	        map.setZoom(12);
+	      }
+	    }
 	    currentRestaurant = RestaurantStore.find(marker.id);
-	    this.setState({ mapHeader: "Visit " + currentRestaurant.name, linkId: marker.id });
+	    this.setState({ mapHeader: currentRestaurant });
 	  },
 	  updateRestaurants: function updateRestaurants() {
 	    var restaurants = RestaurantStore.allRestaurants();
 	    for (var i = 0; i < restaurants.length; i++) {
+	      markerIcon = restaurants[i]['stars'] === 2 ? "assets/silver_star.png" : "assets/gold_star.png";
 	      linkPath = restaurants[i]['id'];
 	      marker = new google.maps.Marker({
 	        position: { lat: restaurants[i]['lat'], lng: restaurants[i]['lon'] },
 	        map: this.map,
-	        id: restaurants[i]['id']
+	        id: restaurants[i]['id'],
+	        icon: markerIcon
 	      });
 	
 	      self = this;
 	
 	      google.maps.event.addListener(marker, 'click', function () {
+	        clicked = true;
 	        self.updateHeader(this);
+	      });
+	
+	      google.maps.event.addListener(marker, 'mouseover', function () {
+	        if (!clicked) {
+	          self.updateHeader(this);
+	        }
 	      });
 	
 	      marker.setMap(this.map);
@@ -33764,20 +33832,110 @@
 	
 	
 	  changePage: function changePage(e) {
-	    e.preventDefault;
-	    hashHistory.push("restaurants/" + this.state.linkId);
+	    e.preventDefault();
+	    hashHistory.push("restaurants/" + this.state.mapHeader.id);
+	  },
+	
+	  resetMap: function resetMap(e) {
+	    e.preventDefault();
+	    map.panTo({ lat: 37.867853, lng: -122.001649 });
+	    map.setZoom(9);
+	    clicked = false;
 	  },
 	
 	  render: function render() {
 	
+	    var mapHeader = void 0,
+	        restaurant = void 0,
+	        stars = void 0;
+	
+	    if (this.state.mapHeader === null) {
+	      mapHeader = React.createElement(
+	        "div",
+	        { className: "start-header" },
+	        React.createElement(
+	          "h3",
+	          null,
+	          "Browse Restaurants"
+	        )
+	      );
+	    } else {
+	      restaurant = this.state.mapHeader;
+	      stars = "✩".repeat(restaurant.stars);
+	      mapHeader = React.createElement(
+	        "div",
+	        { className: "map-overlay" },
+	        React.createElement(
+	          "h3",
+	          { onClick: this.changePage, className: "rest-head-name" },
+	          restaurant.name
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          React.createElement(
+	            "h3",
+	            { className: "rest-head-stars" },
+	            stars
+	          ),
+	          React.createElement(
+	            "h3",
+	            { className: "rest-head-stars" },
+	            restaurant.cuisine
+	          ),
+	          React.createElement(
+	            "h3",
+	            { className: "rest-head-stars" },
+	            stars
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "overlay-info" },
+	          React.createElement(
+	            "h5",
+	            { id: "address" },
+	            React.createElement(
+	              "i",
+	              { className: "material-icons md-18" },
+	              "phone"
+	            ),
+	            " ",
+	            restaurant.phone
+	          ),
+	          React.createElement(
+	            "h5",
+	            null,
+	            React.createElement(
+	              "i",
+	              { className: "material-icons md-18" },
+	              "location_searching"
+	            ),
+	            " ",
+	            restaurant.address
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "overlay-action" },
+	          React.createElement(
+	            "h5",
+	            { onClick: this.resetMap },
+	            "Reset Map"
+	          ),
+	          React.createElement(
+	            "h5",
+	            { onClick: this.changePage },
+	            "Visit"
+	          )
+	        )
+	      );
+	    }
+	
 	    return React.createElement(
 	      "div",
 	      { "class": "map-div" },
-	      React.createElement(
-	        "h3",
-	        { className: "map-overlay", onClick: this.changePage },
-	        this.state.mapHeader
-	      ),
+	      mapHeader,
 	      React.createElement("div", { id: "map", ref: "map" })
 	    );
 	  }
@@ -33793,15 +33951,20 @@
 	
 	var React = __webpack_require__(1);
 	var RestaurantActions = __webpack_require__(263);
-	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
+	var RestaurantShowItem = __webpack_require__(270);
+	var RestaurantReservations = __webpack_require__(271);
+	var RestaurantReviewsShow = __webpack_require__(277);
+	var Link = __webpack_require__(168).Link;
+	var ReactRouter = __webpack_require__(168);
+	var hashHistory = ReactRouter.hashHistory;
 	
 	var RestaurantShow = React.createClass({
 	  displayName: "RestaurantShow",
 	
 	  getInitialState: function getInitialState() {
-	    return { restaurant: {} };
+	    return { restaurant: {}, showing: "Home" };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -33818,9 +33981,50 @@
 	    this.listener.remove();
 	  },
 	
+	  updateReservations: function updateReservations(e) {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.setState({ showing: "Reservations" });
+	      $("#second-link").addClass("tab");
+	      $("#second-link").siblings("h3").removeClass("tab");
+	      $('body').scrollTop(0);
+	    } else {
+	      $('#reservation-reminder').removeClass('hidden');
+	    }
+	  },
+	
+	  updateHome: function updateHome(e) {
+	    this.setState({ showing: "Home" });
+	    $("#first-link").addClass("tab");
+	    $("#first-link").siblings("h3").removeClass("tab");
+	    $('body').scrollTop(0);
+	  },
+	
+	  updateReviews: function updateReviews(e) {
+	    this.setState({ showing: "Reviews" });
+	    $("#third-link").addClass("tab");
+	    $("#third-link").siblings("h3").removeClass("tab");
+	    $('body').scrollTop(0);
+	  },
+	
+	  closeReminder: function closeReminder() {
+	    $("#reservation-reminder").addClass("hidden");
+	  },
+	
+	  toLogin: function toLogin() {
+	    SessionStore.setRestaurantId(this.state.restaurant.id);
+	    hashHistory.push('/login');
+	  },
+	
 	  render: function render() {
-	    var reservationPath = "restaurants/" + this.state.restaurant.id + "/reservations";
-	    var reviewsPath = "restaurants/" + this.state.restaurant.id + "/reviews";
+	    var sub = void 0;
+	
+	    if (this.state.showing === "Home") {
+	      sub = React.createElement(RestaurantShowItem, { restaurant: this.state.restaurant, reviews: this.updateReviews });
+	    } else if (this.state.showing === "Reservations") {
+	      sub = React.createElement(RestaurantReservations, { restaurant: this.state.restaurant });
+	    } else {
+	      sub = React.createElement(RestaurantReviewsShow, { restaurant: this.state.restaurant });
+	    }
 	
 	    var imgUrl = this.state.restaurant.photo;
 	
@@ -33835,31 +34039,39 @@
 	        "div",
 	        { className: "button-links" },
 	        React.createElement(
-	          "div",
-	          { className: "rs" },
+	          "h3",
+	          { id: "first-link", className: "first tab", onClick: this.updateHome },
+	          this.state.restaurant.name,
+	          " "
+	        ),
+	        React.createElement(
+	          "h3",
+	          { id: "second-link", className: "mid", onClick: this.updateReservations },
+	          "Reservations"
+	        ),
+	        React.createElement(
+	          "h3",
+	          { id: "third-link", className: "end", onClick: this.updateReviews },
+	          "Reviews"
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { id: "reservation-reminder", className: "hidden" },
+	        React.createElement(
+	          "h3",
+	          null,
+	          "You Must Be Logged In To Make A Reservation ",
 	          React.createElement(
-	            Link,
-	            { to: "/" },
-	            "BACK TO RESTAURANTS"
+	            "span",
+	            { onClick: this.toLogin },
+	            "[ Login ]"
 	          )
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "rs" },
-	          React.createElement(
-	            Link,
-	            { to: reservationPath },
-	            "RESERVATIONS"
-	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "rs" },
-	          React.createElement(
-	            Link,
-	            { to: reviewsPath },
-	            "REVIEWS"
-	          )
+	          "h3",
+	          { className: "close", onClick: this.closeReminder },
+	          "Close"
 	        )
 	      ),
 	      React.createElement(
@@ -33868,70 +34080,22 @@
 	        React.createElement(
 	          "h1",
 	          { className: "restaurant-header" },
-	          this.state.restaurant.name
+	          "✩".repeat(this.state.restaurant.stars)
 	        ),
 	        React.createElement(
 	          "h1",
 	          { className: "restaurant-header" },
-	          "|"
+	          this.state.restaurant.name,
+	          " ",
+	          this.state.showing
 	        ),
 	        React.createElement(
 	          "h1",
 	          { className: "restaurant-header" },
-	          this.state.restaurant.stars,
-	          " ✩"
+	          "✩".repeat(this.state.restaurant.stars)
 	        )
 	      ),
-	      React.createElement(
-	        "div",
-	        { className: "restaurant-show", style: divStyle },
-	        React.createElement(
-	          "div",
-	          { className: "restaurant-text" },
-	          React.createElement(
-	            "h3",
-	            null,
-	            "Cuisine: ",
-	            this.state.restaurant.cuisine
-	          ),
-	          React.createElement(
-	            "h3",
-	            null,
-	            "Chef: ",
-	            this.state.restaurant.head_chef
-	          ),
-	          React.createElement(
-	            "h3",
-	            null,
-	            "Phone: ",
-	            this.state.restaurant.phone
-	          ),
-	          React.createElement(
-	            "h3",
-	            null,
-	            React.createElement(
-	              "a",
-	              { href: this.state.restaurant.website, target: "blank" },
-	              "Visit Website"
-	            )
-	          ),
-	          React.createElement(
-	            "h3",
-	            null,
-	            "Address: ",
-	            this.state.restaurant.address
-	          )
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "michelin-review" },
-	        React.createElement(
-	          "h3",
-	          null,
-	          this.state.restaurant.mich_review
-	        )
-	      )
+	      sub
 	    );
 	  }
 	});
@@ -33942,6 +34106,512 @@
 /* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
+	var RestaurantShowItem = React.createClass({
+	  displayName: 'RestaurantShowItem',
+	
+	  render: function render() {
+	    var review = void 0,
+	        review1 = void 0,
+	        reviewer = void 0,
+	        reviewer1 = void 0,
+	        content = void 0,
+	        content1 = void 0,
+	        rating = void 0,
+	        rating1 = void 0,
+	        date = void 0,
+	        date1 = void 0,
+	        reviewLink = void 0;
+	    var imgUrl = this.props.restaurant.photo;
+	
+	    var divStyle = {
+	      backgroundImage: 'url(' + imgUrl + ')'
+	    };
+	
+	    if (Object.keys(this.props.restaurant).length > 0) {
+	      review = this.props.restaurant.reviews[0];
+	      reviewer = review['name'];
+	      content = review['content'].slice(0, 200);
+	      rating = "✩".repeat(review['rating']);
+	      date = review['date'];
+	      reviewLink = React.createElement(
+	        'span',
+	        { className: 'link-to-reviews', onClick: this.props.reviews },
+	        '[ more ]'
+	      );
+	
+	      review1 = this.props.restaurant.reviews[1];
+	      reviewer1 = review1['name'];
+	      content1 = review1['content'].slice(0, 200);
+	      rating1 = "✩".repeat(review1['rating']);
+	      date1 = review1['date'];
+	    } else {
+	      review = "";
+	      reviewer = "";
+	      content = "";
+	      rating = "";
+	      date = "";
+	
+	      reviewLink = "";
+	
+	      review1 = "";
+	      reviewer1 = "";
+	      content1 = "";
+	      rating1 = "";
+	      date1 = "";
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'restaurant-show', style: divStyle },
+	        React.createElement(
+	          'div',
+	          { className: 'restaurant-text' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Cuisine: ',
+	            this.props.restaurant.cuisine
+	          ),
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Chef: ',
+	            this.props.restaurant.head_chef
+	          ),
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Phone: ',
+	            this.props.restaurant.phone
+	          ),
+	          React.createElement(
+	            'h3',
+	            { id: 'rest-website' },
+	            React.createElement(
+	              'a',
+	              { href: this.props.restaurant.website, target: 'blank' },
+	              ' Website ',
+	              React.createElement(
+	                'i',
+	                { className: 'material-icons' },
+	                'open_in_new'
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Address: ',
+	            this.props.restaurant.address
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'rest-review-box' },
+	        React.createElement(
+	          'div',
+	          { className: 'michelin-review' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: 'rev-header' },
+	              'Michelin Review | ',
+	              rating,
+	              ' '
+	            ),
+	            this.props.restaurant.mich_review
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'user-review' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: 'user-rev-header' },
+	              reviewer,
+	              ' | ',
+	              rating,
+	              ' | ',
+	              date,
+	              ' '
+	            ),
+	            content,
+	            ' ',
+	            reviewLink
+	          ),
+	          React.createElement(
+	            'h3',
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: 'user-rev-header' },
+	              reviewer1,
+	              ' | ',
+	              rating1,
+	              ' | ',
+	              date1,
+	              ' '
+	            ),
+	            content1,
+	            ' ',
+	            reviewLink
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = RestaurantShowItem;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var RestaurantActions = __webpack_require__(263);
+	var SessionStore = __webpack_require__(231);
+	var RestaurantStore = __webpack_require__(267);
+	var ReservationItem = __webpack_require__(272);
+	var ReservationSearch = __webpack_require__(276);
+	
+	var RestaurantReservations = React.createClass({
+	  displayName: "RestaurantReservations",
+	
+	
+	  render: function render() {
+	    var resItems = this.props.restaurant.reservations.slice(0, 8).map(function (resItem, idx) {
+	      return React.createElement(ReservationItem, { key: idx, resItem: resItem });
+	    });
+	    return React.createElement(
+	      "div",
+	      { className: "reservations-box" },
+	      React.createElement(
+	        "div",
+	        { className: "restaurant-header" },
+	        React.createElement(ReservationSearch, { restaurant: this.props.restaurant })
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "reservation-items-container" },
+	        resItems
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = RestaurantReservations;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var UserActions = __webpack_require__(273);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	
+	var DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+	
+	var ReservationItem = React.createClass({
+	  displayName: 'ReservationItem',
+	
+	  getInitialState: function getInitialState() {
+	    var resItem = this.props.resItem;
+	    return { resItem: resItem };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(props) {
+	    this.setState({ resItem: props.resItem });
+	  },
+	
+	  createReservation: function createReservation(e) {
+	    e.preventDefault();
+	    var userId = SessionStore.currentUser().id;
+	    var resOptId = this.state.resItem.id;
+	    UserActions.createReservation({ user_id: userId, reservation_option_id: resOptId });
+	    hashHistory.push("/profile");
+	  },
+	
+	  render: function render() {
+	
+	    var objDate = new Date(this.state.resItem.reservation_time);
+	    var day = DAYS[objDate.getDay()];
+	    var hour = (parseInt(objDate.getHours()) - 5).toString();
+	    // debugger
+	    // if (hour > 12) {
+	    //   hour = hour - 12;
+	
+	    var minutes = objDate.getMinutes();
+	    if (minutes.toString().length === 1) {
+	      minutes = minutes.toString() + "0";
+	    }
+	
+	    var month = (parseInt(objDate.getMonth()) + 1).toString();
+	    var year = objDate.getFullYear();
+	    var days = objDate.getDate();
+	
+	    var dateObj = month + "." + days + "." + year;
+	    var time = hour + ":" + minutes;
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'reservation-item' },
+	      React.createElement(
+	        'h3',
+	        null,
+	        dateObj
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Party Size: ',
+	        this.state.resItem.table_size
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        time
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        day
+	      ),
+	      React.createElement(
+	        'h2',
+	        { className: 'button', onClick: this.createReservation },
+	        'Reserve'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ReservationItem;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(232);
+	var RestaurantConstants = __webpack_require__(264);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	var UserApiUtil = __webpack_require__(274);
+	var UserConstants = __webpack_require__(275);
+	
+	var UserActions = {
+	
+	  postReview: function postReview(review) {
+	    UserApiUtil.postReview(review, UserActions.updateReviews);
+	  },
+	
+	  deleteReview: function deleteReview(reviewId) {
+	    UserApiUtil.deleteReview(review, UserActions.updateUser);
+	  },
+	
+	  editReview: function editReview(review) {
+	    UserApiUtil.editReview(review, UserActions.updateUser);
+	  },
+	
+	  getUser: function getUser() {
+	    UserApiUtil.getUser(UserActions.updateUser);
+	  },
+	
+	  createReservation: function createReservation(reservation) {
+	    UserApiUtil.createReservation(reservation, UserActions.updateUser);
+	  },
+	
+	  updateUser: function updateUser(user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.UPDATE_USER,
+	      user: user
+	    });
+	  },
+	
+	  updateReviews: function updateReviews(reviewData) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.UPDATE_REVIEWS,
+	      reviewData: reviewData
+	    });
+	  },
+	
+	  removeReview: function removeReview(reviewId) {
+	    AppDispatcher.dispatch({
+	      actionType: RestaurantConstants.REMOVE_REVIEW,
+	      reviewId: reviewId
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var UserApiUtil = {
+	  postReview: function postReview(review, callback) {
+	    $.ajax({
+	      url: 'api/reviews',
+	      method: 'POST',
+	      dataType: 'json',
+	      data: { review: review },
+	      success: function success(review) {
+	        callback(review);
+	      }
+	    });
+	  },
+	
+	  deleteReview: function deleteReview(id, callback) {
+	    $.ajax({
+	      url: 'api/reviews/' + id,
+	      method: 'DELETE',
+	      success: function success(id) {
+	        callback(id);
+	      }
+	    });
+	  },
+	
+	  getUser: function getUser(callback) {
+	    $.ajax({
+	      url: 'api/user/profile',
+	      method: 'GET',
+	      success: function success(userData) {
+	        callback(userData);
+	      }
+	    });
+	  },
+	
+	  editReview: function editReview(review, callback) {
+	    $.ajax({
+	      url: 'api/reviews/' + review.id,
+	      method: 'UPDATE',
+	      success: function success(review) {
+	        callback(review);
+	      }
+	    });
+	  },
+	
+	  createReservation: function createReservation(reservation, callback) {
+	    $.ajax({
+	      url: 'api/reservations',
+	      method: 'POST',
+	      data: { reservation: reservation },
+	      success: function success(user) {
+	        callback(user);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var RestaurantConstants = {
+		UPDATE_USER: "UPDATE_USER"
+	};
+	
+	module.exports = RestaurantConstants;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var RestaurantActions = __webpack_require__(263);
+	
+	var ReservationSearch = React.createClass({
+	  displayName: 'ReservationSearch',
+	
+	  getInitialState: function getInitialState() {
+	    return { date: null, seats: null };
+	  },
+	
+	  updateDate: function updateDate(e) {
+	    e.preventDefault();
+	    this.setState({ date: e.target.value });
+	    RestaurantActions.getRestaurant(this.props.restaurant.id, { date: e.target.value, seats: this.state.seats });
+	  },
+	
+	  updateTableSize: function updateTableSize(e) {
+	    e.preventDefault();
+	    this.setState({ seats: e.target.value });
+	    RestaurantActions.getRestaurant(this.props.restaurant.id, { date: this.state.date, seats: e.target.value });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { className: 'reservation-form' },
+	        React.createElement('input', { type: 'date', onChange: this.updateDate }),
+	        React.createElement(
+	          'select',
+	          { onChange: this.updateTableSize, name: 'table_size' },
+	          React.createElement(
+	            'option',
+	            { selected: true, disabled: true },
+	            'Number of Diners'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: '2' },
+	            '2'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: '4' },
+	            '4'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: '6' },
+	            '6'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ReservationSearch;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var React = __webpack_require__(1);
@@ -33949,10 +34619,10 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
-	var ReviewItem = __webpack_require__(271);
-	var ReviewForm = __webpack_require__(292);
+	var ReviewItem = __webpack_require__(278);
+	var ReviewForm = __webpack_require__(299);
 	var ReactDOM = __webpack_require__(38);
-	var Modal = __webpack_require__(272);
+	var Modal = __webpack_require__(279);
 	
 	var appElement = document.getElementById("content");
 	
@@ -33983,78 +34653,42 @@
 	  displayName: "RestaurantReviews",
 	
 	  getInitialState: function getInitialState() {
-	    return { restaurant: {}, modalIsOpen: false, error: false };
+	    return { modalIsOpen: false };
 	  },
 	
 	  openModal: function openModal() {
 	    if (SessionStore.isUserLoggedIn()) {
 	      this.setState({ modalIsOpen: true });
 	    } else {
-	      this.displayError();
+	      $("#error-alert").removeClass("hidden");
 	    }
-	  },
-	
-	  displayError: function displayError() {
-	    this.updateError();
-	  },
-	
-	  updateError: function updateError() {
-	    if (this.state.error) {
-	      this.setState({ error: false });
-	    } else {
-	      this.setState({ error: true });
-	    }
-	  },
-	
-	  afterOpenModal: function afterOpenModal() {
-	    this.refs.subtitle.style.color = '#f00';
 	  },
 	
 	  closeModal: function closeModal() {
 	    this.setState({ modalIsOpen: false });
 	  },
 	
-	  componentDidMount: function componentDidMount() {
-	    this.listener = RestaurantStore.addListener(this.updateRestaurant);
-	    RestaurantActions.getRestaurant(parseInt(this.props.params.restaurantId));
-	  },
-	
 	  componentWillMount: function componentWillMount() {
 	    Modal.setAppElement(document.body);
 	  },
 	
-	  updateRestaurant: function updateRestaurant() {
-	    var restaurant = RestaurantStore.find(parseInt(this.props.params.restaurantId));
-	    this.setState({ restaurant: restaurant });
-	  },
-	
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.listener.remove();
-	  },
-	
 	  render: function render() {
 	    var reviews = void 0;
-	    if (Object.keys(this.state.restaurant).length === 0) {
+	    if (Object.keys(this.props.restaurant).length === 0) {
 	      reviews = React.createElement(
 	        "div",
 	        null,
 	        "No Reviews"
 	      );
 	    } else {
-	      reviews = this.state.restaurant.reviews.map(function (review, idx) {
+	      reviews = this.props.restaurant.reviews.map(function (review, idx) {
 	        return React.createElement(ReviewItem, { key: idx, review: review });
 	      });
 	    }
 	
-	    var errorMessage = this.state.error ? React.createElement(
-	      "div",
-	      { className: "error" },
-	      "You Must Be Logged In To Write a Review"
-	    ) : null;
-	    var hashPath = "/restaurants/" + this.state.restaurant.id;
 	    return React.createElement(
 	      "div",
-	      { className: "review-box" },
+	      null,
 	      React.createElement(
 	        "div",
 	        { className: "restaurant-header" },
@@ -34064,7 +34698,7 @@
 	          React.createElement(
 	            "h2",
 	            null,
-	            "Leave Review +"
+	            "Leave Review"
 	          )
 	        ),
 	        React.createElement(
@@ -34074,31 +34708,30 @@
 	            onAfterOpen: this.afterOpenModal,
 	            onRequestClose: this.closeModal,
 	            style: customStyles },
-	          React.createElement(ReviewForm, { closeModal: this.closeModal, restaurantId: this.state.restaurant.id })
-	        ),
+	          React.createElement(ReviewForm, { closeModal: this.closeModal, restaurantId: this.props.restaurant.id, restaurantName: this.props.restaurant.name })
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { id: "error-alert", className: "error hidden" },
+	        "You Must Be Logged In To Write A Review ",
 	        React.createElement(
-	          "div",
-	          { className: "restaurant-name" },
-	          React.createElement(
-	            "h2",
-	            null,
-	            this.state.restaurant.name,
-	            "Reviews"
-	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "link-back" },
+	          "span",
+	          { onClick: this.saveLocation },
+	          "[",
 	          React.createElement(
 	            Link,
-	            { to: hashPath },
-	            "BACK TO ",
-	            this.state.restaurant.name
-	          )
-	        ),
-	        errorMessage
+	            { to: "/login" },
+	            "Login"
+	          ),
+	          "]"
+	        )
 	      ),
-	      reviews
+	      React.createElement(
+	        "div",
+	        { className: "review-box" },
+	        reviews
+	      )
 	    );
 	  }
 	});
@@ -34106,7 +34739,7 @@
 	module.exports = RestaurantReviews;
 
 /***/ },
-/* 271 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34114,22 +34747,15 @@
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var ReactDOM = __webpack_require__(38);
-	var Modal = __webpack_require__(272);
+	var Modal = __webpack_require__(279);
 	
 	var RestaurantReviewItem = React.createClass({
 	  displayName: 'RestaurantReviewItem',
 	
-	  getInitialState: function getInitialState() {
-	    var review = this.props.review;
-	    return { review: review };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(props) {
-	    this.setState({ review: props.review });
-	  },
 	
 	  render: function render() {
 	
+	    var rating = "✩".repeat(this.props.review.rating);
 	    return React.createElement(
 	      'div',
 	      { className: 'review-item' },
@@ -34139,11 +34765,29 @@
 	        React.createElement(
 	          'h3',
 	          { className: 'name-date' },
-	          this.state.review.name,
-	          ' / ',
-	          this.state.review.rating,
-	          '✩ / ',
-	          this.state.review.date
+	          React.createElement(
+	            'i',
+	            { className: 'material-icons md-48' },
+	            'perm_identity'
+	          ),
+	          ' ',
+	          this.props.review.name
+	        ),
+	        React.createElement(
+	          'h3',
+	          { id: 'rest-rating', className: 'name-date' },
+	          rating
+	        ),
+	        React.createElement(
+	          'h3',
+	          { className: 'name-date' },
+	          React.createElement(
+	            'i',
+	            { className: 'material-icons md-48' },
+	            'date_range'
+	          ),
+	          ' ',
+	          this.props.review.date
 	        )
 	      ),
 	      React.createElement(
@@ -34152,7 +34796,7 @@
 	        React.createElement(
 	          'h4',
 	          null,
-	          this.state.review.content
+	          this.props.review.content
 	        )
 	      )
 	    );
@@ -34162,25 +34806,25 @@
 	module.exports = RestaurantReviewItem;
 
 /***/ },
-/* 272 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(273);
+	module.exports = __webpack_require__(280);
 	
 
 
 /***/ },
-/* 273 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
-	var ExecutionEnvironment = __webpack_require__(274);
-	var ModalPortal = React.createFactory(__webpack_require__(275));
-	var ariaAppHider = __webpack_require__(290);
-	var elementClass = __webpack_require__(291);
+	var ExecutionEnvironment = __webpack_require__(281);
+	var ModalPortal = React.createFactory(__webpack_require__(282));
+	var ariaAppHider = __webpack_require__(297);
+	var elementClass = __webpack_require__(298);
 	var renderSubtreeIntoContainer = __webpack_require__(38).unstable_renderSubtreeIntoContainer;
-	var Assign = __webpack_require__(279);
+	var Assign = __webpack_require__(286);
 	
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
 	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
@@ -34288,7 +34932,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 274 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -34333,14 +34977,14 @@
 
 
 /***/ },
-/* 275 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(276);
-	var scopeTab = __webpack_require__(278);
-	var Assign = __webpack_require__(279);
+	var focusManager = __webpack_require__(283);
+	var scopeTab = __webpack_require__(285);
+	var Assign = __webpack_require__(286);
 	
 	// so that our CSS is statically analyzable
 	var CLASS_NAMES = {
@@ -34531,10 +35175,10 @@
 
 
 /***/ },
-/* 276 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(277);
+	var findTabbable = __webpack_require__(284);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -34605,7 +35249,7 @@
 
 
 /***/ },
-/* 277 */
+/* 284 */
 /***/ function(module, exports) {
 
 	/*!
@@ -34661,10 +35305,10 @@
 
 
 /***/ },
-/* 278 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(277);
+	var findTabbable = __webpack_require__(284);
 	
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -34686,7 +35330,7 @@
 
 
 /***/ },
-/* 279 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34697,9 +35341,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(280),
-	    createAssigner = __webpack_require__(286),
-	    keys = __webpack_require__(282);
+	var baseAssign = __webpack_require__(287),
+	    createAssigner = __webpack_require__(293),
+	    keys = __webpack_require__(289);
 	
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -34772,7 +35416,7 @@
 
 
 /***/ },
-/* 280 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34783,8 +35427,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(281),
-	    keys = __webpack_require__(282);
+	var baseCopy = __webpack_require__(288),
+	    keys = __webpack_require__(289);
 	
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -34805,7 +35449,7 @@
 
 
 /***/ },
-/* 281 */
+/* 288 */
 /***/ function(module, exports) {
 
 	/**
@@ -34843,7 +35487,7 @@
 
 
 /***/ },
-/* 282 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34854,9 +35498,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(283),
-	    isArguments = __webpack_require__(284),
-	    isArray = __webpack_require__(285);
+	var getNative = __webpack_require__(290),
+	    isArguments = __webpack_require__(291),
+	    isArray = __webpack_require__(292);
 	
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -35085,7 +35729,7 @@
 
 
 /***/ },
-/* 283 */
+/* 290 */
 /***/ function(module, exports) {
 
 	/**
@@ -35228,7 +35872,7 @@
 
 
 /***/ },
-/* 284 */
+/* 291 */
 /***/ function(module, exports) {
 
 	/**
@@ -35477,7 +36121,7 @@
 
 
 /***/ },
-/* 285 */
+/* 292 */
 /***/ function(module, exports) {
 
 	/**
@@ -35663,7 +36307,7 @@
 
 
 /***/ },
-/* 286 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35674,9 +36318,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(287),
-	    isIterateeCall = __webpack_require__(288),
-	    restParam = __webpack_require__(289);
+	var bindCallback = __webpack_require__(294),
+	    isIterateeCall = __webpack_require__(295),
+	    restParam = __webpack_require__(296);
 	
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -35721,7 +36365,7 @@
 
 
 /***/ },
-/* 287 */
+/* 294 */
 /***/ function(module, exports) {
 
 	/**
@@ -35792,7 +36436,7 @@
 
 
 /***/ },
-/* 288 */
+/* 295 */
 /***/ function(module, exports) {
 
 	/**
@@ -35930,7 +36574,7 @@
 
 
 /***/ },
-/* 289 */
+/* 296 */
 /***/ function(module, exports) {
 
 	/**
@@ -36003,7 +36647,7 @@
 
 
 /***/ },
-/* 290 */
+/* 297 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -36051,7 +36695,7 @@
 
 
 /***/ },
-/* 291 */
+/* 298 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -36116,7 +36760,7 @@
 
 
 /***/ },
-/* 292 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36125,10 +36769,10 @@
 	
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var UserStore = __webpack_require__(293);
+	var UserStore = __webpack_require__(300);
 	var SessionStore = __webpack_require__(231);
-	var UserActions = __webpack_require__(295);
-	var ReviewItem = __webpack_require__(271);
+	var UserActions = __webpack_require__(273);
+	var ReviewItem = __webpack_require__(278);
 	
 	var buttonDisable = void 0;
 	
@@ -36202,14 +36846,22 @@
 	      ),
 	      React.createElement(
 	        "form",
-	        { className: "form-fieldset", onSubmit: this.handleSubmit },
+	        { className: "form-text", onSubmit: this.handleSubmit },
 	        React.createElement(
 	          "div",
 	          { className: "form-h" },
 	          React.createElement(
 	            "h2",
 	            null,
-	            SessionStore.currentUser().name + "'s Review"
+	            React.createElement(
+	              "i",
+	              { className: "material-icons md-48" },
+	              "perm_identity"
+	            ),
+	            " ",
+	            SessionStore.currentUser().name,
+	            " | ",
+	            this.props.restaurantName
 	          )
 	        ),
 	        React.createElement(
@@ -36218,18 +36870,9 @@
 	          "Review"
 	        ),
 	        React.createElement("textarea", {
-	          placeholder: "Leave a review (must be signed in)", value: this.state.content,
+	          placeholder: "Leave a review...", value: this.state.content,
 	          onChange: this.updateContent,
 	          className: "review-input" }),
-	        React.createElement(
-	          "div",
-	          { className: "rating" },
-	          React.createElement(
-	            "h5",
-	            null,
-	            "Rating"
-	          )
-	        ),
 	        React.createElement(
 	          "div",
 	          { className: "input-block" },
@@ -36266,14 +36909,14 @@
 	module.exports = ReviewForm;
 
 /***/ },
-/* 293 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var AppDispatcher = __webpack_require__(232);
 	var Store = __webpack_require__(236).Store;
-	var UserConstants = __webpack_require__(294);
+	var UserConstants = __webpack_require__(275);
 	var RestaurantConstants = __webpack_require__(264);
 	
 	var UserStore = new Store(AppDispatcher);
@@ -36371,405 +37014,21 @@
 	module.exports = UserStore;
 
 /***/ },
-/* 294 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	var RestaurantConstants = {
-		UPDATE_USER: "UPDATE_USER"
-	};
-	
-	module.exports = RestaurantConstants;
-
-/***/ },
-/* 295 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var AppDispatcher = __webpack_require__(232);
-	var RestaurantConstants = __webpack_require__(264);
-	var hashHistory = __webpack_require__(168).hashHistory;
-	var UserApiUtil = __webpack_require__(296);
-	var UserConstants = __webpack_require__(294);
-	
-	var UserActions = {
-	
-	  postReview: function postReview(review) {
-	    UserApiUtil.postReview(review, UserActions.updateReviews);
-	  },
-	
-	  deleteReview: function deleteReview(reviewId) {
-	    UserApiUtil.deleteReview(review, UserActions.updateUser);
-	  },
-	
-	  editReview: function editReview(review) {
-	    UserApiUtil.editReview(review, UserActions.updateUser);
-	  },
-	
-	  getUser: function getUser() {
-	    UserApiUtil.getUser(UserActions.updateUser);
-	  },
-	
-	  createReservation: function createReservation(reservation) {
-	    UserApiUtil.createReservation(reservation, UserActions.updateUser);
-	  },
-	
-	  updateUser: function updateUser(user) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.UPDATE_USER,
-	      user: user
-	    });
-	  },
-	
-	  updateReviews: function updateReviews(reviewData) {
-	    AppDispatcher.dispatch({
-	      actionType: RestaurantConstants.UPDATE_REVIEWS,
-	      reviewData: reviewData
-	    });
-	  },
-	
-	  removeReview: function removeReview(reviewId) {
-	    AppDispatcher.dispatch({
-	      actionType: RestaurantConstants.REMOVE_REVIEW,
-	      reviewId: reviewId
-	    });
-	  }
-	};
-	
-	module.exports = UserActions;
-
-/***/ },
-/* 296 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var UserApiUtil = {
-	  postReview: function postReview(review, callback) {
-	    $.ajax({
-	      url: 'api/reviews',
-	      method: 'POST',
-	      dataType: 'json',
-	      data: { review: review },
-	      success: function success(review) {
-	        callback(review);
-	      }
-	    });
-	  },
-	
-	  deleteReview: function deleteReview(id, callback) {
-	    $.ajax({
-	      url: 'api/reviews/' + id,
-	      method: 'DELETE',
-	      success: function success(id) {
-	        callback(id);
-	      }
-	    });
-	  },
-	
-	  getUser: function getUser(callback) {
-	    $.ajax({
-	      url: 'api/user/profile',
-	      method: 'GET',
-	      success: function success(userData) {
-	        callback(userData);
-	      }
-	    });
-	  },
-	
-	  editReview: function editReview(review, callback) {
-	    $.ajax({
-	      url: 'api/reviews/' + review.id,
-	      method: 'UPDATE',
-	      success: function success(review) {
-	        callback(review);
-	      }
-	    });
-	  },
-	
-	  createReservation: function createReservation(reservation, callback) {
-	    $.ajax({
-	      url: 'api/reservations',
-	      method: 'POST',
-	      data: { reservation: reservation },
-	      success: function success(user) {
-	        callback(user);
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = UserApiUtil;
-
-/***/ },
-/* 297 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	var RestaurantActions = __webpack_require__(263);
-	var Link = __webpack_require__(168).Link;
-	var SessionStore = __webpack_require__(231);
-	var RestaurantStore = __webpack_require__(267);
-	var ReservationItem = __webpack_require__(298);
-	var ReservationSearch = __webpack_require__(299);
-	
-	var RestaurantReservations = React.createClass({
-	  displayName: "RestaurantReservations",
-	
-	  getInitialState: function getInitialState() {
-	    return { restaurant: "none" };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    this.listener = RestaurantStore.addListener(this.updateRestaurant);
-	    RestaurantActions.getRestaurant(parseInt(this.props.params.restaurantId));
-	  },
-	
-	  updateRestaurant: function updateRestaurant() {
-	    var restaurant = RestaurantStore.find(parseInt(this.props.params.restaurantId));
-	    this.setState({ restaurant: restaurant });
-	  },
-	
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.listener.remove();
-	  },
-	
-	  render: function render() {
-	    var resItems = void 0;
-	    if (this.state.restaurant === "none") {
-	      resItems = React.createElement(
-	        "div",
-	        null,
-	        "No Reservations"
-	      );
-	    } else {
-	      resItems = this.state.restaurant.reservations.map(function (resItem, idx) {
-	        return React.createElement(ReservationItem, { key: idx, resItem: resItem });
-	      });
-	    }
-	
-	    var hashPath = "/restaurants/" + this.state.restaurant.id;
-	
-	    return React.createElement(
-	      "div",
-	      { className: "restaurant-box" },
-	      React.createElement(
-	        "div",
-	        { className: "restaurant-header" },
-	        React.createElement(ReservationSearch, { restaurantId: parseInt(this.props.params.restaurantId) }),
-	        React.createElement(
-	          "div",
-	          { className: "restaurant-name" },
-	          React.createElement(
-	            "h2",
-	            null,
-	            this.state.restaurant.name,
-	            " Reservation Options"
-	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "link-back" },
-	          React.createElement(
-	            Link,
-	            { to: hashPath },
-	            "BACK TO ",
-	            this.state.restaurant.name
-	          )
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "reservation-items-container" },
-	        resItems
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = RestaurantReservations;
-
-/***/ },
-/* 298 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	var UserActions = __webpack_require__(295);
-	var hashHistory = __webpack_require__(168).hashHistory;
-	
-	var DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-	
-	var ReservationItem = React.createClass({
-	  displayName: 'ReservationItem',
-	
-	  getInitialState: function getInitialState() {
-	    var resItem = this.props.resItem;
-	    return { resItem: resItem };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(props) {
-	    this.setState({ resItem: props.resItem });
-	  },
-	
-	  createReservation: function createReservation(e) {
-	    e.preventDefault();
-	    var userId = SessionStore.currentUser().id;
-	    var resOptId = this.state.resItem.id;
-	    UserActions.createReservation({ user_id: userId, reservation_option_id: resOptId });
-	    hashHistory.push("/profile");
-	  },
-	
-	  render: function render() {
-	
-	    var objDate = new Date(this.state.resItem.reservation_time);
-	    var day = DAYS[objDate.getDay()];
-	    var hour = (parseInt(objDate.getHours()) - 5).toString();
-	    // debugger
-	    // if (hour > 12) {
-	    //   hour = hour - 12;
-	
-	    var minutes = objDate.getMinutes();
-	    if (minutes.toString().length === 1) {
-	      minutes = minutes.toString() + "0";
-	    }
-	
-	    var month = (parseInt(objDate.getMonth()) + 1).toString();
-	    var year = objDate.getFullYear();
-	    var days = objDate.getDate();
-	
-	    var dateObj = month + "." + days + "." + year;
-	    var time = hour + ":" + minutes;
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'reservation-item' },
-	      React.createElement(
-	        'h3',
-	        null,
-	        dateObj
-	      ),
-	      React.createElement(
-	        'h4',
-	        null,
-	        'Party Size: ',
-	        this.state.resItem.table_size
-	      ),
-	      React.createElement(
-	        'h4',
-	        null,
-	        time
-	      ),
-	      React.createElement(
-	        'h4',
-	        null,
-	        day
-	      ),
-	      React.createElement(
-	        'h2',
-	        { className: 'button', onClick: this.createReservation },
-	        'Reserve'
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = ReservationItem;
-
-/***/ },
-/* 299 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	var RestaurantActions = __webpack_require__(263);
-	
-	var ReservationSearch = React.createClass({
-	  displayName: 'ReservationSearch',
-	
-	  getInitialState: function getInitialState() {
-	    return { date: null, seats: null };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(props) {
-	    this.setState({ restaurantId: this.props.restaurantId });
-	  },
-	
-	  updateDate: function updateDate(e) {
-	    e.preventDefault();
-	    this.setState({ date: e.target.value });
-	    RestaurantActions.getRestaurant(this.state.restaurantId, { date: e.target.value, seats: this.state.seats });
-	  },
-	
-	  updateTableSize: function updateTableSize(e) {
-	    e.preventDefault();
-	    this.setState({ seats: e.target.value });
-	    RestaurantActions.getRestaurant(this.state.restaurantId, { date: this.state.date, seats: e.target.value });
-	  },
-	
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'form',
-	        { className: 'reservation-form' },
-	        React.createElement('input', { type: 'date', onChange: this.updateDate }),
-	        React.createElement(
-	          'select',
-	          { onChange: this.updateTableSize, name: 'table_size' },
-	          React.createElement(
-	            'option',
-	            { selected: true, disabled: true },
-	            'Number of Diners'
-	          ),
-	          React.createElement(
-	            'option',
-	            { value: '2' },
-	            '2'
-	          ),
-	          React.createElement(
-	            'option',
-	            { value: '4' },
-	            '4'
-	          ),
-	          React.createElement(
-	            'option',
-	            { value: '6' },
-	            '6'
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = ReservationSearch;
-
-/***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var UserStore = __webpack_require__(293);
+	var UserStore = __webpack_require__(300);
 	var SessionStore = __webpack_require__(231);
 	var SessionActions = __webpack_require__(254);
-	var UserActions = __webpack_require__(295);
-	var ReviewItem = __webpack_require__(271);
+	var UserActions = __webpack_require__(273);
+	var ReviewItem = __webpack_require__(278);
 	var hashHistory = __webpack_require__(168).hashHistory;
-	var UserReview = __webpack_require__(301);
-	var UserReservation = __webpack_require__(303);
+	var UserReview = __webpack_require__(302);
+	var UserReservation = __webpack_require__(304);
 	
 	var UserProfile = React.createClass({
 	  displayName: "UserProfile",
@@ -36792,15 +37051,6 @@
 	    this.setState({ user: UserStore.getUser() });
 	  },
 	
-	  toggleButton: function toggleButton(e) {
-	    e.preventDefault();
-	    if (this.state.reviewVisibility === true) {
-	      this.setState({ reviewVisibility: false, buttonText: "My Reviews", headerText: "Reservations" });
-	    } else {
-	      this.setState({ reviewVisibility: true, buttonText: "My Reservations", headerText: "Reviews" });
-	    }
-	  },
-	
 	  logout: function logout() {
 	    SessionActions.logOut();
 	    hashHistory.push('/');
@@ -36809,36 +37059,27 @@
 	  render: function render() {
 	    return React.createElement(
 	      "div",
-	      { className: "restaurant-box" },
+	      { className: "user-box" },
 	      React.createElement(
 	        "div",
-	        { className: "user-profile-header" },
+	        { className: "user-reservations-box" },
 	        React.createElement(
-	          "h2",
+	          "h3",
 	          null,
-	          this.state.user.name
+	          "My Reservations"
 	        ),
-	        React.createElement(
-	          "h2",
-	          { className: "button", onClick: this.toggleButton },
-	          this.state.buttonText
-	        ),
-	        React.createElement(
-	          "h2",
-	          { className: "button", onClick: this.logout },
-	          "Logout"
-	        )
+	        React.createElement(UserReservation, { user: this.state.user })
 	      ),
 	      React.createElement(
 	        "div",
-	        null,
+	        { className: "user-reviews-box" },
 	        React.createElement(
-	          "h2",
-	          { className: "header-text" },
-	          this.state.headerText
-	        )
-	      ),
-	      this.state.reviewVisibility ? React.createElement(UserReview, { user: this.state.user }) : React.createElement(UserReservation, { user: this.state.user })
+	          "h3",
+	          null,
+	          "My Reviews"
+	        ),
+	        React.createElement(UserReview, { user: this.state.user })
+	      )
 	    );
 	  }
 	});
@@ -36846,7 +37087,7 @@
 	module.exports = UserProfile;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36856,8 +37097,8 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
-	var UserReviewItem = __webpack_require__(302);
-	var ReviewForm = __webpack_require__(292);
+	var UserReviewItem = __webpack_require__(303);
+	var ReviewForm = __webpack_require__(299);
 	var ReactDOM = __webpack_require__(38);
 	
 	var UserReviews = React.createClass({
@@ -36889,7 +37130,7 @@
 	module.exports = UserReviews;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36903,26 +37144,32 @@
 	
 	
 	  render: function render() {
-	
+	    var star = "✩".repeat(this.props.review.rating);
 	    return React.createElement(
 	      'div',
-	      { className: 'review-item' },
+	      { className: 'user-review-item-box' },
 	      React.createElement(
 	        'div',
-	        { className: 'top-header' },
+	        { className: 'user-top-header' },
 	        React.createElement(
 	          'h3',
 	          { className: 'name-date' },
-	          this.props.review.rest_name,
-	          ' / ',
-	          this.props.review.rating,
-	          '✩ / ',
+	          this.props.review.rest_name
+	        ),
+	        React.createElement(
+	          'h3',
+	          { className: 'name-date' },
+	          star
+	        ),
+	        React.createElement(
+	          'h3',
+	          { className: 'name-date' },
 	          this.props.review.date
 	        )
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'review' },
+	        { className: 'user-review-item' },
 	        React.createElement(
 	          'h4',
 	          null,
@@ -36936,7 +37183,7 @@
 	module.exports = UserReviewItem;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36946,7 +37193,7 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(231);
 	var RestaurantStore = __webpack_require__(267);
-	var UserReservationItem = __webpack_require__(304);
+	var UserReservationItem = __webpack_require__(305);
 	
 	var UserReservations = React.createClass({
 	  displayName: "UserReservations",
@@ -36968,7 +37215,7 @@
 	
 	    return React.createElement(
 	      "div",
-	      { className: "reservation-items-container" },
+	      { className: "user-reservation-items-container" },
 	      resItems
 	    );
 	  }
@@ -36977,14 +37224,14 @@
 	module.exports = UserReservations;
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var UserActions = __webpack_require__(295);
+	var UserActions = __webpack_require__(273);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
@@ -36998,7 +37245,7 @@
 	    var user = this.props.user;
 	    return React.createElement(
 	      'div',
-	      { className: 'reservation-item' },
+	      { className: 'user-reservation-item' },
 	      React.createElement(
 	        'h2',
 	        null,

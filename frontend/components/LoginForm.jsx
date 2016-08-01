@@ -35,7 +35,13 @@ const LoginForm = React.createClass({
 
 	redirectIfLoggedIn() {
     if (SessionStore.isUserLoggedIn()) {
-      this.context.router.push("/");
+			if (SessionStore.getRestaurantId() !== null) {
+				let id = SessionStore.getRestaurantId();
+				SessionStore.setRestaurantId(null);
+				this.context.router.push(`/restaurants/${id}`);
+			} else {
+				this.context.router.push("/");
+			}
     }
   },
 
@@ -101,47 +107,49 @@ const LoginForm = React.createClass({
 
 
 		return (
-			<div className="login-form">
-				<form className="form-fieldset" onSubmit={this.handleSubmit}>
-	        <div className="form-header">
-						<h2>{ formHeader }</h2>
-						<h4> { navLink } </h4>
-					</div>
-
-	        { this.fieldErrors("base") }
-
+			<div className="index-full-content">
 				<div className="login-form">
-
-					{this.formType() === "signup" ?
-						<div className="form-input-div"><label className="form-label">Name</label>
-		          { this.fieldErrors("name") }
-							<input type="text" placeholder="Name"
-		            value={this.state.name}
-		            onChange={this.update("name")}
-								className="login-input" />
-						 </div> : <div/>}
-
-						<label className="form-label"> Email</label>
-		          { this.fieldErrors("email") }
-							<input type="text"
-		            placeholder="Email" value={this.state.email}
-		            onChange={this.update("email")}
-								className="login-input" />
-
-						<label className="form-label"> Password</label>
-		          { this.fieldErrors("password") }
-		          <input type="password"
-								placeholder="Password"
-		            value={this.state.password}
-		            onChange={this.update("password")}
-								className="login-input" />
-
-						<div className="button-wrapper">
-							<button onClick={this.handleGuestLogin} className="form-submit">Guest</button>
-							<button className="form-submit" type="submit">Submit</button>
+					<form className="form-fieldset" onSubmit={this.handleSubmit}>
+		        <div className="form-header">
+							<h2>{ formHeader }</h2>
+							<h4> { navLink } </h4>
 						</div>
-					</div>
-				</form>
+
+		        { this.fieldErrors("base") }
+
+					<div className="login-form">
+
+						{this.formType() === "signup" ?
+							<div className="form-input-div"><label className="form-label">Name</label>
+			          { this.fieldErrors("name") }
+								<input type="text" placeholder="Name"
+			            value={this.state.name}
+			            onChange={this.update("name")}
+									className="login-input" />
+							 </div> : <div/>}
+
+							<label className="form-label"> Email</label>
+			          { this.fieldErrors("email") }
+								<input type="text"
+			            placeholder="Email" value={this.state.email}
+			            onChange={this.update("email")}
+									className="login-input" />
+
+							<label className="form-label"> Password</label>
+			          { this.fieldErrors("password") }
+			          <input type="password"
+									placeholder="Password"
+			            value={this.state.password}
+			            onChange={this.update("password")}
+									className="login-input" />
+
+							<div className="button-wrapper">
+								<button onClick={this.handleGuestLogin} className="form-submit">Guest</button>
+								<button className="form-submit" type="submit">Submit</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		);
 	}

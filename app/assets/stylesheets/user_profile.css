@@ -2,6 +2,7 @@ div.user-profile-header {
   display: flex;
   flex-direction: row;
   width: 100%;
+  margin-top: 50px;
   margin-bottom: 1%;
   background: black;
   color: white;
@@ -22,4 +23,102 @@ h2.header-text {
   text-align: center;
   padding: 3%;
   font-size: 2em;
+}
+
+div.user-box {
+  width: 100%;
+  background: white;
+  margin: 80px auto 1% auto;
+  display: flex;
+  flex-direction: row;
+  opacity: 1;
+  padding: 2%;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+div.user-reservation-item {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  border: 1px solid #ccc;
+  margin: 0 1% 40px 1%;
+  padding: 4%;
+}
+
+div.user-reservation-item > h3{
+  font-size: 1.5em;
+  display: block;
+  text-align: center;
+  background: white;
+  color: black;
+}
+
+div.user-reservation-items-container {
+  width: 100%;
+}
+
+div.user-reviews-box {
+  width: 64%;
+  border: 1px solid #ccc;
+  margin-left: 2%;
+  padding: 2%
+}
+
+div.user-reservation-item > h2 {
+  font-size: 2em;
+  text-align: center;
+  background: black;
+  color: white;
+}
+
+div.user-reservation-item > h2:hover {
+  font-size: 2em;
+  background: #ccc;
+  color: white;
+}
+
+div.user-reservations-box {
+  width: 30%;
+  padding: 2%;
+  padding: 2%;
+}
+
+div.user-reviews-box > h3 {
+  text-align: center;
+  padding: 20px 10px 30px;
+  font-size: 30px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 35px;
+}
+
+div.user-reservations-box > h3 {
+  text-align: center;
+  padding: 20px 10px 30px;
+  font-size: 30px;
+  margin-bottom: 35px;
+}
+
+div.user-review > h4 {
+  font-size: 20px;
+  text-align: justify;
+}
+
+div.user-review-item {
+  width: 59%;
+  padding: 5px 3% 3% 3% ;
+}
+
+div.user-top-header {
+  display: block;
+  align-items: center;
+  justify-content: flex-start;
+  width: 35%;
+  padding: 0 3% 3% 3%;
+}
+
+div.user-review-item-box {
+  display: flex;
+  justify-content: space-between;
+
 }

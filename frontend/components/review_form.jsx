@@ -68,18 +68,15 @@ const ReviewForm = React.createClass({
     return(
       <div className="review-form">
         <h3 onClick={this.closeForm} className="close-button">Close</h3>
-				<form className="form-fieldset" onSubmit={this.handleSubmit}>
+				<form className="form-text" onSubmit={this.handleSubmit}>
 	        <div className="form-h">
-            <h2>{SessionStore.currentUser().name + "'s Review"}</h2>
+            <h2><i className="material-icons md-48">perm_identity</i> {SessionStore.currentUser().name} | {this.props.restaurantName}</h2>
 					</div>
 					<label className="form-label">Review</label>
 					<textarea
-            placeholder="Leave a review (must be signed in)" value={this.state.content}
+            placeholder="Leave a review..." value={this.state.content}
             onChange={this.updateContent}
 						className="review-input" />
-          <div className="rating">
-            <h5>Rating</h5>
-          </div>
           <div className="input-block">
             <div id="one-star" onClick={this.oneStar}>✩</div>
             <div id="two-star"onClick={this.twoStar}>✩✩</div>

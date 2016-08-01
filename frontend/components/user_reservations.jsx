@@ -18,7 +18,7 @@ const UserReservations = React.createClass({
     }
 
     return (
-      <div className="reservation-items-container">
+      <div className="user-reservation-items-container">
         {resItems}
       </div>
     );

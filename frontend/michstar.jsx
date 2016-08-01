@@ -18,9 +18,6 @@ const RestaurantApiUtil = require('./util/restaurant_api_util');
 
 const RestaurantIndex = require('./components/restaurant_index');
 const RestaurantShow = require('./components/restaurant_show');
-const RestaurantReviews = require('./components/restaurant_reviews_show');
-
-const RestaurantReservations = require('./components/restaurant_reservations');
 
 const UserProfile = require('./components/UserProfile');
 
@@ -32,8 +29,6 @@ const appRouter = (
       <IndexRoute component={ RestaurantIndex } />
       <Route path="/restaurants" component={ RestaurantIndex } />
       <Route path="/restaurants/:restaurantId" component= {RestaurantShow} />
-      <Route path="/restaurants/:restaurantId/reviews" component= {RestaurantReviews} />
-      <Route path="/restaurants/:restaurantId/reservations" onEnter={_ensureLoggedIn} component= {RestaurantReservations} />
       <Route path="/login" component={ LoginForm } />
       <Route path="/signup" component={ LoginForm } />
       <Route path="/profile" component={ UserProfile } onEnter={_ensureLoggedIn}/>

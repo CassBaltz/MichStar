@@ -2,11 +2,13 @@ div.container {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   background: black;
   color: white;
   position: fixed;
+  height: 55px;
   top: 0;
+  font-size: 20px;
   z-index: 10000000
 }
 
@@ -16,41 +18,75 @@ h2.logo {
   margin-bottom: 0;
   font-family: 'Cinzel', serif;
   font-weight: 700;
-  font-size: 1em;
 }
 
 h3.home-link {
   order: 0;
   color: white;
-  padding: 1%;
   margin-top: 0;
   margin-bottom: 0;
-  margin-left: 0;
+  margin-left: 10%;
+  padding: 5px 10px;
+  border-left: 5px solid transparent;
 }
 
 h3.home-link:hover {
-  background: grey;
-  color: red;
+  color: #ccc;
   cursor: pointer;
   cursor: hand;
+  border-color: #ccc;
 }
 
-h3.personal-link:hover {
-  background: grey;
-  color: red;
-  cursor: pointer;
-  cursor: hand;
+div.inner-profile-container > h3.personal-link:hover {
+  color: #ccc;
+  border-color: #ccc;
+  cursor: pointer
 }
 
-h3.personal-link {
+div.inner-profile-container > h4.personal-link:hover {
+  color: #ccc;
+  border-color: #ccc;
+  cursor: pointer
+}
+
+div.inner-profile-container {
+  display: flex;
+}
+
+div.profile-container {
   order: 1;
+  margin-right: 10%;
+}
+
+div.inner-profile-container > h3.personal-link {
   color: white;
-  padding: 1%;
+  padding: 16px;
   margin-top: 0;
   margin-bottom: 0;
+  margin-right: 0;
+  margin-left: 20px;
+  padding: 5px 10px;
+  border-left: 5px solid transparent
+}
+
+div.inner-profile-container > h4.personal-link {
+  order: 1;
+  color: white;
+  padding: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  margin-left: 20px;
+  padding: 5px 10px;
+  border-left: 5px solid transparent
 }
 
 h3.clicked {
-  background: white;
-  color: black;
+  border-color: #ccc;
+  color: #ccc;
+}
+
+div.inner-profile-container > h3.clicked {
+  border-color: #ccc;
+  color: #ccc;
 }

@@ -15,39 +15,77 @@ height: 100vh;
 }*/
 
 div.restaurant-box {
-  width: 80%;
+  width: 100%;
   background: white;
-  margin: 7% auto 7% auto;
-  border: 1px solid #ccc;
+  margin: 0% auto 1% auto;
   display: flex;
   flex-direction: column;
   opacity: 1;
-  padding: 2%;
+  padding: 0 2% 2% 2%;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+div.rest-review-box {
+  width: 94%;
+  height: 80%;
+  background: white;
+  margin: 2% auto;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: row;
+  opacity: 1;
+  padding: 0 2% 2% 2%;
   justify-content: space-between;
   align-items: stretch;
 }
 
 div.michelin-review {
-  padding: 1%;
+  font-size: 20px;
+  width: 100%;
+  text-align: justify;
+  border: 1px solid #ccc;
+  margin-top: 2%;
 }
 
 div.michelin-review > h3 {
-  font-size: 22px;
+  padding: 2%;
+}
+
+div.user-review {
+  font-size: 18px;
+  width: 40%;
+  text-align: justify;
+  border: 1px solid #ccc;
+  margin: 2% 0 0 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+div.user-review > h3 {
+  padding: 2%;
 }
 
 div.header-div {
   display: flex;
   justify-content: center;
   padding: 1%;
-  margin: 1%;
+  margin: 140px 1% 1%;
   align-items: center;
   border: 1px solid #ccc
+}
+
+div.restaurant-text > h3 > a:hover {
+  color: #ccc;
 }
 
 h1.restaurant-header {
   text-align: center;
   font-size: 3em;
   margin-left: 3%;
+  margin-right: 3%
 }
 
 div.restaurant-text {
@@ -90,18 +128,130 @@ img.flex-image {
 }
 
 div.button-links {
-display: flex;
-font-size: 30px;
-padding: 1%;
-justify-content: center;
-align-items: flex-end;
-background: black;
-margin: 1%;
-color: white;
+  display: flex;
+  font-size: 20px;
+  line-height: 25px;
+  padding: 15px 1%;
+  justify-content: flex-end;
+  align-items: center;
+  background: #333;
+  margin: 53px 1%;
+  position: fixed;
+  width: 92%;
+  color: white;
+  z-index: 100
 }
 
-div.button-links > div.rs {
-  padding: 10px;
+div.button-links > h3.mid {
+  margin-right: 20px;
+  padding: 3px 10px;
+  border-bottom: 2px solid transparent;
+}
+
+div.button-links > h3.mid:hover {
+  cursor: pointer;
+  color: #ccc;
+  border-color: #ccc;
+  padding-bottom: 2px
+}
+
+div.button-links > h3.end {
+  margin-right: 20px;
+  margin-left: 40px;
+  padding: 3px 10px;
+  border-bottom: 2px solid transparent;
+}
+
+div.button-links > h3.end:hover {
+  cursor: pointer;
+  color: #ccc;
+  border-color: #ccc;
+}
+
+div.button-links > h3.first {
+  margin-right: auto;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  padding: 3px 10px;
+  border-bottom: 2px solid transparent;
+}
+
+div.button-links > h3.first:hover {
+  cursor: pointer;
+  color: #ccc;
+  border-color: #ccc;
+}
+
+
+span.link-to-reviews {
+  color: red;
+}
+
+span.link-to-reviews:hover {
+  text-decoration: underline;
+  cursor: pointer
+}
+
+#reservation-reminder {
+  position: fixed;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  width: 50%;
+  margin-top: 160px;
+  z-index: 9999999;
+  border: 1px solid #ccc;
+  background: black;
+  text-align: center;
+  font-size: 24px;
+  color: white;
+  opacity: .9;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#reservation-reminder > h3 {
+  padding: 10px
+}
+
+#reservation-reminder > h3.close {
+  background: white;
+  color: #ff1a1a;
+  margin: 20px auto;
+}
+
+#reservation-reminder > h3.close:hover {
+  cursor: pointer;
+  color: #cc0000
+}
+
+#reservation-reminder > h3 > span {
+  color: #ff1a1a;
+}
+
+#reservation-reminder > h3 > span:hover {
+  cursor: pointer;
+  color: #cc0000
+}
+#rest-website {
+  vertical-align: middle
+}
+
+.tab {
+  color: #ccc !important;
+  border-color: #ccc !important;
+}
+
+
+
+
+/*div.button-links > div.ra:hover {
+  padding-bottom: 5px;
   margin-left: 3%;
   margin-right: 3%;
-}
+  cursor: pointer;
+  color: #ccc;
+  border-bottom: 5px solid #ccc
+}*/

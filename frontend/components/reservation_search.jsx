@@ -7,20 +7,16 @@ const ReservationSearch = React.createClass({
     return {date: null, seats: null};
   },
 
-  componentWillReceiveProps: function(props) {
-    this.setState({restaurantId: this.props.restaurantId})
-  },
-
   updateDate: function (e) {
     e.preventDefault();
     this.setState({date: e.target.value});
-    RestaurantActions.getRestaurant(this.state.restaurantId, {date: e.target.value, seats: this.state.seats});
+    RestaurantActions.getRestaurant(this.props.restaurant.id, {date: e.target.value, seats: this.state.seats});
   },
 
   updateTableSize: function (e) {
     e.preventDefault();
     this.setState({seats: e.target.value});
-    RestaurantActions.getRestaurant(this.state.restaurantId, {date: this.state.date, seats: e.target.value});
+    RestaurantActions.getRestaurant(this.props.restaurant.id, {date: this.state.date, seats: e.target.value});
   },
 
   render: function() {

@@ -26,6 +26,7 @@ const NavBar = React.createClass({
 
   componentDidMount: function() {
     this.listener = SessionStore.addListener(this.userChange);
+    this.userChange();
     window.addEventListener('hashchange', this.hashChange, false);
   },
 

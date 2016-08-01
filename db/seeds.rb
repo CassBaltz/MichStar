@@ -49,7 +49,7 @@ manresa = Restaurant.create(
 )
 
 restuarant_at_meadowood = Restaurant.create(
-  name: "Restaurant at Meadowood",
+  name: "Meadowood",
   mich_review: "Located in a sprawling verdant resort amid mountains and vineyards, Meadowood is the peak of wine country-chic. The bar and lounge resemble a plush mountain lodge, thanks to fireplaces, vintage books, and soft leather seating. Their extraordinary dining room boasts a lovely backlit vaulted ceiling over tables made from granite and columns of Canadian redwood. Every detail conveys American beauty and grace; service is usually faultless, anticipatory, and adept. Chef Christopher Kostow's cuisine is not only stunning to behold but thoroughly delicious. Sample a ring of buttery Gwen avocado enhanced with Rancho Chimiles walnut oil and containing a perfectly chilled oyster as well as a few sea beans for exquisite crunch and flavor. Next, chunks of silky and translucent lobster are paired with crispy, sweet chestnuts and lemony purslane for a decadent study in texture, and work as a perfect foil to a simple yet sublime duck tea (a clear yet intense broth) with nothing but a few dill fronds for finish. For dessert, silken chocolate custard with a potent dark chocolate sauce, fudgy dates, and sweet roasted chocolate panettone is a hauntingly complex pleasure on a plate.",
   head_chef: "Christopher Kostow",
   stars: 3,
@@ -97,7 +97,7 @@ atelier_crenn = Restaurant.create(
   stars: 2,
   cuisine: "Contemporary",
   website: "http://www.ateliercrenn.com",
-  address: "Address 3127 Fillmore St., San Francisco 94123",
+  address: "3127 Fillmore St., San Francisco 94123",
   phone: "1.415.440.0460",
   lat: 37.798334,
   lon: -122.435943,

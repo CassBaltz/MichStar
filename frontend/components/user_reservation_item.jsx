@@ -11,7 +11,7 @@ const UserReservationItem = React.createClass({
     let resItem = this.props.resItem;
     let user = this.props.user;
     return (
-      <div className="reservation-item">
+      <div className="user-reservation-item">
         <h2><Link to={`/restaurants/${resItem.rest_id}`}>{resItem.rest_name}</Link></h2>
         <h3>Party Size: {resItem.res_table_size}</h3>
         <h3>{resItem.time}</h3>

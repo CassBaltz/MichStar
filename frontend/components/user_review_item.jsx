@@ -6,13 +6,15 @@ const ReactDOM = require('react-dom');
 const UserReviewItem = React.createClass({
 
   render: function() {
-
+    let star = "✩".repeat(this.props.review.rating);
     return (
-      <div className="review-item">
-        <div className="top-header">
-          <h3 className="name-date">{this.props.review.rest_name} / {this.props.review.rating}✩ / {this.props.review.date}</h3>
+      <div className="user-review-item-box">
+        <div className="user-top-header">
+          <h3 className="name-date">{this.props.review.rest_name}</h3>
+          <h3 className="name-date">{star}</h3>
+          <h3 className="name-date">{this.props.review.date}</h3>
         </div>
-        <div className="review">
+        <div className="user-review-item">
           <h4>{this.props.review.content}</h4>
         </div>
       </div>

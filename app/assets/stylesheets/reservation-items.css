@@ -30,6 +30,12 @@ div.reservation-item > h2 {
   color: white;
 }
 
+div.reservation-item > h2:hover {
+  font-size: 2em;
+  background: #ccc;
+  color: white;
+}
+
 input[type=date] {
   height: 3em;
   width: 11em;
@@ -52,6 +58,7 @@ div.reservation-item > h4 {
 form.reservation-form {
   display: flex;
   align-items: center;
+  justify-content: center
 }
 
 /*div.button-links > div.ri {

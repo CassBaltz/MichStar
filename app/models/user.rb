@@ -60,7 +60,7 @@ DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATUR
       }
       reviews_ary.push(review_obj)
     end
-    reviews_ary
+    reviews_ary.reverse
   end
 
   def build_reservations
@@ -84,7 +84,7 @@ DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATUR
       reservationItem[:date] = reservationItem[:date][1..-1] if reservationItem[:date][0] == "0"
       reservation_ary.push(reservationItem)
     end
-    reservation_ary
+    reservation_ary.reverse
   end
 
   private
@@ -98,12 +98,4 @@ DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATUR
 		end
   end
 
-  def parse_time
-    {
-
-    }
-
-
-
-  end
 end
