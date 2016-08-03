@@ -11,7 +11,9 @@ const RestaurantShowItem = React.createClass({
     backgroundImage: 'url(' + imgUrl + ')',
     }
 
-    let michRating = "✩".repeat(this.props.restaurant.rating);
+    let michRating = "✩".repeat(this.props.restaurant.stars);
+
+    debugger
 
     if (Object.keys(this.props.restaurant).length > 0) {
       review = this.props.restaurant.reviews[0];
@@ -56,11 +58,11 @@ const RestaurantShowItem = React.createClass({
         </div>
         <div className="rest-review-box">
           <div className="michelin-review">
-            <h3><span className="rev-header">Michelin Review | {michRating} </span>{this.props.restaurant.mich_review}</h3>
+            <h3><span className="rev-header">Michelin Review | {michRating} </span><br></br>{this.props.restaurant.mich_review}</h3>
           </div>
           <div className="user-review">
-            <h3><span className="user-rev-header">{reviewer} | {rating} | {date} </span>{content} {reviewLink}</h3>
-            <h3><span className="user-rev-header">{reviewer1} | {rating1} | {date1} </span>{content1} {reviewLink}</h3>
+            <h3><span className="user-rev-header">{reviewer} | {rating} | {date}  </span><br></br>{content} ... {reviewLink}</h3>
+            <h3><span className="user-rev-header">{reviewer1} | {rating1} | {date1}</span><br></br>{content1} ... {reviewLink}</h3>
           </div>
         </div>
       </div>

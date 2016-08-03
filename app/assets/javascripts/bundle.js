@@ -34131,7 +34131,9 @@
 	      backgroundImage: 'url(' + imgUrl + ')'
 	    };
 	
-	    var michRating = "✩".repeat(this.props.restaurant.rating);
+	    var michRating = "✩".repeat(this.props.restaurant.stars);
+	
+	    debugger;
 	
 	    if (Object.keys(this.props.restaurant).length > 0) {
 	      review = this.props.restaurant.reviews[0];
@@ -34231,6 +34233,7 @@
 	              michRating,
 	              ' '
 	            ),
+	            React.createElement('br', null),
 	            this.props.restaurant.mich_review
 	          )
 	        ),
@@ -34248,10 +34251,11 @@
 	              rating,
 	              ' | ',
 	              date,
-	              ' '
+	              '  '
 	            ),
+	            React.createElement('br', null),
 	            content,
-	            ' ',
+	            ' ... ',
 	            reviewLink
 	          ),
 	          React.createElement(
@@ -34264,11 +34268,11 @@
 	              ' | ',
 	              rating1,
 	              ' | ',
-	              date1,
-	              ' '
+	              date1
 	            ),
+	            React.createElement('br', null),
 	            content1,
-	            ' ',
+	            ' ... ',
 	            reviewLink
 	          )
 	        )
